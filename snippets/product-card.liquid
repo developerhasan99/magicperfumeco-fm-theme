@@ -1,29 +1,20 @@
+{%- comment -%} Site product card, Black Friday look (styles: assets/magyx-brand.css, "product card"). {%- endcomment -%}
 <div class="mgx-card flex flex-col bg-white p-4 shadow-sm rounded-lg relative h-full">
-  {% if product.tags contains 'bestseller' or product.tags contains 'onsale' %}
-    <div class="absolute top-3 left-4 z-10 flex gap-4">
-      {% if product.tags contains 'bestseller' %}
-        <div class="mgx-badge-amber px-2 py-1 text-xs rounded-full flex items-center gap-1">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-star">
-            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-          </svg>
-          <span>Bestseller</span>
-        </div>
-      {% elsif product.tags contains 'onsale' %}
-        <div class="mgx-badge-sale px-2 py-1 text-xs rounded-full">⚡ Angebot</div>
-      {% endif %}
-    </div>
-  {% endif %}
-
-  <a href="{{ product.url }}" class="flex relative">
+  <a href="{{ product.url }}" class="mgx-card__media">
     <img
-      class="w-full h-auto"
-      src="{{ product.images.first | image_url: width: 300 }}"
+      src="{{ product.images.first | image_url: width: 600 }}"
       alt="{{ product.title }}"
       height="{{ product.images.first.height }}"
       width="{{ product.images.first.width }}"
+      loading="lazy"
     >
+    {% if product.tags contains 'bestseller' %}
+      <span class="mgx-card__badge">Bestseller</span>
+    {% elsif product.tags contains 'onsale' %}
+      <span class="mgx-card__badge mgx-card__badge--sale">Angebot</span>
+    {% endif %}
     {% unless product.tags contains 'Bundle_Price_Show' %}
-      <div class="card__promo-marquee absolute left-0 right-0 bottom-0 mgx-bg-black" aria-label="Köp 3, få 1 gratis">
+      <div class="card__promo-marquee" aria-label="Black Friday: 40 % Rabatt + 2 Flakons gratis dazu!">
         <div class="card__promo-marquee-rail">
           <div class="card__promo-marquee-group">
             <span class="card__promo-marquee-text">Black Friday: 40 % Rabatt + 2 Flakons gratis dazu!</span>
@@ -86,24 +77,25 @@
     {%- endif -%}
   </div> {% endcomment %}
 
-  <h3 class="mb-0 mt-2 text-base">
-    <a class="no-underline text-black font-semibold" href="{{ product.url }}">
+  <h3 class="mgx-card__title">
+    <a href="{{ product.url }}">
       {{ product.title }}
     </a>
   </h3>
 
   {% if product.metafields.custom.inspiration != blank %}
-    <div class="flex items-center gap-2 mt-2">
-      <img 
-        style="filter: blur(2px);" 
-        class="object-contain object-center bg-white"
-        src="{{ product.metafields.custom.inspiration.value.image | image_url }}"
-        alt="{{ product.metafields.custom.inspiration.value.image.alt | escape }}"
-        width="35" 
-        height="35"
-      >
+    <div class="mgx-card__insp">
+      <span class="mgx-card__thumb">
+        <img
+          src="{{ product.metafields.custom.inspiration.value.image | image_url: width: 120 }}"
+          alt="{{ product.metafields.custom.inspiration.value.image.alt | escape }}"
+          width="44"
+          height="44"
+          loading="lazy"
+        >
+      </span>
       <div>
-        <p class="text-xs my-0">Inspiriert von:</p>
+        <p class="mgx-card__insp-label">Inspiriert von:</p>
         <h4 class="text-sm font-semibold my-0 line-clamp-1 inspiration_heading">{{ product.metafields.custom.inspiration.value.name }}</h4>
       </div>
     </div>
@@ -119,10 +111,7 @@
   </div>
 
   <div class="mt-auto">
-    <a 
-      class="mgx-btn-primary uppercase text-sm font-semibold tracking-[2px] py-3 px-4 rounded-lg no-underline w-full text-center block" 
-      href="{{ product.url }}"
-    >
+    <a class="mgx-card__btn" href="{{ product.url }}">
       Duft ansehen
     </a>
   </div>

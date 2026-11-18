@@ -324,3 +324,201 @@
   padding-top: 12px;
   padding-bottom: 6px;
 }
+
+/* ---------- product card, Black Friday look (snippets/product-card.liquid) ---------- */
+/* rounded square image; badge and the offer strip sit inside it */
+.mgx-card__media {
+  position: relative;
+  display: block;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #f6f6f6;
+}
+.mgx-card__media > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.mgx-card__badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 2;
+  padding: 5px 8px;
+  border-radius: 4px;
+  background: #232323;
+  color: var(--mgx-white);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: 0.125em;
+  text-transform: uppercase;
+}
+.mgx-card__badge--sale {
+  background: var(--mgx-sale);
+}
+
+/* offer strip: black, neon-red hairline on top, glowing red dots (the red of the Black Friday hero) */
+.mgx-card .card__promo-marquee {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  padding-block: 8px;
+  background: linear-gradient(180deg, #1a0505 0%, #070707 100%);
+  border-top: 1px solid #ff3b3b;
+  box-shadow: 0 -4px 14px rgba(255, 59, 59, 0.45);
+  color: var(--mgx-white);
+  text-shadow: 0 0 8px rgba(255, 59, 59, 0.55);
+}
+.mgx-card .card__promo-marquee-group {
+  gap: 10px;
+  padding-inline-end: 10px;
+}
+.mgx-card .card__promo-marquee-text {
+  font-size: 13px;
+  font-weight: 600;
+}
+.mgx-card .card__promo-marquee-dot {
+  width: 6px;
+  height: 6px;
+  background: #ff3b3b;
+  box-shadow: 0 0 6px 1px rgba(255, 59, 59, 0.9);
+}
+
+/* title in caps */
+.mgx-card__title {
+  margin: 12px 0 0;
+  font-size: 14px;
+  line-height: 1.3;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.mgx-card__title a {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  color: var(--mgx-black);
+  text-decoration: none;
+}
+
+/* "Inspiriert von": blurred designer bottle in a framed tile, grey label over the name in ink */
+.mgx-card__insp {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+.mgx-card__thumb {
+  display: flex;
+  flex: none;
+  width: 40px;
+  height: 40px;
+  padding: 3px;
+  box-sizing: border-box;
+  border: 1px solid #e7e7e7;
+  border-radius: 6px;
+  background: var(--mgx-white);
+  overflow: hidden;
+}
+.mgx-card__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: blur(2px);
+}
+.mgx-card__insp-label {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.35;
+  color: #707070;
+}
+.mgx-card__insp .inspiration_heading {
+  color: var(--mgx-black);
+}
+.mgx-card s.price-item--regular {
+  color: #707070;
+}
+
+/* full-width ink button, caps */
+.mgx-card__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 10px 8px;
+  border: 1px solid #000;
+  border-radius: 4px;
+  background: #232323;
+  color: var(--mgx-white);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.125em;
+  text-transform: uppercase;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+.mgx-card__btn:hover,
+.mgx-card__btn:focus-visible {
+  background: var(--mgx-graphite);
+  color: var(--mgx-white);
+}
+
+/* phones: tighter tile (as on the Swedish store) so the caps button keeps one line; title may take 3 lines */
+@media screen and (max-width: 749px) {
+  .mgx-card {
+    padding: 8px;
+  }
+  .mgx-card__title {
+    font-size: 13px;
+  }
+  .mgx-card__title a {
+    -webkit-line-clamp: 3;
+  }
+  .mgx-card__btn {
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .mgx-card__title {
+    font-size: 16px;
+  }
+  .mgx-card__thumb {
+    width: 48px;
+    height: 48px;
+  }
+  .mgx-card__btn {
+    min-height: 48px;
+    font-size: 15px;
+  }
+}
+
+/* ---------- Black Friday neon pulse (product page "Unser bestes Angebot" card, tsr_block in main-product.liquid) ---------- */
+/* same red as the Black Friday hero; the animation outranks the card's Tailwind shadow / hover shadow */
+.mgx-neon-pulse {
+  border-color: #ff3b3b;
+  animation: mgxNeonPulse 1.8s ease-in-out infinite;
+}
+@keyframes mgxNeonPulse {
+  0%, 100% {
+    box-shadow: 0 0 4px rgba(255, 59, 59, 0.45), 0 0 10px rgba(255, 59, 59, 0.25);
+  }
+  50% {
+    box-shadow: 0 0 10px rgba(255, 59, 59, 0.9), 0 0 26px rgba(255, 59, 59, 0.55);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mgx-neon-pulse {
+    animation: none;
+    box-shadow: 0 0 10px rgba(255, 59, 59, 0.6);
+  }
+}

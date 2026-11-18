@@ -9,8 +9,71 @@
  */
 {
   "sections": {
+    "black_friday_hero": {
+      "type": "black-friday-hero",
+      "blocks": {
+        "tier_1": {
+          "type": "tier",
+          "settings": {
+            "label": "Kauf 2",
+            "value": "25 %",
+            "badge": "",
+            "highlight": false
+          }
+        },
+        "tier_2": {
+          "type": "tier",
+          "settings": {
+            "label": "Kauf 4",
+            "value": "30 %",
+            "badge": "",
+            "highlight": false
+          }
+        },
+        "tier_3": {
+          "type": "tier",
+          "settings": {
+            "label": "Kauf 6",
+            "value": "35 %",
+            "badge": "",
+            "highlight": false
+          }
+        },
+        "tier_4": {
+          "type": "tier",
+          "settings": {
+            "label": "Kauf 8+",
+            "value": "40 %",
+            "badge": "",
+            "highlight": true
+          }
+        }
+      },
+      "block_order": [
+        "tier_1",
+        "tier_2",
+        "tier_3",
+        "tier_4"
+      ],
+      "settings": {
+        "image": "shopify://shop_images/Magyx-BF-Red-01.webp",
+        "mobile_image": "shopify://shop_images/MAGYX_Perfume_Collection_Glow.webp",
+        "min_height": 600,
+        "accent_color": "#ff3b3b",
+        "background_color": "#070707",
+        "display_font": "anton_n4",
+        "eyebrow": "Nur diese Woche",
+        "title": "Black Friday",
+        "subtitle": "Je mehr du kaufst, desto mehr sparst du.",
+        "note": "<p>Leg 2 Parfums in den Warenkorb und erhalte <strong>25 % Rabatt</strong>, bis zu <strong>40 %</strong>, wenn du 8 oder mehr kaufst. Der Rabatt wird automatisch an der Kasse abgezogen.</p>",
+        "button_text": "Black Friday shoppen",
+        "button_link": "shopify://collections/bestseller-singles",
+        "shipping_text": "Kostenloser Versand ab 60 €"
+      }
+    },
     "mgx_hero_home": {
       "type": "mgx-hero",
+      "disabled": true,
       "settings": {
         "image": "shopify://shop_images/Magyx-BF-Red-01.webp",
         "image_mobile": "shopify://shop_images/MAGYX_Perfume_Collection_Glow.webp",
@@ -1031,6 +1094,7 @@
     }
   },
   "order": [
+    "black_friday_hero",
     "mgx_hero_home",
     "custom_liquid_FjGk39",
     "home_hero_XQyQrf",
