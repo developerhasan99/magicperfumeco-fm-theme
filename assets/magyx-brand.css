@@ -1,0 +1,326 @@
+/*
+  MAGYX brand tokens + utilities.
+  Single source of truth for brand colours in the theme (MAGYX Brand Guidelines, Edition 01).
+  Loaded last in layout/theme.liquid so single-class utilities win ties against
+  tailwind-compiled.css / blocky.css without !important.
+  Palette: Magyx Black #100F0D, White #FFFFFF, Silver #C7C9CB, Graphite #3A3A3C, Accent Pine #184031 (token keeps the name --mgx-amber;
+  it was amber #9A5B1E until 21.10.2026, same switch as tryscent.eu), Sale Red #C8202F (discount badges only).
+*/
+
+:root {
+  --mgx-black: #100F0D;
+  --mgx-black-rgb: 16, 15, 13;
+  --mgx-white: #FFFFFF;
+  --mgx-white-rgb: 255, 255, 255;
+  --mgx-silver: #C7C9CB;
+  --mgx-silver-rgb: 199, 201, 203;
+  --mgx-graphite: #3A3A3C;
+  --mgx-graphite-rgb: 58, 58, 60;
+  --mgx-amber: #184031;
+  --mgx-amber-rgb: 24, 64, 49;
+  --mgx-sale: #C8202F;
+  --mgx-sale-rgb: 200, 32, 47;
+
+  /* roles */
+  --mgx-hairline: var(--mgx-silver);
+  --mgx-text: var(--mgx-black);
+  --mgx-text-muted: var(--mgx-graphite);
+  --mgx-cta: var(--mgx-black);
+  --mgx-cta-hover: var(--mgx-graphite);
+  --mgx-cta-text: var(--mgx-white);
+  --mgx-accent: var(--mgx-amber);
+  --mgx-star: var(--mgx-amber);
+  --mgx-selected: var(--mgx-black);
+}
+
+/* ---------- buttons ---------- */
+.mgx-btn-primary {
+  background-color: var(--mgx-cta);
+  color: var(--mgx-cta-text);
+}
+.mgx-btn-primary:hover,
+.mgx-btn-primary:focus-visible {
+  background-color: var(--mgx-cta-hover);
+  color: var(--mgx-cta-text);
+}
+.mgx-btn-primary:disabled:hover,
+.mgx-btn-primary[aria-disabled='true']:hover {
+  background-color: var(--mgx-cta);
+}
+.mgx-btn-3d {
+  border: 1px solid var(--mgx-graphite);
+  box-shadow: 0 4px 0 var(--mgx-graphite), 0 10px 24px rgba(var(--mgx-black-rgb), 0.25);
+}
+.mgx-btn-3d:hover {
+  box-shadow: 0 2px 0 var(--mgx-graphite), 0 6px 16px rgba(var(--mgx-black-rgb), 0.25);
+}
+.mgx-btn-3d:active {
+  box-shadow: 0 0 0 var(--mgx-graphite), 0 2px 8px rgba(var(--mgx-black-rgb), 0.25);
+}
+.mgx-btn-outline {
+  border-color: var(--mgx-black);
+  color: var(--mgx-black);
+  background-color: transparent;
+}
+.mgx-btn-outline:hover {
+  background-color: var(--mgx-black);
+  color: var(--mgx-white);
+}
+.mgx-price-pill {
+  background-color: var(--mgx-graphite);
+  color: var(--mgx-white);
+}
+
+/* ---------- accent: badges, savings, stars, icons ---------- */
+.mgx-badge-amber {
+  background-color: var(--mgx-accent);
+  color: var(--mgx-white);
+}
+.mgx-badge-amber-soft {
+  background-color: rgba(var(--mgx-amber-rgb), 0.12);
+  color: var(--mgx-accent);
+}
+.mgx-text-accent {
+  color: var(--mgx-accent);
+}
+.mgx-fill-accent {
+  fill: var(--mgx-accent);
+}
+.mgx-stroke-accent {
+  stroke: var(--mgx-accent);
+}
+.mgx-star {
+  color: var(--mgx-star);
+}
+.mgx-star svg {
+  fill: currentColor;
+}
+.mgx-bg-amber {
+  background-color: var(--mgx-amber);
+  color: var(--mgx-white);
+}
+
+/* ---------- discounts: -X %, Spare X %, Angebot ---------- */
+.mgx-badge-sale {
+  background-color: var(--mgx-sale);
+  color: var(--mgx-white);
+}
+.mgx-text-sale {
+  color: var(--mgx-sale);
+}
+/* "Du sparst ... heute" pill on the bundle page */
+.mgx-badge-sale-soft {
+  background-color: rgba(var(--mgx-sale-rgb), 0.1);
+  color: var(--mgx-sale);
+}
+.mgx-border-sale {
+  border-color: var(--mgx-sale);
+}
+/* bundle page price row: struck regular price + price (magyx.co sizes) */
+.mgx-bundle-compare {
+  font-size: 16px;
+}
+.mgx-bundle-price {
+  font-size: 23px;
+  line-height: 1.3;
+}
+@media screen and (min-width: 768px) {
+  .mgx-bundle-compare {
+    font-size: 19px;
+  }
+  .mgx-bundle-price {
+    font-size: 27px;
+  }
+}
+
+/* ---------- text + surfaces ---------- */
+.mgx-text {
+  color: var(--mgx-text);
+}
+.mgx-text-muted {
+  color: var(--mgx-text-muted);
+}
+/* empty-state glyphs: empty stars, empty bundle slots */
+.mgx-icon-subtle {
+  color: var(--mgx-silver);
+}
+.mgx-text-white {
+  color: var(--mgx-white);
+}
+.mgx-bg-black {
+  background-color: var(--mgx-black);
+  color: var(--mgx-white);
+}
+/* Product card (snippets/product-card.liquid): its Bestseller / Angebot badge (z-10) stays layered inside
+   the card, so open filter dropdowns and the sticky filter bar paint over it. */
+.mgx-card {
+  isolation: isolate;
+}
+.mgx-surface {
+  background-color: var(--mgx-white);
+}
+.mgx-fill-black {
+  fill: var(--mgx-black);
+}
+.mgx-border {
+  border-color: var(--mgx-hairline);
+}
+.mgx-border-black {
+  border-color: var(--mgx-black);
+}
+.mgx-border-onblack {
+  border-color: rgba(var(--mgx-white-rgb), 0.2);
+}
+.mgx-hairline-top {
+  border-top: 1px solid var(--mgx-hairline);
+}
+.mgx-hairline-bottom {
+  border-bottom: 1px solid var(--mgx-hairline);
+}
+
+/* ---------- selection + interactive states ---------- */
+.mgx-selected {
+  border-color: var(--mgx-selected);
+}
+.mgx-dot {
+  background-color: var(--mgx-selected);
+}
+.mgx-pill {
+  border-color: var(--mgx-hairline);
+  background-color: var(--mgx-white);
+  color: var(--mgx-black);
+}
+.mgx-pill:hover {
+  border-color: var(--mgx-black);
+  color: var(--mgx-black);
+}
+.mgx-pill-active,
+.mgx-pill-active:hover {
+  border-color: var(--mgx-black);
+  background-color: var(--mgx-black);
+  color: var(--mgx-white);
+}
+.mgx-check {
+  border-color: var(--mgx-black);
+  color: var(--mgx-black);
+}
+.mgx-check--on {
+  background-color: var(--mgx-black);
+  border-color: var(--mgx-black);
+  color: var(--mgx-white);
+}
+.mgx-input:focus,
+.mgx-input:focus-visible {
+  border-color: var(--mgx-black);
+  outline: none;
+}
+.mgx-close:hover {
+  background-color: var(--mgx-black);
+  color: var(--mgx-white);
+}
+.mgx-underline-hover:hover {
+  text-decoration-color: var(--mgx-accent);
+}
+.mgx-chip-outline {
+  border-color: var(--mgx-graphite);
+  color: var(--mgx-graphite);
+}
+
+/* ---------- magyx.co additions ---------- */
+.mgx-border-amber {
+  border-color: var(--mgx-amber);
+}
+.mgx-bg-amber-tint {
+  background-color: rgba(var(--mgx-amber-rgb), 0.08);
+}
+.mgx-bg-silver-tint {
+  background-color: rgba(var(--mgx-silver-rgb), 0.3);
+}
+.mgx-bg-graphite {
+  background-color: var(--mgx-graphite);
+  color: var(--mgx-white);
+}
+.mgx-text-silver {
+  color: var(--mgx-silver);
+}
+.mgx-text-graphite {
+  color: var(--mgx-graphite);
+}
+.mgx-hover-selected:hover,
+.mgx-focus-selected:focus,
+.mgx-focus-selected:focus-visible {
+  border-color: var(--mgx-selected);
+}
+.mgx-hover-text:hover {
+  color: var(--mgx-black);
+}
+/* doubled class: replaces `!border-[...]` overrides without !important */
+.mgx-selected-strong.mgx-selected-strong {
+  border-color: var(--mgx-selected);
+}
+/* swiper thumbnails: active thumb border */
+.mgx-thumbs > .swiper-slide-thumb-active {
+  border-color: var(--mgx-selected);
+}
+
+/* ---------- collection hero fade (replaces cream gradients) ---------- */
+.mgx-hero-fade {
+  background: linear-gradient(
+    180deg,
+    rgba(var(--mgx-white-rgb), 0.92) 0%,
+    rgba(var(--mgx-white-rgb), 0.72) 55%,
+    rgba(var(--mgx-white-rgb), 0) 100%
+  );
+}
+@media (min-width: 640px) {
+  .mgx-hero-fade {
+    background: linear-gradient(
+      90deg,
+      rgba(var(--mgx-white-rgb), 0.92) 0%,
+      rgba(var(--mgx-white-rgb), 0.72) 45%,
+      rgba(var(--mgx-white-rgb), 0) 100%
+    );
+  }
+}
+
+/* ---------- payment methods row (snippets/mgx-payment-icons.liquid) ----------
+   Shopify's full-colour 38x24 icons on one line under the buy button, same
+   400px width and top margin as the greyscale image it replaces (its mt-8 is
+   32px in tailwind-compiled.css; 2rem here would be 20px, root is 10px). On a
+   narrow column the icons shrink together instead of wrapping. */
+.mgx-pay-icons {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  max-width: 400px;
+  margin: 32px auto 0;
+  padding: 0;
+  list-style: none;
+}
+.mgx-pay-icons > li {
+  flex: 0 1 38px;
+  min-width: 0;
+  margin: 0;
+}
+.mgx-pay-icons__icon {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ---------- product-page size / option buttons, 20% shorter ---------- */
+/* reactive-atc: was pt-4 pb-3 (72px tall) -> 64px; top room keeps badges off the label */
+.mgx-size-btn {
+  padding-top: 12px;
+  padding-bottom: 8px;
+}
+/* draft-three-atc: was pt-5 pb-4 (64px tall) -> ~51px */
+.mgx-size-btn--draft {
+  padding-top: 13px;
+  padding-bottom: 10px;
+}
+/* quantity-breaker size row: was py-2.5 (59.75px); extra top room keeps the badge off the label */
+.mgx-size-btn--qb {
+  padding-top: 12px;
+  padding-bottom: 6px;
+}

@@ -1,0 +1,533 @@
+{%- comment -%}
+  MAGYX Hero: full-width image hero with headline, subline, short text and up to two buttons.
+  Replaces the hand-written custom-liquid heroes on the homepage and on collection-lp-1 (Bestseller), same look.
+  Social proof (stars, rating line, "Geliebt von ..." line, proof sentence) sits behind one switch,
+  "Show rating", so it only appears once the numbers are real (Judge.me).
+  px on purpose: the theme's root font-size is 10px.
+{%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+  assign fade = s.fade_color
+  assign img_mobile = s.image_mobile | default: s.image
+  assign focal_mobile = 'center'
+  if img_mobile.presentation.focal_point != blank
+    assign focal_mobile = img_mobile.presentation.focal_point
+  endif
+  assign hero_classes = 'mgx-hero'
+  if s.text_tone == 'light'
+    assign hero_classes = hero_classes | append: ' mgx-hero--light'
+  endif
+  if s.buttons_bottom
+    assign hero_classes = hero_classes | append: ' mgx-hero--btn-bottom'
+  endif
+  if s.mobile_layout == 'cover' and img_mobile != blank
+    assign hero_classes = hero_classes | append: ' mgx-hero--m-cover'
+  endif
+-%}
+
+<style>
+  #mgx-hero-{{ section.id }} {
+    position: relative;
+    min-height: 560px;
+    overflow: hidden;
+    background:
+      linear-gradient(90deg, {{ fade | color_modify: 'alpha', 0.55 }} 0%, {{ fade | color_modify: 'alpha', 0.3 }} 34%, {{ fade | color_modify: 'alpha', 0 }} 58%)
+      {%- if s.image != blank -%}, url('{{ s.image | image_url: width: 2400 }}') center right / cover no-repeat{%- endif -%},
+      {{ fade }};
+  }
+  #mgx-hero-{{ section.id }} .mgx-hero__container {
+    width: min(1180px, calc(100% - 36px));
+    margin-inline: auto;
+  }
+  #mgx-hero-{{ section.id }} .mgx-hero__inner {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    min-height: 560px;
+  }
+  #mgx-hero-{{ section.id }} .mgx-hero__copy {
+    max-width: 600px;
+  }
+
+  /* Social proof, "stacked": small caps line, then stars + rating. */
+  #mgx-hero-{{ section.id }} .mgx-hero__proof-stack {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 26px;
+  }
+  #mgx-hero-{{ section.id }} .mgx-hero__eyebrow {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(16, 15, 13, 0.55);
+  }
+  #mgx-hero-{{ section.id }} .mgx-hero__rating {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #100F0D;
+  }
+
+  /* Social proof, "pill": stars + rating in a white pill. */
+  #mgx-hero-{{ section.id }} .mgx-hero__pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 26px;
+    padding: 10px 18px;
+    border-radius: 999px;
+    background: #FFFFFF;
+    box-shadow: 0 4px 18px rgba(16, 15, 13, 0.1);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #100F0D;
+  }
+  #mgx-hero-{{ section.id }} .mgx-hero__stars {
+    font-size: 16px;
+    letter-spacing: 2px;
+    color: var(--mgx-accent, #184031);
+  }
+  #mgx-hero-{{ section.id }} .mgx-hero__pill .mgx-hero__stars {
+    font-size: inherit;
+  }
+
+  #mgx-hero-{{ section.id }} h1.mgx-hero__heading {
+    margin: 0 0 18px;
+    font-size: 36px;
+    font-weight: 900;
+    line-height: 1.22;
+    letter-spacing: 0.6px;
+    color: #100F0D;
+  }
+  #mgx-hero-{{ section.id }} .mgx-hero__subheading {
+    max-width: 560px;
+    margin-bottom: 16px;
+    font-size: 24px;
+    font-weight: 900;
+    line-height: 1.3;
+    letter-spacing: 0.4px;
+    color: #100F0D;
+  }
+  #mgx-hero-{{ section.id }} .mgx-hero__text {
+    max-width: 520px;
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.7;
+    color: rgba(16, 15, 13, 0.66);
+  }
+  #mgx-hero-{{ section.id }} .mgx-hero__text + .mgx-hero__text {
+    margin-top: 8px;
+  }
+  #mgx-hero-{{ section.id }} .mgx-hero__microcopy {
+    margin: 12px 0 0;
+    font-size: 14px;
+    color: rgba(16, 15, 13, 0.55);
+  }
+
+  #mgx-hero-{{ section.id }} .mgx-hero__buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 28px;
+  }
+  #mgx-hero-{{ section.id }} .mgx-hero__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 28px;
+    border-radius: 999px;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+  #mgx-hero-{{ section.id }} .mgx-hero__btn:hover {
+    opacity: 0.85;
+  }
+  #mgx-hero-{{ section.id }} .mgx-hero__btn--primary {
+    background: #100F0D;
+    color: #FFFFFF;
+  }
+  #mgx-hero-{{ section.id }} .mgx-hero__btn--secondary {
+    border: 2px solid #100F0D;
+    background: #FFFFFF;
+    color: #100F0D;
+  }
+
+  /* "Text colour: light" for dark images: white text, white button 1, outlined button 2. */
+  #mgx-hero-{{ section.id }}.mgx-hero--light h1.mgx-hero__heading,
+  #mgx-hero-{{ section.id }}.mgx-hero--light .mgx-hero__subheading,
+  #mgx-hero-{{ section.id }}.mgx-hero--light .mgx-hero__rating {
+    color: #FFFFFF;
+  }
+  #mgx-hero-{{ section.id }}.mgx-hero--light .mgx-hero__text,
+  #mgx-hero-{{ section.id }}.mgx-hero--light .mgx-hero__microcopy,
+  #mgx-hero-{{ section.id }}.mgx-hero--light .mgx-hero__eyebrow {
+    color: rgba(255, 255, 255, 0.82);
+  }
+  #mgx-hero-{{ section.id }}.mgx-hero--light .mgx-hero__btn--primary {
+    background: #FFFFFF;
+    color: #100F0D;
+  }
+  #mgx-hero-{{ section.id }}.mgx-hero--light .mgx-hero__btn--secondary {
+    border-color: #FFFFFF;
+    background: transparent;
+    color: #FFFFFF;
+  }
+
+  /* "Buttons at the bottom": the text stays on top, the buttons sit on the section's bottom edge. */
+  #mgx-hero-{{ section.id }}.mgx-hero--btn-bottom .mgx-hero__inner {
+    align-items: stretch;
+    padding-block: 56px 48px;
+  }
+  #mgx-hero-{{ section.id }}.mgx-hero--btn-bottom .mgx-hero__copy {
+    display: flex;
+    flex-direction: column;
+  }
+  #mgx-hero-{{ section.id }}.mgx-hero--btn-bottom .mgx-hero__buttons {
+    margin-top: auto;
+    padding-top: 28px;
+  }
+
+  /* Phones: copy centred on top, the photo underneath (anchored bottom right, the copy area fades into it). */
+  @media (max-width: 700px) {
+    #mgx-hero-{{ section.id }} {
+      min-height: auto;
+      background:
+        linear-gradient(180deg, {{ fade | color_modify: 'alpha', 0.94 }} 0%, {{ fade | color_modify: 'alpha', 0.82 }} 34%, {{ fade | color_modify: 'alpha', 0.35 }} 56%, {{ fade | color_modify: 'alpha', 0 }} 74%)
+        {%- if img_mobile != blank -%}, url('{{ img_mobile | image_url: width: 1400 }}') right bottom / 190% auto no-repeat{%- endif -%},
+        {{ fade }};
+    }
+    #mgx-hero-{{ section.id }} .mgx-hero__inner {
+      display: block;
+      min-height: auto;
+      padding-top: 36px;
+      padding-bottom: {% if img_mobile != blank %}85vw{% else %}36px{% endif %};
+    }
+    #mgx-hero-{{ section.id }} .mgx-hero__copy {
+      max-width: 100%;
+      text-align: center;
+    }
+    #mgx-hero-{{ section.id }} .mgx-hero__rating {
+      justify-content: center;
+    }
+    #mgx-hero-{{ section.id }} .mgx-hero__pill {
+      flex-direction: column;
+      gap: 6px;
+      padding: 12px 22px;
+      text-align: center;
+    }
+    #mgx-hero-{{ section.id }} h1.mgx-hero__heading {
+      font-size: 30px;
+    }
+    #mgx-hero-{{ section.id }} .mgx-hero__subheading {
+      margin-inline: auto;
+      font-size: 20px;
+    }
+    #mgx-hero-{{ section.id }} .mgx-hero__text {
+      margin-inline: auto;
+    }
+    #mgx-hero-{{ section.id }} .mgx-hero__microcopy {
+      font-weight: 600;
+      color: rgba(16, 15, 13, 0.75);
+    }
+    #mgx-hero-{{ section.id }} .mgx-hero__buttons {
+      justify-content: center;
+    }
+    #mgx-hero-{{ section.id }} .mgx-hero__btn {
+      width: 100%;
+      max-width: 320px;
+    }
+    #mgx-hero-{{ section.id }}.mgx-hero--light .mgx-hero__microcopy {
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    /* Buttons at the bottom, photo under the text: the buttons sit on the lower edge of the photo. */
+    #mgx-hero-{{ section.id }}.mgx-hero--btn-bottom .mgx-hero__inner {
+      display: flex;
+      padding-top: 36px;
+      padding-bottom: 28px;
+    }
+    #mgx-hero-{{ section.id }}.mgx-hero--btn-bottom .mgx-hero__copy {
+      width: 100%;
+    }
+    #mgx-hero-{{ section.id }}.mgx-hero--btn-bottom .mgx-hero__buttons {
+      margin-top: {% if img_mobile != blank %}calc(85vw - 28px){% else %}28px{% endif %};
+      padding-top: 0;
+    }
+
+    /* "Image on phones: fills the section": photo as the full background (focal point from the image picker),
+       section as tall as the screen below the header, so photo, text and buttons are all above the fold. */
+    #mgx-hero-{{ section.id }}.mgx-hero--m-cover {
+      background:
+        linear-gradient(180deg, {{ fade }} 0%, {{ fade | color_modify: 'alpha', 0.9 }} 22%, {{ fade | color_modify: 'alpha', 0 }} 42%, {{ fade | color_modify: 'alpha', 0 }} 70%, {{ fade | color_modify: 'alpha', 0.85 }} 100%),
+        url('{{ img_mobile | image_url: width: 1400 }}') {{ focal_mobile | split: ' ' | first }} bottom / 100% auto no-repeat,
+        {{ fade }};
+    }
+    /* Height follows the copy, not the screen: the buttons start a fixed share of the photo height below the copy, so a
+       longer heading or a short phone pushes the photo down instead of sliding it under the text. */
+    #mgx-hero-{{ section.id }}.mgx-hero--m-cover .mgx-hero__inner {
+      --mgx-m-photo: calc(100vw / {{ img_mobile.aspect_ratio | default: 0.8 }});
+      display: flex;
+      min-height: 0;
+      padding-top: 28px;
+      padding-bottom: 28px;
+    }
+    #mgx-hero-{{ section.id }}.mgx-hero--m-cover .mgx-hero__copy {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+    #mgx-hero-{{ section.id }}.mgx-hero--m-cover h1.mgx-hero__heading {
+      margin-bottom: 10px;
+      font-size: clamp(21px, 6.4vw, 26px);
+      line-height: 1.18;
+      letter-spacing: 0;
+    }
+    #mgx-hero-{{ section.id }}.mgx-hero--m-cover .mgx-hero__subheading {
+      margin-bottom: 6px;
+      font-size: clamp(15px, 4.3vw, 17px);
+    }
+    #mgx-hero-{{ section.id }}.mgx-hero--m-cover .mgx-hero__text {
+      font-size: 15px;
+      line-height: 1.5;
+    }
+    #mgx-hero-{{ section.id }}.mgx-hero--m-cover .mgx-hero__buttons {
+      margin-top: calc(var(--mgx-m-photo) * 0.6);
+      padding-top: 0;
+    }
+  }
+</style>
+
+<section id="mgx-hero-{{ section.id }}" class="{{ hero_classes }}">
+  <div class="mgx-hero__container">
+    <div class="mgx-hero__inner">
+      <div class="mgx-hero__copy">
+
+        {%- if s.show_social_proof -%}
+          {%- if s.social_proof_style == 'pill' -%}
+            {%- if s.rating_text != blank -%}
+              <div class="mgx-hero__pill">
+                <span class="mgx-hero__stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                <span>{{ s.rating_text }}</span>
+              </div>
+            {%- endif -%}
+          {%- elsif s.social_proof_eyebrow != blank or s.rating_text != blank -%}
+            <div class="mgx-hero__proof-stack">
+              {%- if s.social_proof_eyebrow != blank -%}
+                <span class="mgx-hero__eyebrow">{{ s.social_proof_eyebrow }}</span>
+              {%- endif -%}
+              {%- if s.rating_text != blank -%}
+                <div class="mgx-hero__rating">
+                  <span class="mgx-hero__stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                  <span>{{ s.rating_text }}</span>
+                </div>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        {%- endif -%}
+
+        {%- if s.heading != blank -%}
+          <h1 class="mgx-hero__heading">{{ s.heading }}</h1>
+        {%- endif -%}
+
+        {%- if s.subheading != blank -%}
+          <div class="mgx-hero__subheading">{{ s.subheading }}</div>
+        {%- endif -%}
+
+        {%- if s.show_social_proof and s.social_proof_text != blank -%}
+          <p class="mgx-hero__text">{{ s.social_proof_text }}</p>
+        {%- endif -%}
+
+        {%- if s.text != blank -%}
+          <p class="mgx-hero__text">{{ s.text }}</p>
+        {%- endif -%}
+
+        {%- if s.microcopy != blank -%}
+          <p class="mgx-hero__microcopy">{{ s.microcopy }}</p>
+        {%- endif -%}
+
+        {%- if s.button_1_label != blank or s.button_2_label != blank -%}
+          <div class="mgx-hero__buttons">
+            {%- if s.button_1_label != blank -%}
+              <a href="{{ s.button_1_link | default: routes.all_products_collection_url }}" class="mgx-hero__btn mgx-hero__btn--primary">
+                {{- s.button_1_label -}}
+              </a>
+            {%- endif -%}
+            {%- if s.button_2_label != blank -%}
+              <a href="{{ s.button_2_link | default: routes.all_products_collection_url }}" class="mgx-hero__btn mgx-hero__btn--secondary">
+                {{- s.button_2_label -}}
+              </a>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "MAGYX Hero",
+  "tag": "div",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image (desktop)",
+      "info": "Sits on the right, the text side fades into the colour below. 1920 x 1080 or larger."
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Image (phones)",
+      "info": "Shown under the text on phones. Empty = the desktop image."
+    },
+    {
+      "type": "select",
+      "id": "mobile_layout",
+      "label": "Image on phones",
+      "options": [
+        { "value": "below", "label": "Under the text" },
+        { "value": "cover", "label": "Fills the section" }
+      ],
+      "default": "below",
+      "info": "Fills the section: one screen tall, the photo full width at the bottom with the text above it and the buttons on top of its lower edge."
+    },
+    {
+      "type": "color",
+      "id": "fade_color",
+      "label": "Background and fade colour",
+      "default": "#ECE1CF"
+    },
+    {
+      "type": "header",
+      "content": "Rating (social proof)"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social_proof",
+      "label": "Show rating",
+      "info": "Stars, the rating line, the line above it and the proof sentence. Switch on only with real numbers (e.g. from Judge.me).",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "social_proof_style",
+      "label": "Rating style",
+      "options": [
+        { "value": "stacked", "label": "Line above + stars" },
+        { "value": "pill", "label": "White pill" }
+      ],
+      "default": "stacked"
+    },
+    {
+      "type": "text",
+      "id": "social_proof_eyebrow",
+      "label": "Line above the stars",
+      "info": "Style \"Line above + stars\" only.",
+      "default": "Geliebt von über 10.000 Parfumliebhabern"
+    },
+    {
+      "type": "text",
+      "id": "rating_text",
+      "label": "Text next to the stars",
+      "default": "4,6/5 Sterne"
+    },
+    {
+      "type": "text",
+      "id": "social_proof_text",
+      "label": "Proof sentence",
+      "info": "Shown under the subheading, hidden together with the rating."
+    },
+    {
+      "type": "header",
+      "content": "Text"
+    },
+    {
+      "type": "select",
+      "id": "text_tone",
+      "label": "Text colour",
+      "options": [
+        { "value": "dark", "label": "Dark (light images)" },
+        { "value": "light", "label": "White (dark images)" }
+      ],
+      "default": "dark",
+      "info": "White also turns button 1 white and button 2 into a white outline."
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Duftzwillinge in Premiumqualität."
+    },
+    {
+      "type": "inline_richtext",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Finde den Zwilling deines Lieblingsdufts – oder starte mit unseren Bestsellern."
+    },
+    {
+      "type": "inline_richtext",
+      "id": "text",
+      "label": "Text"
+    },
+    {
+      "type": "text",
+      "id": "microcopy",
+      "label": "Small text"
+    },
+    {
+      "type": "header",
+      "content": "Buttons"
+    },
+    {
+      "type": "checkbox",
+      "id": "buttons_bottom",
+      "label": "Buttons at the bottom of the section",
+      "info": "Text stays on top, the buttons move to the lower edge.",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "button_1_label",
+      "label": "Button 1 label (black)",
+      "info": "Empty = no button."
+    },
+    {
+      "type": "url",
+      "id": "button_1_link",
+      "label": "Button 1 link"
+    },
+    {
+      "type": "text",
+      "id": "button_2_label",
+      "label": "Button 2 label (white)",
+      "info": "Empty = no button."
+    },
+    {
+      "type": "url",
+      "id": "button_2_link",
+      "label": "Button 2 link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "MAGYX Hero"
+    }
+  ]
+}
+{% endschema %}

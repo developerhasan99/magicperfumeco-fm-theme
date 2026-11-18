@@ -1,0 +1,69 @@
+{%- comment -%}
+  The saving a UGC product card shows (PDP / bundle-page video row and the
+  collection grid's UGC tile), as on magyx.whop.site's videos row: against the
+  regular (compare-at) price, rounded to a whole percent. No regular price above
+  today's = no output = the plain card.
+
+  Outputs "pct|price|compare|per_bottle" (money in cents, per_bottle 0 when the
+  title carries no bottle count of 2 or more), or nothing.
+  Callers capture it and split on '|':
+    {%- capture offer_data -%}{% render 'ugc-offer-data', product: some_product %}{%- endcapture -%}
+
+  Bottle count (German titles): the whole number right before an "x" that is
+  followed, with or without a space, by a number and "ml". The pattern may sit
+  anywhere in the title and is matched case-insensitively:
+    "6 X 50ml Parfümflaschen"            -> 6
+    "6X 50ml Parfümflaschen"             -> 6
+    "Er & Sie – 2X 50ml Parfümflakons"   -> 2
+    "Tagesblüten – 3X 50ml Parfümflakons" -> 3
+    "10 X 30ml Parfümflaschen"           -> 10
+    "Duftet wie Sauvage - Nr. 366"       -> none
+  How: the title is lowercased ("×" counts as "x"), every "x" and every "ml"
+  gets a space on each side and runs of spaces are collapsed, so "6X 50ml",
+  "6 X 50ml", "6x50ml" and "6 x 50 ml" all become the words "6 x 50 ml". The
+  words are then walked: the first "x" whose word before is a whole number, the
+  word after a whole number and the next word "ml" gives the count. Splitting
+  other words that contain an x or ml ("luxus" -> "lu x us") is harmless, since
+  those pieces are never whole numbers. A word is a whole number when adding 0
+  and printing it gives the same text back ("06", "2a" and "" are not).
+
+  Accepts:
+  - product: {Object} the product the card links to
+{%- endcomment -%}
+{%- liquid
+  assign offer_variant = product.selected_or_first_available_variant
+  if offer_variant != blank and offer_variant.compare_at_price > offer_variant.price
+    assign offer_pct = offer_variant.price | times: 100.0 | divided_by: offer_variant.compare_at_price
+    assign offer_pct = 100 | minus: offer_pct | round
+    if offer_pct > 0 and offer_pct < 100
+      assign bottle_text = product.title | downcase | replace: '×', 'x' | replace: 'x', ' x ' | replace: 'ml', ' ml '
+      assign bottle_text = bottle_text | replace: '  ', ' ' | replace: '  ', ' ' | replace: '  ', ' ' | strip
+      assign bottle_words = bottle_text | split: ' '
+      assign bottles = 0
+      for word in bottle_words
+        if word != 'x' or forloop.first
+          continue
+        endif
+        assign i_count = forloop.index0 | minus: 1
+        assign i_size = forloop.index0 | plus: 1
+        assign i_unit = forloop.index0 | plus: 2
+        assign w_count = bottle_words[i_count] | append: ''
+        assign w_size = bottle_words[i_size] | append: ''
+        assign w_unit = bottle_words[i_unit] | append: ''
+        assign n_count = w_count | plus: 0
+        assign n_size = w_size | plus: 0
+        assign s_count = n_count | append: ''
+        assign s_size = n_size | append: ''
+        if w_unit == 'ml' and s_count == w_count and s_size == w_size and n_count > 0 and n_size > 0
+          assign bottles = n_count
+          break
+        endif
+      endfor
+      assign offer_per = 0
+      if bottles > 1
+        assign offer_per = offer_variant.price | times: 1.0 | divided_by: bottles | round
+      endif
+      echo offer_pct | append: '|' | append: offer_variant.price | append: '|' | append: offer_variant.compare_at_price | append: '|' | append: offer_per
+    endif
+  endif
+-%}

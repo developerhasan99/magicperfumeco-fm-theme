@@ -1,0 +1,343 @@
+{% liquid
+  assign product_form_id = 'product-form-' | append: section.id
+  assign selected_variant = product.selected_or_first_available_variant
+
+  assign multi_option = false
+  if product.options.size > 1
+    assign multi_option = true
+  endif
+
+  for variant in product.variants
+    assign variant_title_down = variant.title | downcase
+
+    if variant_title_down contains '50'
+      if multi_option == false or variant.available
+        assign selected_variant = variant
+        break
+      endif
+    endif
+  endfor
+%}
+
+{% unless product.available %}
+  {% render 'sold-out-alternative', product: product %}
+{% else %}
+{% if multi_option %}
+  {% comment %} Multi-option picker (e.g. Größe + Konzentration): one row of buttons per option {% endcomment %}
+  <div id="variant-selector">
+    {% for option in product.options_with_values %}
+      {% liquid
+        assign option_index = forloop.index0
+        assign option_name_down = option.name | downcase
+        assign option_kind = 'other'
+        assign option_heading = option.name | append: ' auswählen:'
+        if option_name_down contains 'größe' or option_name_down contains 'grösse' or option_name_down contains 'groesse' or option_name_down contains 'storlek' or option_name_down contains 'size' or option_name_down contains 'volym' or option_name_down contains 'pojemno'
+          assign option_kind = 'size'
+          assign option_heading = 'Größe auswählen:'
+        endif
+      %}
+      <div class="flex justify-between items-center mb-3 !mt-6">
+        <h2 class="m-0 text-sm md:text-base font-semibold">{{ option_heading }}</h2>
+        {% if option_kind == 'size' %}
+          <div class="text-xs md:text-sm italic text-gray-500">80 % unserer Kunden kaufen 50 ml oder mehr</div>
+        {% endif %}
+      </div>
+
+      <div class="flex gap-3">
+        {% for value in option.values %}
+          {% liquid
+            assign value_available = false
+            for variant in product.variants
+              if variant.options[option_index] == value and variant.available
+                assign value_available = true
+                break
+              endif
+            endfor
+            assign value_selected = false
+            if selected_variant.options[option_index] == value
+              assign value_selected = true
+            endif
+          %}
+          <button
+            type="button"
+            class="option-button mgx-size-btn flex-grow justify-center gap-2 rounded-lg px-2 bg-white border-2 border-solid font-['Plus_Jakarta_Sans'] relative {% if value_selected %}border-black{% else %}border-gray-200{% endif %} {% if value_available %}cursor-pointer{% else %}opacity-50 line-through cursor-not-allowed{% endif %}"
+            data-option-index="{{ option_index }}"
+            data-value="{{ value | escape }}"
+            aria-pressed="{{ value_selected }}"
+            {% unless value_available %}
+              aria-disabled="true" title="{{ 'products.product.sold_out' | t | escape }}"
+            {% endunless %}>
+            <div class="text-center">
+              <div class="text-base font-semibold">{{ value }}</div>
+              {% if option_kind == 'size' %}
+                {% comment %} per-ml price depends on the other options too; filled by JS below {% endcomment %}
+                <div class="option-per-ml text-xs text-gray-500">&nbsp;</div>
+              {% endif %}
+            </div>
+            {% if option_kind == 'size' %}
+              {% if value contains '50' %}
+                <span class="text-xs italic text-white rounded absolute -top-2.5 left-1/2 [transform:translateX(-50%)] mgx-badge-amber px-2 py-0.5">Beliebt</span>
+              {% endif %}
+              {% if value contains '100' %}
+                <span class="text-xs italic text-white rounded absolute -top-2.5 left-1/2 [transform:translateX(-50%)] mgx-badge-amber px-2 py-0.5">Bestseller</span>
+              {% endif %}
+            {% endif %}
+          </button>
+        {% endfor %}
+      </div>
+    {% endfor %}
+  </div>
+{% elsif product.variants.size > 1 %}
+  {% comment %} Variant Selector {% endcomment %}
+  <div class="flex justify-between items-center mb-3 !mt-6">
+    <h2 class="m-0 text-sm md:text-base font-semibold">Größe auswählen:</h2>
+    <div class="text-xs md:text-sm italic text-gray-500">80 % unserer Kunden kaufen 50 ml oder mehr</div>
+  </div>
+
+  <div class="flex gap-3" id="variant-selector">
+    {% for variant in product.variants %}
+      {% liquid
+        assign variant_ml = 0
+        if variant.title contains '100'
+          assign variant_ml = 100
+        elsif variant.title contains '50'
+          assign variant_ml = 50
+        elsif variant.title contains '30'
+          assign variant_ml = 30
+        endif
+
+        if variant_ml > 0
+          assign price_per_ml = variant.price | times: 1.0 | divided_by: variant_ml
+        endif
+      %}
+      <button
+        type="button"
+        class="variant-button mgx-size-btn flex-grow justify-center gap-2 rounded-lg px-2 bg-white border-2 border-solid cursor-pointer font-['Plus_Jakarta_Sans'] relative {% if variant.id == selected_variant.id %}border-black{% else %}border-gray-200{% endif %}"
+        data-variant-id="{{ variant.id }}"
+        data-variant-title="{{ variant.title }}"
+        data-original-price="{{ variant.price | money }}"
+        data-compare-price="{{ variant.compare_at_price | money }}">
+        <div class="text-center">
+          <div class="text-base font-semibold">{{ variant.title }}</div>
+        </div>
+        {% if variant.title contains '50' %}
+          <span class="text-xs italic text-white rounded absolute -top-2.5 left-1/2 [transform:translateX(-50%)] mgx-badge-amber px-2 py-0.5">Beliebt</span>
+        {% endif %}
+        {% if variant.title contains '100' %}
+          <span class="text-xs italic text-white rounded absolute -top-2.5 left-1/2 [transform:translateX(-50%)] mgx-badge-amber px-2 py-0.5">Bestseller</span>
+        {% endif %}
+        {% if variant_ml > 0 %}
+          <div class="text-xs text-gray-500">{{ price_per_ml | money }} / ml</div>
+        {% endif %}
+      </button>
+    {% endfor %}
+  </div>
+{% endif %}
+
+{% comment %} Add to cart form {% endcomment %}
+<product-form
+  class="product-form !m-0"
+  data-hide-errors="{{ gift_card_recipient_feature_active }}"
+  data-section-id="{{ section.id }}">
+  {%- form 'product'
+    , product
+    , id: product_form_id
+    , class: 'form'
+    , novalidate: 'novalidate'
+    , data-type: 'add-to-cart-form'
+  -%}
+    <input
+      type="hidden"
+      name="id"
+      id="product-variant-id"
+      value="{{ selected_variant.id }}"
+      class="product-variant-id">
+    <button
+      type="submit"
+      name="add"
+      value="1"
+      class="atc-button shimmer-btn cta_product_from_submit_btn flex flex-wrap items-center !mb-0 text-2xl !py-3 !px-2 rounded-lg button mgx-btn-primary transition-colors shadow-xl tracking-normal button--full-width button--primary"
+      aria-label="In den Warenkorb"
+      {% if product.metafields.custom.bundle_size != blank %}
+      disabled="disabled"
+      {% endif %}>
+      <span>{{ 'products.product.add_to_cart' | t }}</span>
+      <div class="ml-2 pl-2 border-0 border-l flex items-center border-solid border-gray-200/20">
+        <div
+          class="inline-block text-lg mgx-price-pill px-3 rounded"
+          id="product-price"
+          role="status"
+          {{ block.shopify_attributes }}>
+          {% if selected_variant.compare_at_price > selected_variant.price %}
+            <span class="compare-price line-through text-white/50 text-base">{{ selected_variant.compare_at_price | money }}</span>
+          {% endif %}
+          <span class="current-price">{{ selected_variant.price | money }}</span>
+        </div>
+      </div>
+      {%- render 'loading-spinner' -%}
+    </button>
+  {%- endform -%}
+</product-form>
+{% endunless %}
+
+{%- comment -%} FUEL_06 product page entry for product.expressive-notes, see snippets/fuel06-pdp-link.liquid. This snippet is shared with the bundle templates; the link's own gate keeps it off those. {%- endcomment -%}
+{%- render 'fuel06-pdp-link' -%}
+
+<div>
+  {% render 'mgx-payment-icons' %}
+</div>
+
+{% render 'shipping-badges' %}
+
+<script>
+  (function() {
+    // Variant data object
+    const variantsData = {
+      {% for variant in product.variants %}
+        "{{ variant.id }}": {
+          title: "{{ variant.title }}",
+          originalPrice: "{{ variant.price | money }}",
+          compareAtPrice: "{{ variant.compare_at_price | money }}",
+          hasComparePrice: {% if variant.compare_at_price > variant.price %}true{% else %}false{% endif %},
+          available: {{ variant.available }},
+          price: {{ variant.price }},
+          options: {{ variant.options | json }}
+        }{% unless forloop.last %},{% endunless %}
+      {% endfor %}
+    };
+
+    // State
+    let selectedVariantId = "{{ selected_variant.id }}";
+
+    // DOM elements
+    const variantButtons = document.querySelectorAll('.variant-button');
+    const optionButtons = document.querySelectorAll('#variant-selector .option-button');
+    const variantIdInput = document.getElementById('product-variant-id');
+    const priceContainer = document.getElementById('product-price');
+
+    // Bail out if the required elements aren't on the page
+    if ((!variantButtons.length && !optionButtons.length) || !variantIdInput) return;
+
+    const currentPriceSpan = priceContainer ? priceContainer.querySelector('.current-price') : null;
+    const MONEY = new Intl.NumberFormat('de-DE', { style: 'currency', currency: '{{ cart.currency.iso_code }}' });
+
+    // Size buttons on multi-option products: per-ml price of that size with the other options as currently chosen
+    function refreshPerMl(current) {
+      document.querySelectorAll('#variant-selector .option-per-ml').forEach(el => {
+        const button = el.closest('.option-button');
+        const wanted = (current.options || []).slice();
+        wanted[Number(button.dataset.optionIndex)] = button.dataset.value;
+        const id = Object.keys(variantsData).find(id => variantsData[id].options.every((o, i) => o === wanted[i]));
+        const ml = parseFloat(button.dataset.value);
+        el.textContent = id && ml ? MONEY.format(variantsData[id].price / 100 / ml) + ' / ml' : ' ';
+      });
+    }
+    if (variantsData[selectedVariantId]) refreshPerMl(variantsData[selectedVariantId]);
+
+    // Update variant selection
+    function updateVariant(variantId) {
+      selectedVariantId = variantId;
+      const variantData = variantsData[variantId];
+      if (!variantData) return;
+
+      // Update hidden input
+      variantIdInput.value = variantId;
+
+      // Update button styles
+      variantButtons.forEach(button => {
+        if (button.dataset.variantId === variantId) {
+          button.classList.add('border-black');
+          button.classList.remove('border-gray-200');
+        } else {
+          button.classList.remove('border-black');
+          button.classList.add('border-gray-200');
+        }
+      });
+
+      optionButtons.forEach(button => {
+        const chosen = (variantData.options || [])[Number(button.dataset.optionIndex)] === button.dataset.value;
+        button.classList.toggle('border-black', chosen);
+        button.classList.toggle('border-gray-200', !chosen);
+        button.setAttribute('aria-pressed', chosen ? 'true' : 'false');
+      });
+      refreshPerMl(variantData);
+
+      // Update price display
+      if (priceContainer) {
+        let compareSpan = priceContainer.querySelector('.compare-price');
+        if (variantData.hasComparePrice) {
+          if (!compareSpan) {
+            compareSpan = document.createElement('span');
+            compareSpan.className = 'compare-price line-through text-white/50 text-base';
+            priceContainer.insertBefore(compareSpan, currentPriceSpan);
+          }
+          compareSpan.innerHTML = variantData.compareAtPrice;
+          compareSpan.style.display = '';
+        } else if (compareSpan) {
+          compareSpan.style.display = 'none';
+        }
+
+        if (currentPriceSpan) {
+          currentPriceSpan.innerHTML = variantData.originalPrice;
+        }
+      }
+
+      // Update all other current-price elements in the page
+      const allCurrentPriceElements = document.querySelectorAll('.current-price');
+      allCurrentPriceElements.forEach(element => {
+        // Skip the main price container element that we already updated
+        if (element !== currentPriceSpan && element.textContent.trim() !== '') {
+          element.innerHTML = variantData.originalPrice;
+        }
+      });
+    }
+
+    // Add click event listeners to variant buttons
+    variantButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        const variantId = this.dataset.variantId;
+        updateVariant(variantId);
+      });
+    });
+
+    // Option buttons: keep the other options, fall back to the first in-stock variant with the clicked value
+    optionButtons.forEach(button => button.addEventListener('click', function () {
+      const index = Number(this.dataset.optionIndex), value = this.dataset.value;
+      const wanted = ((variantsData[selectedVariantId] || {}).options || []).slice();
+      wanted[index] = value;
+      const ids = Object.keys(variantsData);
+      const match = ids.find(id => variantsData[id].available && variantsData[id].options.every((o, i) => o === wanted[i]))
+        || ids.find(id => variantsData[id].available && variantsData[id].options[index] === value);
+      if (match) updateVariant(match);
+    }));
+  })();
+</script>
+
+{% assign bundle_product = all_products['8x-50ml-parfumflaschen'] %}
+{% if bundle_product != blank and product.template_suffix == 'tsr-promo' %}
+  <a href="{{ bundle_product.url }}" class="mt-8 [display:grid] grid-cols-3 overflow-hidden rounded-lg border-2 mgx-border border-solid bg-white text-inherit no-underline shadow-[0_1px_0_rgba(17,24,39,0.03)] md:flex-row">
+    <div class="relative w-full overflow-hidden bg-white md:max-w-[280px]">
+      <img
+        src="{{ bundle_product.featured_image | image_url: width: 560 }}"
+        alt="{{ bundle_product.title | escape }}"
+        class="h-full w-full object-cover"
+        loading="lazy"
+        width="280"
+        height="280">
+    </div>
+
+    <div class="col-span-2 p-4 md:p-[18px]">
+      <div class="inline-block rounded-xl mgx-badge-sale px-2 py-1 text-xs font-semibold uppercase">
+        Spare 64%
+      </div>
+      <h3 class="my-2 tracking-normal font-semibold text-base md:text-lg">
+        Unser bestes Angebot: Bundle zusammenstellen!
+      </h3>
+      <div class="m-0 tracking-normal text-black text-sm md:text-base">
+        Nur
+        <strong>{{ bundle_product.price | divided_by: 8 | money }}</strong>
+        pro Flasche
+      </div>
+    </div>
+  </a>
+{% endif %}

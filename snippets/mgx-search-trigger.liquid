@@ -1,0 +1,57 @@
+{%- comment -%}
+  MAGYX search trigger. Opens the search overlay (sections/mgx-search.liquid, #MgxSearch): assets/mgx-search.js
+  catches clicks on [data-mgx-search-open] and calls preventDefault. Without JS it is a plain link to /search.
+  Styles: assets/mgx-search-trigger.css (loaded by sections/header.liquid).
+
+  Accepts:
+  - variant: {String} 'pill' (desktop header pill), 'icon' (44px magnifier), 'row' (full-width pill, phones + menu drawer). Default 'icon'.
+  - label: {String} visible text of 'pill' / 'row'; screen-reader text of 'icon' (default "Suche öffnen").
+
+  Usage:
+  {% render 'mgx-search-trigger', variant: 'row', label: 'Duft oder Marke suchen' %}
+{%- endcomment -%}
+{%- liquid
+  assign mgx_st_variant = variant | default: 'icon'
+  if mgx_st_variant == 'icon'
+    assign mgx_st_label = label | strip | default: 'Suche öffnen'
+  else
+    assign mgx_st_label = label | strip | default: 'Duft oder Marke suchen'
+  endif
+-%}
+<a
+  href="{{ routes.search_url }}"
+  class="mgx-st mgx-st--{{ mgx_st_variant }} focus-inset"
+  data-mgx-search-open
+  aria-haspopup="dialog"
+  aria-controls="MgxSearch"
+>
+  {%- if mgx_st_variant == 'icon' -%}
+    <svg
+      class="mgx-st__icon"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <circle cx="11" cy="11" r="7"/><path d="m20 20-4.2-4.2"/>
+    </svg>
+    <span class="visually-hidden">{{ mgx_st_label | escape }}</span>
+  {%- else -%}
+    <span class="mgx-st__label">{{ mgx_st_label | escape }}</span>
+    <span class="mgx-st__circle" aria-hidden="true">
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.4"
+        stroke-linecap="round"
+        focusable="false"
+      >
+        <circle cx="11" cy="11" r="7"/><path d="m20 20-4.2-4.2"/>
+      </svg>
+    </span>
+  {%- endif -%}
+</a>

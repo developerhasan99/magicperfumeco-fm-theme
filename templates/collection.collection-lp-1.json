@@ -1,0 +1,151 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "banner": {
+      "type": "main-collection-banner",
+      "disabled": true,
+      "settings": {
+        "show_collection_description": true,
+        "show_collection_image": false,
+        "color_scheme": "scheme-2"
+      }
+    },
+    "mgx_hero_bestseller": {
+      "type": "mgx-hero",
+      "settings": {
+        "image": "shopify://shop_images/MAGYX_Site_Header.webp",
+        "mobile_layout": "below",
+        "fade_color": "#ece1cf",
+        "show_social_proof": false,
+        "social_proof_style": "pill",
+        "social_proof_eyebrow": "Geliebt von über 10.000 Parfumliebhabern",
+        "rating_text": "4,6/5 Sterne · 10.000+ Bewertungen",
+        "social_proof_text": "Über 10.000 Kunden kennen die Antwort bereits.",
+        "text_tone": "dark",
+        "heading": "Bestseller",
+        "subheading": "Ohne Flasche und Logo: Würdest du den Unterschied bemerken?",
+        "text": "",
+        "microcopy": "Unsere meistgekauften Düfte.",
+        "buttons_bottom": false,
+        "button_1_label": "",
+        "button_1_link": "",
+        "button_2_label": "",
+        "button_2_link": ""
+      }
+    },
+    "custom_liquid_LM7CFG": {
+      "type": "custom-liquid",
+      "name": "t:sections.custom-liquid.presets.name",
+      "settings": {
+        "custom_liquid": "<style>\n#mp-trust-custom{\n  padding:40px 0;\n  background:#fff;\n  border-bottom:1px solid rgba(199,201,203,.5);\n}\n#mp-trust-custom .mp-container{\n  width:min(1180px,calc(100% - 36px));\n  margin-inline:auto;\n}\n#mp-trust-custom .mp-trust-grid{\n  display:grid;\n  grid-template-columns:repeat(4,1fr);\n  gap:0;\n}\n#mp-trust-custom .mp-trust-item{\n  text-align:center;\n  padding:16px 24px;\n  border-right:1px solid rgba(199,201,203,.5);\n}\n#mp-trust-custom .mp-trust-item:last-child{\n  border-right:none;\n}\n#mp-trust-custom .mp-icon{\n  height:44px;\n  margin:0 auto 14px;\n  color:#184031;\n}\n#mp-trust-custom .mp-icon svg{\n  width:36px;\n  height:36px;\n}\n#mp-trust-custom h3{\n  margin:0 0 6px;\n  font-size:15px;\n  font-weight:800;\n  letter-spacing:.3px;\n  color:#100F0D;\n  line-height:1.3;\n}\n#mp-trust-custom p{\n  margin:0;\n  font-size:13.5px;\n  line-height:1.6;\n  color:rgba(0,0,0,.55);\n}\n@media(max-width:700px){\n  #mp-trust-custom{padding:24px 0}\n  #mp-trust-custom .mp-trust-grid{\n    grid-template-columns:1fr 1fr;\n    gap:0;\n  }\n  #mp-trust-custom .mp-trust-item{\n    padding:16px 12px;\n    border-right:1px solid rgba(199,201,203,.5);\n    border-bottom:1px solid rgba(199,201,203,.5);\n  }\n  #mp-trust-custom .mp-trust-item:nth-child(2n){border-right:none}\n  #mp-trust-custom .mp-trust-item:nth-last-child(-n+2){border-bottom:none}\n  #mp-trust-custom h3{font-size:13px}\n  #mp-trust-custom p{font-size:12.5px}\n}\n</style>\n\n<section id=\"mp-trust-custom\">\n  <div class=\"mp-container\">\n    <div class=\"mp-trust-grid\">\n\n      <div class=\"mp-trust-item\">\n        <div class=\"mp-icon\" aria-hidden=\"true\">\n          <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"4\" y=\"7.5\" width=\"16\" height=\"12.5\" rx=\"1\"/><path d=\"M4 7.5 6.5 4h11L20 7.5\"/><path d=\"M12 4v3.5\"/><path d=\"M9.5 12h5\"/></svg>\n        </div>\n        <h3>Hergestellt in Europa</h3>\n        <p>IFRA-konforme Duftrezepturen. Ohne Phthalate und Parabene.</p>\n      </div>\n\n      <div class=\"mp-trust-item\">\n        <div class=\"mp-icon\" aria-hidden=\"true\">\n          <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 3.5c3.4 4.3 5.8 7.4 5.8 10.2a5.8 5.8 0 1 1-11.6 0C6.2 10.9 8.6 7.8 12 3.5z\"/><path d=\"M9.6 14.2a2.6 2.6 0 0 0 2.3 2.5\"/></svg>\n        </div>\n        <h3>Hochkonzentriertes Eau de Parfum</h3>\n        <p>20 % Parfumöl in jedem Duft.</p>\n      </div>\n\n      <div class=\"mp-trust-item\">\n        <div class=\"mp-icon\" aria-hidden=\"true\">\n          <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"6.5\" y=\"9.5\" width=\"11\" height=\"10.5\" rx=\"1.5\"/><path d=\"M10.5 9.5V7h3v2.5\"/><rect x=\"9.5\" y=\"3.8\" width=\"5\" height=\"3.2\" rx=\".8\"/></svg>\n        </div>\n        <h3>Von Parfumexperten entwickelt</h3>\n        <p>Sorgfältig abgestimmte Duftkompositionen.</p>\n      </div>\n\n      <div class=\"mp-trust-item\">\n        <div class=\"mp-icon\" aria-hidden=\"true\">\n          <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 3.5 19 6v5.4c0 4.4-2.9 7.7-7 9.1-4.1-1.4-7-4.7-7-9.1V6z\"/><path d=\"m9 11.9 2.2 2.2 3.8-4.2\"/></svg>\n        </div>\n        <h3>60 Tage testen</h3>\n        <p>Nicht dein Duft? Innerhalb von 60 Tagen zurückgeben.</p>\n      </div>\n\n    </div>\n  </div>\n</section>",
+        "color_scheme": "",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "custom_liquid_7EM3H4": {
+      "type": "custom-liquid",
+      "name": "t:sections.custom-liquid.presets.name",
+      "settings": {
+        "custom_liquid": "<style>\n#mp-reviews-custom{padding:48px 0;background:#fff;overflow:hidden}\n#mp-reviews-custom .mp-container{width:min(860px,calc(100% - 36px));margin-inline:auto}\n#mp-reviews-custom .mp-head{text-align:center;max-width:640px;margin:0 auto 30px}\n#mp-reviews-custom .mp-stars-lg,#mp-reviews-custom .mp-stars{display:flex;gap:3px}\n#mp-reviews-custom .mp-stars-lg{justify-content:center;margin-bottom:14px}\n#mp-reviews-custom .mp-stars-lg span,#mp-reviews-custom .mp-stars span{display:grid;place-items:center;background:#00b67a}\n#mp-reviews-custom .mp-stars-lg span{width:28px;height:28px}\n#mp-reviews-custom .mp-stars span{width:15px;height:15px}\n#mp-reviews-custom svg{fill:#fff;width:76%;height:76%}\n#mp-reviews-custom .mp-title{margin:0 0 10px;font-size:26px;line-height:1.25;font-weight:800;color:#100F0D}\n#mp-reviews-custom .mp-sub{margin:0;font-size:14px;line-height:1.5;color:rgba(0,0,0,.62)}\n#mp-reviews-custom .mp-carousel{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:4px 2px 8px}\n#mp-reviews-custom .mp-carousel::-webkit-scrollbar{display:none}\n#mp-reviews-custom .mp-card{flex:0 0 calc((100% - 32px) / 3);scroll-snap-align:start;box-sizing:border-box;display:flex;flex-direction:column;background:#fff;border:1px solid #e8e8e8;border-radius:10px;padding:16px 16px 14px;box-shadow:0 1px 4px rgba(0,0,0,.05)}\n#mp-reviews-custom .mp-card-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}\n#mp-reviews-custom .mp-verified{font-size:11px;color:rgba(0,0,0,.55);white-space:nowrap}\n#mp-reviews-custom .mp-card h3{margin:0 0 8px;font-size:14px;line-height:1.4;font-weight:700;color:#100F0D}\n#mp-reviews-custom .mp-card p{margin:0 0 8px;font-size:13px;line-height:1.6;color:rgba(0,0,0,.62)}\n#mp-reviews-custom .mp-card .mp-result{font-weight:600;color:#100F0D;margin-bottom:12px}\n#mp-reviews-custom .mp-card-foot{margin-top:auto;font-size:13px;color:#100F0D}\n#mp-reviews-custom .mp-nav{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:18px}\n#mp-reviews-custom .mp-arrow{width:40px;height:40px;border-radius:50%;border:1px solid #d6d6d6;background:#fff;color:#100F0D;font-size:22px;line-height:1;cursor:pointer;display:grid;place-items:center;padding:0 0 3px;transition:background .2s,color .2s,border-color .2s}\n#mp-reviews-custom .mp-arrow:hover{background:#100F0D;border-color:#100F0D;color:#fff}\n#mp-reviews-custom .mp-arrow:disabled{opacity:.35;cursor:default;background:#fff;color:#100F0D;border-color:#d6d6d6}\n#mp-reviews-custom .mp-dots{display:flex;gap:0}\n#mp-reviews-custom .mp-dot{box-sizing:content-box;width:8px;height:8px;border-radius:50%;border:0;padding:8px 5px;background:#d9d9d9;background-clip:content-box;cursor:pointer}\n#mp-reviews-custom .mp-dot.active{background:#00b67a}\n@media(max-width:749px){\n  #mp-reviews-custom{padding:32px 0}\n  #mp-reviews-custom .mp-container{width:100%}\n  #mp-reviews-custom .mp-head{padding:0 18px;margin-bottom:22px}\n  #mp-reviews-custom .mp-stars-lg span{width:24px;height:24px}\n  #mp-reviews-custom .mp-title{font-size:22px}\n  #mp-reviews-custom .mp-carousel{gap:12px;padding:4px 18px 8px;scroll-padding-left:18px}\n  #mp-reviews-custom .mp-card{flex-basis:82%}\n  #mp-reviews-custom .mp-arrow{display:none}\n}\n</style>\n\n<section id=\"mp-reviews-custom\">\n  <div class=\"mp-container\">\n    <div class=\"mp-head\">\n      <div class=\"mp-stars-lg\" role=\"img\" aria-label=\"5 von 5 Sternen\"><span><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 2.5l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.7l7.1-.6z\"/></svg></span><span><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 2.5l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.7l7.1-.6z\"/></svg></span><span><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 2.5l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.7l7.1-.6z\"/></svg></span><span><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 2.5l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.7l7.1-.6z\"/></svg></span><span><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 2.5l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.7l7.1-.6z\"/></svg></span></div>\n      <h2 class=\"mp-title\">Zum Verwechseln &#228;hnlich? Das sagen unsere Kunden.</h2>\n      <p class=\"mp-sub\">Kundenrezensionen &#183; 4,7 von 5 Sternen</p>\n    </div>\n    <div class=\"mp-carousel\" data-mp-carousel>\n      <article class=\"mp-card\">\n        <div class=\"mp-card-top\">\n          <div class=\"mp-stars\" role=\"img\" aria-label=\"5 von 5 Sternen\"><span><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 2.5l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.7l7.1-.6z\"/></svg></span><span><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 2.5l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.7l7.1-.6z\"/></svg></span><span><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 2.5l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.7l7.1-.6z\"/></svg></span><span><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 2.5l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.7l7.1-.6z\"/></svg></span><span><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 2.5l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.7l7.1-.6z\"/></svg></span></div>\n          <span class=\"mp-verified\">Verifizierter K&#228;ufer</span>\n        </div>\n        <h3>&#8222;Riecht super frisch und kommt Aventus ziemlich nah.&#8220;</h3>\n        <p>Wusste erst nicht genau, was mich erwartet, aber der Duft hat mich echt positiv &#252;berrascht. H&#228;lt ordentlich und der Preis ist einfach deutlich besser.</p>\n        <p class=\"mp-result\">Nah am Original. Deutlich besserer Preis.</p>\n        <div class=\"mp-card-foot\"><strong>Michael T.</strong></div>\n      </article>\n      <article class=\"mp-card\">\n        <div class=\"mp-card-top\">\n          <div class=\"mp-stars\" role=\"img\" aria-label=\"5 von 5 Sternen\"><span><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 2.5l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.7l7.1-.6z\"/></svg></span><span><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 2.5l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.7l7.1-.6z\"/></svg></span><span><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 2.5l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.7l7.1-.6z\"/></svg></span><span><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 2.5l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.7l7.1-.6z\"/></svg></span><span><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 2.5l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.7l7.1-.6z\"/></svg></span></div>\n          <span class=\"mp-verified\">Verifizierter K&#228;ufer</span>\n        </div>\n        <h3>&#8222;Ich hab vorher nie einen Duft-Dupe gefunden, der wirklich authentisch riecht.&#8220;</h3>\n        <p>Das war meine erste Bestellung hier und ich bin echt begeistert. Ich kauf mein Parf&#252;m ab jetzt nirgendwo anders mehr.</p>\n        <p class=\"mp-result\">Authentisch im Duft. Konstant gleich gut.</p>\n        <div class=\"mp-card-foot\"><strong>Sebastian M&#252;ller</strong></div>\n      </article>\n      <article class=\"mp-card\">\n        <div class=\"mp-card-top\">\n          <div class=\"mp-stars\" role=\"img\" aria-label=\"5 von 5 Sternen\"><span><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 2.5l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.7l7.1-.6z\"/></svg></span><span><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 2.5l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.7l7.1-.6z\"/></svg></span><span><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 2.5l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.7l7.1-.6z\"/></svg></span><span><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 2.5l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.7l7.1-.6z\"/></svg></span><span><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 2.5l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.7l7.1-.6z\"/></svg></span></div>\n          <span class=\"mp-verified\">Verifizierter K&#228;ufer</span>\n        </div>\n        <h3>&#8222;Die D&#252;fte sind wirklich nah an den Originalen.&#8220;</h3>\n        <p>Alle drei D&#252;fte, die ich bestellt habe, riechen echt richtig gut und halten auch lange.</p>\n        <p class=\"mp-result\">Drei D&#252;fte. Alle nah am Original.</p>\n        <div class=\"mp-card-foot\"><strong>Clara P.</strong></div>\n      </article>\n      <article class=\"mp-card\">\n        <div class=\"mp-card-top\">\n          <div class=\"mp-stars\" role=\"img\" aria-label=\"5 von 5 Sternen\"><span><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 2.5l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.7l7.1-.6z\"/></svg></span><span><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 2.5l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.7l7.1-.6z\"/></svg></span><span><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 2.5l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.7l7.1-.6z\"/></svg></span><span><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 2.5l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.7l7.1-.6z\"/></svg></span><span><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 2.5l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.7l7.1-.6z\"/></svg></span></div>\n          <span class=\"mp-verified\">Verifizierter K&#228;ufer</span>\n        </div>\n        <h3>&#8222;Einer der besten D&#252;fte, die ich seit Jahren gerochen habe.&#8220;</h3>\n        <p>Die Noten sind einfach brutal gut. Der bleibt definitiv dauerhaft in meiner Sammlung.</p>\n        <p class=\"mp-result\">Bleibt dauerhaft in der Sammlung.</p>\n        <div class=\"mp-card-foot\"><strong>Emilia Wagner</strong></div>\n      </article>\n      <article class=\"mp-card\">\n        <div class=\"mp-card-top\">\n          <div class=\"mp-stars\" role=\"img\" aria-label=\"5 von 5 Sternen\"><span><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 2.5l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.7l7.1-.6z\"/></svg></span><span><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 2.5l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.7l7.1-.6z\"/></svg></span><span><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 2.5l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.7l7.1-.6z\"/></svg></span><span><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 2.5l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.7l7.1-.6z\"/></svg></span><span><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 2.5l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.7l7.1-.6z\"/></svg></span></div>\n          <span class=\"mp-verified\">Verifizierter K&#228;ufer</span>\n        </div>\n        <h3>&#8222;Genau so einen Duft hab ich gesucht.&#8220;</h3>\n        <p>Ich hab ewig nach D&#252;ften gesucht, die hochwertig riechen und auch lange halten.</p>\n        <p class=\"mp-result\">Hochwertig im Duft. Lange Haltbarkeit.</p>\n        <div class=\"mp-card-foot\"><strong>Daniel Roth</strong></div>\n      </article>\n      <article class=\"mp-card\">\n        <div class=\"mp-card-top\">\n          <div class=\"mp-stars\" role=\"img\" aria-label=\"5 von 5 Sternen\"><span><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 2.5l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.7l7.1-.6z\"/></svg></span><span><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 2.5l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.7l7.1-.6z\"/></svg></span><span><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 2.5l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.7l7.1-.6z\"/></svg></span><span><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 2.5l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.7l7.1-.6z\"/></svg></span><span><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 2.5l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.7l7.1-.6z\"/></svg></span></div>\n          <span class=\"mp-verified\">Verifizierter K&#228;ufer</span>\n        </div>\n        <h3>&#8222;Einer meiner absoluten Lieblingsd&#252;fte.&#8220;</h3>\n        <p>War super schnell da und riecht einfach richtig gut.</p>\n        <p class=\"mp-result\">Schnell geliefert. Richtig guter Duft.</p>\n        <div class=\"mp-card-foot\"><strong>Jonas Hartmann</strong></div>\n      </article>\n      <article class=\"mp-card\">\n        <div class=\"mp-card-top\">\n          <div class=\"mp-stars\" role=\"img\" aria-label=\"5 von 5 Sternen\"><span><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 2.5l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.7l7.1-.6z\"/></svg></span><span><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 2.5l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.7l7.1-.6z\"/></svg></span><span><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 2.5l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.7l7.1-.6z\"/></svg></span><span><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 2.5l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.7l7.1-.6z\"/></svg></span><span><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 2.5l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.7l7.1-.6z\"/></svg></span></div>\n          <span class=\"mp-verified\">Verifizierter K&#228;ufer</span>\n        </div>\n        <h3>&#8222;Wow, einfach unglaublich gut.&#8220;</h3>\n        <p>Am Anfang war ich etwas besorgt, weil sich die Lieferung verz&#246;gert hat. Aber als das Parf&#252;m angekommen ist und sich der Duft erst mal gesetzt hat: wow.</p>\n        <p class=\"mp-result\">Das Warten wert.</p>\n        <div class=\"mp-card-foot\"><strong>Lionel M.</strong></div>\n      </article>\n    </div>\n    <div class=\"mp-nav\">\n      <button type=\"button\" class=\"mp-arrow\" data-mp-prev aria-label=\"Vorherige Rezension\">&#8249;</button>\n      <div class=\"mp-dots\" data-mp-dots></div>\n      <button type=\"button\" class=\"mp-arrow\" data-mp-next aria-label=\"N&#228;chste Rezension\">&#8250;</button>\n    </div>\n  </div>\n</section>\n\n<script>\n(function(){\n  var root = document.getElementById('mp-reviews-custom');\n  if (!root) return;\n  var track = root.querySelector('[data-mp-carousel]');\n  var cards = Array.prototype.slice.call(track.children);\n  var dotsWrap = root.querySelector('[data-mp-dots]');\n  var prev = root.querySelector('[data-mp-prev]');\n  var next = root.querySelector('[data-mp-next]');\n  if (!cards.length) return;\n\n  function step(){ return cards.length > 1 ? cards[1].offsetLeft - cards[0].offsetLeft : track.clientWidth; }\n  function positions(){ return Math.max(1, cards.length - Math.round(track.clientWidth / step()) + 1); }\n  function current(){\n    var max = track.scrollWidth - track.clientWidth;\n    if (track.scrollLeft >= max - 2) return positions() - 1;\n    return Math.round(track.scrollLeft / step());\n  }\n  function go(i){ track.scrollTo({left: i * step(), behavior: 'smooth'}); }\n\n  function buildDots(){\n    dotsWrap.innerHTML = '';\n    for (var i = 0; i < positions(); i++) {\n      var d = document.createElement('button');\n      d.type = 'button';\n      d.className = 'mp-dot';\n      d.setAttribute('aria-label', 'Rezension ' + (i + 1));\n      d.addEventListener('click', go.bind(null, i));\n      dotsWrap.appendChild(d);\n    }\n    update();\n  }\n  function update(){\n    var c = current(), n = positions();\n    Array.prototype.forEach.call(dotsWrap.children, function(d, i){ d.classList.toggle('active', i === c); });\n    prev.disabled = c <= 0;\n    next.disabled = c >= n - 1;\n  }\n\n  prev.addEventListener('click', function(){ go(Math.max(0, current() - 1)); });\n  next.addEventListener('click', function(){ go(Math.min(positions() - 1, current() + 1)); });\n  var t;\n  track.addEventListener('scroll', function(){ clearTimeout(t); t = setTimeout(update, 60); });\n  window.addEventListener('resize', buildDots);\n  buildDots();\n})();\n</script>",
+        "color_scheme": "",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "popular_products_fTiLBm": {
+      "type": "popular-products",
+      "disabled": true,
+      "name": "Popular Products",
+      "settings": {
+        "background_color": "#fcfbf9",
+        "heading": "Kaufe mehr und spare!",
+        "subheading": "",
+        "collection": "bestselling-bundles",
+        "show_all_button_text": "Schau dir mehr an!",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "product-grid": {
+      "type": "main-collection-product-grid",
+      "blocks": {
+        "fuel05_ugc_video_lp1Vy8": {
+          "type": "fuel05_ugc_video",
+          "settings": {
+            "position": 8,
+            "device": "both",
+            "video": "shopify://files/videos/magic_perfume_FinnjaV_DuftWieVery_5b40c218.mov",
+            "video_url": "",
+            "product": "bundle-and-save"
+          }
+        },
+        "fuel05_ugc_video_lp1Ab4": {
+          "type": "fuel05_ugc_video",
+          "settings": {
+            "position": 4,
+            "device": "both",
+            "video": "shopify://files/videos/magic_perfume_Anna_SophiaZ_DuftWieLIBR_64e5df0c.mov",
+            "video_url": "",
+            "product": "bundle-and-save"
+          }
+        },
+        "fuel05_ugc_video_lp1Wq2": {
+          "type": "fuel05_ugc_video",
+          "settings": {
+            "position": 2,
+            "device": "both",
+            "video": "shopify://files/videos/05_ROAS1.59_11.08_Arbitrage_HighOilConcentration_V2_9x16.mp4",
+            "video_url": "",
+            "product": "bundle-and-save"
+          }
+        }
+      },
+      "block_order": [
+        "fuel05_ugc_video_lp1Vy8",
+        "fuel05_ugc_video_lp1Ab4",
+        "fuel05_ugc_video_lp1Wq2"
+      ],
+      "settings": {
+        "products_per_page": 24,
+        "columns_desktop": 4,
+        "color_scheme": "scheme-2",
+        "image_ratio": "adapt",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "standard",
+        "enable_filtering": true,
+        "filter_type": "horizontal",
+        "enable_sorting": true,
+        "enable_search": true,
+        "search_placeholder": "Marke, Duft oder Nr. suchen",
+        "search_results_text": "[count] Ergebnisse für „[query]“",
+        "search_result_text": "1 Ergebnis für „[query]“",
+        "search_empty_text": "Kein Treffer für „[query]“. Versuch es mit der Marke oder dem Namen des Originals.",
+        "search_loading_text": "Alle Düfte werden durchsucht…",
+        "search_clear_label": "Suche löschen",
+        "columns_mobile": "2",
+        "padding_top": 32,
+        "padding_bottom": 60
+      }
+    }
+  },
+  "order": [
+    "banner",
+    "mgx_hero_bestseller",
+    "custom_liquid_LM7CFG",
+    "custom_liquid_7EM3H4",
+    "popular_products_fTiLBm",
+    "product-grid"
+  ]
+}

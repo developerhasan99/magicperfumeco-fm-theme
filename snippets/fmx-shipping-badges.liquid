@@ -1,0 +1,95 @@
+{%- comment -%}
+  fmx-shipping-badges (magicperfume.co): badge row under the payment icons on the FM product pages
+  (scent pages, bundle pages, payday). Structure, CSS and tile layout = tryscent.co
+  snippets/fmx-shipping-badges.liquid (premium-redesign): delivery tile, carrier-logo tile, seal tile.
+  Content = this store's live badge row (snippets/shipping-badges.liquid on the live magicperfume.co PDP):
+  - delivery: truck icon; DE "Versand in 48 Stunden aus Berlin", every other country
+    "Lieferung nach <Land> in 5 Werktagen" (live sentences);
+  - carrier: DPD + DHL logos side by side (live assets logo-dpd.svg / logo-dhl.svg, DPD white with a hairline
+    border, DHL yellow #FECC00), "Sicherer Versand mit DPD & DHL" (in place of tryscent.co's PostNord tile);
+  - guarantee: seal guarantee-badge-accent.png (live asset, Pine) + "60 Tage Geld-zurück-Garantie".
+  Renders nothing for a product that ships nothing.
+
+  Accepts (optional):
+  - delivery_text: replaces the delivery tile's text
+  - guarantee_text: replaces the guarantee tile's text
+
+  Usage:
+  {% render 'fmx-shipping-badges', product: product %}
+{%- endcomment -%}
+{%- liquid
+  if localization.country.iso_code == 'DE'
+    assign badge_delivery = 'Versand in 48 Stunden aus Berlin'
+  else
+    assign badge_delivery = 'Lieferung nach ' | append: localization.country.name | append: ' in 5 Werktagen'
+  endif
+  assign badge_carrier = 'Sicherer Versand mit DPD &amp; DHL'
+  assign badge_guarantee = '60 Tage Geld-zurück-Garantie'
+
+  if delivery_text != blank
+    assign badge_delivery = delivery_text
+  endif
+  if guarantee_text != blank
+    assign badge_guarantee = guarantee_text
+  endif
+
+  assign badge_ships = true
+  if product != blank and product.selected_or_first_available_variant.requires_shipping == false
+    assign badge_ships = false
+  endif
+-%}
+{%- if badge_ships -%}
+  <style>
+    .fmx-shipping-badges { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); margin: 24px 0; color: var(--pm-ink, #232323); }
+    .fmx-shipping-badges__item { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 4px 6px; text-align: center; }
+    .fmx-shipping-badges__item + .fmx-shipping-badges__item { border-left: 1px solid var(--pm-line, #e7e7e7); }
+    .fmx-shipping-badges__media { display: flex; align-items: center; justify-content: center; width: 100%; height: 28px; }
+    .fmx-shipping-badges__icon { display: block; width: 28px; height: 28px; }
+    .fmx-shipping-badges__icon svg { display: block; width: 100%; height: 100%; fill: currentColor; }
+    .fmx-shipping-badges__logo { display: block; width: auto; height: 28px; }
+    .fmx-shipping-badges__carriers { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; width: 100%; max-width: 132px; height: 28px; }
+    .fmx-shipping-badges__carrier { display: flex; align-items: center; justify-content: center; min-width: 0; border-radius: 4px; overflow: hidden; }
+    .fmx-shipping-badges__carrier--dpd { background: #fff; border: 1px solid var(--pm-line, #e7e7e7); }
+    .fmx-shipping-badges__carrier--dhl { background: #FECC00; }
+    .fmx-shipping-badges__carrier img { display: block; width: 100%; height: 100%; object-fit: contain; }
+    .fmx-shipping-badges__carrier--dpd img { padding: 3px; }
+    .fmx-shipping-badges__text { font-size: 12px; line-height: 1.3; font-weight: 600; letter-spacing: 0; overflow-wrap: anywhere; }
+    @media (min-width: 750px) {
+      .fmx-shipping-badges__item { padding: 4px 10px; }
+      .fmx-shipping-badges__text { font-size: 13px; }
+    }
+  </style>
+  <div class="fmx-shipping-badges">
+    <div class="fmx-shipping-badges__item">
+      <span class="fmx-shipping-badges__media">
+        <span class="fmx-shipping-badges__icon" aria-hidden="true">{{ 'icon-truck.svg' | inline_asset_content }}</span>
+      </span>
+      <span class="fmx-shipping-badges__text">{{ badge_delivery }}</span>
+    </div>
+    <div class="fmx-shipping-badges__item">
+      <span class="fmx-shipping-badges__media">
+        <span class="fmx-shipping-badges__carriers">
+          <span class="fmx-shipping-badges__carrier fmx-shipping-badges__carrier--dpd">
+            <img src="{{ 'logo-dpd.svg' | asset_url }}" alt="DPD" width="60" height="25" loading="lazy">
+          </span>
+          <span class="fmx-shipping-badges__carrier fmx-shipping-badges__carrier--dhl">
+            <img src="{{ 'logo-dhl.svg' | asset_url }}" alt="DHL" width="64" height="14" loading="lazy">
+          </span>
+        </span>
+      </span>
+      <span class="fmx-shipping-badges__text">{{ badge_carrier }}</span>
+    </div>
+    <div class="fmx-shipping-badges__item">
+      <span class="fmx-shipping-badges__media">
+        <img
+          class="fmx-shipping-badges__logo"
+          src="{{ 'guarantee-badge-accent.png' | asset_url }}"
+          alt=""
+          width="28"
+          height="28"
+          loading="lazy">
+      </span>
+      <span class="fmx-shipping-badges__text">{{ badge_guarantee }}</span>
+    </div>
+  </div>
+{%- endif -%}

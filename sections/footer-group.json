@@ -1,0 +1,107 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "name": "t:sections.footer.name",
+  "type": "footer",
+  "sections": {
+    "newsletter_D3xybA": {
+      "type": "newsletter",
+      "blocks": {
+        "heading_yHFKeC": {
+          "type": "heading",
+          "settings": {
+            "heading": "Abonniere den Newsletter und sichere dir 10 % Rabatt.",
+            "heading_size": "h2"
+          }
+        },
+        "paragraph_zERFgA": {
+          "type": "paragraph",
+          "settings": {
+            "text": "<p>Erhalte Neuigkeiten zu unseren Düften und Angeboten.<br/></p>"
+          }
+        },
+        "email_form_6YfwgH": {
+          "type": "email_form",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "heading_yHFKeC",
+        "paragraph_zERFgA",
+        "email_form_6YfwgH"
+      ],
+      "name": "t:sections.newsletter.presets.name",
+      "settings": {
+        "color_scheme": "scheme-4",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
+    "1792764407db95ad34": {
+      "type": "apps",
+      "settings": {
+        "include_margins": true
+      }
+    },
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "text_x89MfR": {
+          "type": "text",
+          "settings": {
+            "heading": "Magic Perfume",
+            "subtext": "<p>Magic Perfume ist eine Parfummarke, die dir hilft, deinen ganz persönlichen Duft zu finden. Entdecke die Düfte von Magic Perfume und finde deinen Favoriten.<br/></p>",
+            "show_social": true
+          }
+        },
+        "link_list_Fhdw8K": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Informationen",
+            "menu": "footer"
+          }
+        },
+        "text_RP9BNp": {
+          "type": "text",
+          "settings": {
+            "heading": "Kontakt",
+            "subtext": "<p>Kurfürstendamm 11, 10719 Berlin, Deutschland&nbsp;</p><p>E-Mail: hello@magicperfume.co · Anbieterinformationen<br/><br/><br/><br/></p>",
+            "show_social": false
+          }
+        }
+      },
+      "block_order": [
+        "text_x89MfR",
+        "link_list_Fhdw8K",
+        "text_RP9BNp"
+      ],
+      "settings": {
+        "color_scheme": "scheme-4",
+        "newsletter_enable": false,
+        "newsletter_heading": "Subscribe to our emails",
+        "enable_follow_on_shop": false,
+        "show_social": false,
+        "enable_country_selector": false,
+        "enable_language_selector": true,
+        "payment_enable": true,
+        "show_policy": true,
+        "margin_top": 0,
+        "padding_top": 44,
+        "padding_bottom": 60
+      }
+    }
+  },
+  "order": [
+    "newsletter_D3xybA",
+    "1792764407db95ad34",
+    "footer"
+  ]
+}

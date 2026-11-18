@@ -1,0 +1,332 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "name": "t:sections.header.name",
+  "type": "header",
+  "sections": {
+    "offer_annoucement_4tnBfB": {
+      "type": "offer-annoucement",
+      "disabled": true,
+      "name": "Offer Announcement",
+      "settings": {
+        "background_color": "#000000",
+        "background_color_2": "#e32402",
+        "prepend_text": "St. Patrick's Day-Aktion",
+        "link_text": "3 kaufen – 1 gratis",
+        "append_text": "",
+        "link": "shopify://collections/best-sellers"
+      }
+    },
+    "offer_timebar_8kAUGX": {
+      "type": "offer-timebar",
+      "blocks": {
+        "payment_icon_NXYPjm": {
+          "type": "payment_icon",
+          "settings": {
+            "use_country_flag": false,
+            "icon": "shopify://shop_images/090e7fd71af4b4e7589642874d6cae93a0a34f77.png",
+            "label": "Schnell"
+          }
+        },
+        "payment_icon_KF79X3": {
+          "type": "payment_icon",
+          "settings": {
+            "use_country_flag": false,
+            "icon": "shopify://shop_images/Flag_of_Germany_svg.webp",
+            "label": "Qualität"
+          }
+        },
+        "payment_icon_3nUT9e": {
+          "type": "payment_icon",
+          "settings": {
+            "use_country_flag": false,
+            "icon": "shopify://shop_images/800c98d03dc73f77225bfa90300384e0370c7cff.png",
+            "label": "Sicher"
+          }
+        },
+        "payment_icon_Qjr7YN": {
+          "type": "payment_icon",
+          "settings": {
+            "use_country_flag": false,
+            "icon": "shopify://shop_images/777929254296c2d290f0836dc4e68451f4cfdbc4.png",
+            "label": "Flexibel"
+          }
+        },
+        "payment_icon_rTMrrJ": {
+          "type": "payment_icon",
+          "settings": {
+            "use_country_flag": false,
+            "icon": "shopify://shop_images/images-555x360--08-28-2026_03_03_PM.png",
+            "label": "Direkt"
+          }
+        }
+      },
+      "block_order": [
+        "payment_icon_NXYPjm",
+        "payment_icon_KF79X3",
+        "payment_icon_3nUT9e",
+        "payment_icon_Qjr7YN",
+        "payment_icon_rTMrrJ"
+      ],
+      "name": "Offer Timebar",
+      "settings": {
+        "enable_top_bar": true,
+        "enable_timer": false,
+        "enable_badges": false,
+        "primary_color": "#000000",
+        "secondary_color": "#ffffff",
+        "timer_box_color": "#0b0b0b",
+        "timer_label_color": "#ffffff",
+        "top_banner_text": "BLACK-WEEK-WAHNSINN",
+        "prepend_text": "BIS ZU 40 % RABATT AUF DEN GESAMTEN WARENKORB",
+        "countdown_date": "",
+        "append_text": "",
+        "link": "shopify://products/bundle-and-save",
+        "goal_line_enable": true,
+        "goal_line_markets": "",
+        "goal_line_lang": "",
+        "goal_steps": "2:25, 4:30, 6:35, 8:40",
+        "goal_bs_handle": "bundle-and-save",
+        "goal_text_empty": "Füge [n] hinzu und erhalte [pct] RABATT",
+        "goal_text_step": "Füge noch [n] hinzu und erhalte [pct] RABATT",
+        "goal_text_unlocked": "[rewards] freigeschaltet",
+        "goal_text_done": "Du erhältst [pct] RABATT",
+        "goal_label_pct": "[pct] RABATT",
+        "goal_word_one": "Flasche",
+        "goal_word_many": "Flaschen"
+      }
+    },
+    "blocky_lys_scrolling_text_bar_GLkKNr": {
+      "type": "blocky-lys-scrolling-text-bar",
+      "blocks": {
+        "text_iDAedj": {
+          "type": "text",
+          "disabled": true,
+          "settings": {
+            "text": "3 KAUFEN- 1  GRATIS"
+          }
+        },
+        "text_QD7JEH": {
+          "type": "text",
+          "settings": {
+            "text": "Kostenloser Versand ab  €40!"
+          }
+        },
+        "text_39tt9p": {
+          "type": "text",
+          "disabled": true,
+          "settings": {
+            "text": "KOSTENLOSER VERSAND AB 55€"
+          }
+        },
+        "text_DiPtyi": {
+          "type": "text",
+          "disabled": true,
+          "settings": {
+            "text": "60 TAGE GELD-ZURÜCK-GARANTIE"
+          }
+        },
+        "text_7Mhc9j": {
+          "type": "text",
+          "disabled": true,
+          "settings": {
+            "text": "BIS ZU 95% GÜNSTIGER"
+          }
+        }
+      },
+      "block_order": [
+        "text_iDAedj",
+        "text_QD7JEH",
+        "text_39tt9p",
+        "text_DiPtyi",
+        "text_7Mhc9j"
+      ],
+      "disabled": true,
+      "settings": {
+        "text_size": "1.5",
+        "background_color": "#000000",
+        "text_color": "#ffffff",
+        "speed": 1,
+        "text_spacing": 3,
+        "padding_top": 16,
+        "padding_bottom": 16
+      }
+    },
+    "header": {
+      "type": "header",
+      "settings": {
+        "logo_position": "middle-left",
+        "menu": "main-menu",
+        "mobile_menu": "handy-menu",
+        "search_label": "Duft oder Marke suchen",
+        "menu_type_desktop": "dropdown",
+        "sticky_header_type": "on-scroll-up",
+        "show_line_separator": true,
+        "color_scheme": "scheme-4",
+        "menu_color_scheme": "scheme-2",
+        "enable_country_selector": false,
+        "enable_language_selector": false,
+        "enable_customer_avatar": true,
+        "mobile_logo_position": "center",
+        "margin_bottom": 0,
+        "padding_top": 20,
+        "padding_bottom": 20
+      }
+    },
+    "mgx_search": {
+      "type": "mgx-search",
+      "blocks": {
+        "category_herren": {
+          "type": "category",
+          "settings": {
+            "label": "Herrendüfte",
+            "link": "shopify://collections/alle-herrendufte"
+          }
+        },
+        "category_damen": {
+          "type": "category",
+          "settings": {
+            "label": "Damendüfte",
+            "link": "shopify://collections/alle-damendufte"
+          }
+        },
+        "category_bestseller": {
+          "type": "category",
+          "settings": {
+            "label": "Bestseller",
+            "link": "shopify://collections/bestseller-singles"
+          }
+        },
+        "category_neu": {
+          "type": "category",
+          "settings": {
+            "label": "Neue Düfte",
+            "link": "shopify://collections/neue-dufte"
+          }
+        },
+        "term_vanille": {
+          "type": "term",
+          "settings": {
+            "emoji": "🍦",
+            "label": "Vanille",
+            "query": "vanille",
+            "color_1": "#fdf3dd",
+            "color_2": "#f7e7c2"
+          }
+        },
+        "term_frisch": {
+          "type": "term",
+          "settings": {
+            "emoji": "🌿",
+            "label": "Frisch",
+            "query": "frisch",
+            "color_1": "#d9f5ec",
+            "color_2": "#c0ecde"
+          }
+        },
+        "term_holzig": {
+          "type": "term",
+          "settings": {
+            "emoji": "🪵",
+            "label": "Holzig",
+            "query": "holzig",
+            "color_1": "#ecdfd0",
+            "color_2": "#ddc9b0"
+          }
+        },
+        "term_blumig": {
+          "type": "term",
+          "settings": {
+            "emoji": "🌸",
+            "label": "Blumig",
+            "query": "blumig",
+            "color_1": "#ffe0f0",
+            "color_2": "#ffc9e6"
+          }
+        },
+        "term_orientalisch": {
+          "type": "term",
+          "settings": {
+            "emoji": "🌙",
+            "label": "Orientalisch",
+            "query": "orientalisch",
+            "color_1": "#fde6cf",
+            "color_2": "#f9cfa5"
+          }
+        },
+        "term_suess": {
+          "type": "term",
+          "settings": {
+            "emoji": "🍓",
+            "label": "Süß",
+            "query": "süß",
+            "color_1": "#ffe3ec",
+            "color_2": "#ffd0de"
+          }
+        },
+        "product_8x50": {
+          "type": "product",
+          "settings": {
+            "product": "8x-50ml-parfumflaschen",
+            "subtitle": "8 Düfte deiner Wahl, je 50 ml"
+          }
+        },
+        "product_6x50": {
+          "type": "product",
+          "settings": {
+            "product": "6-x-50ml-duftgarderobe-64",
+            "subtitle": "6 Düfte deiner Wahl, je 50 ml"
+          }
+        },
+        "product_5x100": {
+          "type": "product",
+          "settings": {
+            "product": "3-x-50ml-duftgarderobe-44",
+            "subtitle": "3 Düfte deiner Wahl, je 50 ml"
+          }
+        }
+      },
+      "block_order": [
+        "category_herren",
+        "category_damen",
+        "category_bestseller",
+        "category_neu",
+        "term_vanille",
+        "term_frisch",
+        "term_holzig",
+        "term_blumig",
+        "term_orientalisch",
+        "term_suess",
+        "product_8x50",
+        "product_6x50",
+        "product_5x100"
+      ],
+      "settings": {
+        "placeholder": "Suche nach Duft, Marke oder Nr.",
+        "heading_categories": "Kategorien",
+        "heading_terms": "Duftrichtungen",
+        "heading_products": "Beliebte Sets",
+        "hint": "Tippe einen Duft, eine Marke oder eine Nummer ein.",
+        "inspired_label": "Inspiriert von",
+        "view_all_label": "Alle Ergebnisse für „[query]“ anzeigen",
+        "empty_text": "Keine Treffer für „[query]“. Versuch es mit einer Marke oder einer Nummer.",
+        "loading_text": "Düfte werden geladen …",
+        "count_text": "[count] Treffer"
+      }
+    }
+  },
+  "order": [
+    "offer_annoucement_4tnBfB",
+    "offer_timebar_8kAUGX",
+    "blocky_lys_scrolling_text_bar_GLkKNr",
+    "header",
+    "mgx_search"
+  ]
+}

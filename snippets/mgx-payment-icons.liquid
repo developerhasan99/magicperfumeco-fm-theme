@@ -1,0 +1,20 @@
+{%- comment -%}
+  Payment methods row under the buy button: quantity-breaker and reactive-atc.
+  Shopify's own full-colour icons: PayPal, Klarna, SEPA-Lastschrift, eps,
+  Apple Pay, Google Pay, Visa, Mastercard (Amex dropped, Klarna added 21.10.2026). A fixed list, not
+  shop.enabled_payment_types: that one changes with the shopper's market.
+  'sepadirectdebit' is the payment_icons name for SEPA Direct Debit
+  (Lastschrift), not 'sepa_direct_debit'.
+  Styles: .mgx-pay-icons in magyx-brand.css.
+  Shopify prints the icon's hover title in English ("SEPA Direct Debit"); replaced with the German name
+  (05.11.2026). The other titles are brand names.
+
+  Usage:
+  {% render 'mgx-payment-icons' %}
+{%- endcomment -%}
+{%- assign mgx_pay_types = 'paypal,klarna,sepadirectdebit,eps,apple_pay,google_pay,visa,master' | split: ',' -%}
+<ul class="mgx-pay-icons" role="list" aria-label="Zahlungsmethoden">
+  {%- for type in mgx_pay_types -%}
+    <li>{{ type | payment_type_svg_tag: class: 'mgx-pay-icons__icon' | replace: '>SEPA Direct Debit<', '>SEPA-Lastschrift<' }}</li>
+  {%- endfor -%}
+</ul>

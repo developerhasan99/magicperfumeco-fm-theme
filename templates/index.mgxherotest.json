@@ -1,0 +1,32 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero": {
+      "type": "mgx-hero",
+      "settings": {
+        "image": "shopify://shop_images/MAGYX_Site_Header.webp",
+        "fade_color": "#100f0d",
+        "mobile_layout": "cover",
+        "text_tone": "light",
+        "buttons_bottom": true,
+        "heading": "Duftzwillinge in Premiumqualität. Für jeden Tag und jede Seite von dir.",
+        "subheading": "Finde den Zwilling deines Lieblingsdufts – oder starte mit unseren Bestsellern.",
+        "button_1_label": "Bestseller entdecken",
+        "button_1_link": "shopify://collections/bestseller-singles",
+        "button_2_label": "Finde dein Lieblingsparfüm",
+        "button_2_link": "/collections/best-sellers"
+      }
+    }
+  },
+  "order": [
+    "hero"
+  ]
+}

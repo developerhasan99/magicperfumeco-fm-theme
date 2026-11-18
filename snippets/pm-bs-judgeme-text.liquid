@@ -1,0 +1,30 @@
+{% comment %}
+  Rating line text for the Bundle & Save page: the shop's live Judge.me rating and review count (all Judge.me
+  reviews of the store, shop metafields judgeme.all_reviews_rating / all_reviews_count), German format, as the
+  live buy box ("custom_rating_text" block in sections/main-product.liquid): "4,8/5 Sterne (1.405 Bewertungen)".
+  Judge.me numbers off, or no numbers: the fallback text. Output is escaped; empty when both are empty.
+
+  Accepts:
+  - use_judgeme: {Boolean} show the Judge.me numbers when they exist
+  - fallback: {String} text when the numbers are off or missing
+
+  Usage:
+  {% render 'pm-bs-judgeme-text', use_judgeme: section.settings.use_judgeme, fallback: section.settings.rating_text %}
+{% endcomment %}
+{%- liquid
+  assign jm_rating = shop.metafields.judgeme.all_reviews_rating | plus: 0
+  assign jm_count = shop.metafields.judgeme.all_reviews_count | plus: 0
+  if use_judgeme and jm_rating > 0 and jm_count > 0
+    assign jm_rating_text = jm_rating | round: 1 | append: '' | replace: '.', ','
+    if jm_count >= 1000
+      assign jm_k = jm_count | divided_by: 1000
+      assign jm_rest = jm_count | modulo: 1000 | prepend: '00' | slice: -3, 3
+      assign jm_count_text = jm_k | append: '.' | append: jm_rest
+    else
+      assign jm_count_text = jm_count
+    endif
+    echo jm_rating_text | append: '/5 Sterne (' | append: jm_count_text | append: ' Bewertungen)'
+  else
+    echo fallback | escape
+  endif
+-%}

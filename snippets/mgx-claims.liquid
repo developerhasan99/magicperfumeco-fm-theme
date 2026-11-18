@@ -1,0 +1,13 @@
+{%- comment -%}
+  The three claim lines with green ticks (magyx.co look): scent pages under "Inspiriert von" and the bundle page above the price.
+  Change the wording here once, both pages follow.
+{%- endcomment -%}
+<ul class="list-none m-0 p-0 flex flex-col gap-2">
+  {%- assign claims = '20 % Parfumöl für 12 Stunden Duft|95 % Duftähnlichkeit. Dieselben Öle aus Grasse|Ohne Phthalate, ohne Parabene' | split: '|' -%}
+  {%- for claim in claims -%}
+    <li class="flex gap-2 items-center">
+      <img class="shrink-0" src="{{ 'mgx-check.svg' | asset_url }}" alt="" height="22" width="22">
+      <span class="font-semibold text-black text-sm md:text-base tracking-normal">{{ claim }}</span>
+    </li>
+  {%- endfor -%}
+</ul>

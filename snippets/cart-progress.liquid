@@ -1,0 +1,52 @@
+{% if cart != empty %}
+  <div class="bc-rewards-bars-wrap" style="flex-direction: row;">
+    <div class="bc-progress-wrap">
+      {% assign cart_count = cart.item_count %}
+      {% assign progress_percentage = cart_count | times: 25 | at_most: 100 %}
+
+      <div class="bc-progress-text" style="color: {% if cart_count >= 4 %}#184031{% else %}#100F0D{% endif %};">
+        {% if cart_count >= 4 %}
+          🎉 3+1-Angebot freigeschaltet!
+        {% else %}
+          Nur noch
+          <strong>{{ 4 | minus: cart_count }}</strong>
+          Flaschen bis 1 gratis!
+        {% endif %}
+      </div>
+      <div class="bc-progress-bar" style="background-color: #E2E2E2; margin-bottom: 0;">
+        <div class="bc-progress-fill" style="width: {{ progress_percentage }}%; background-color: #100F0D;"></div>
+        <div class="bc-checkpoints">
+          <div class="bc-checkpoint {% if cart_count >= 4 %}is-reached{% endif %}" style="left: 100%; 
+               background-color: {% if cart_count >= 4 %}#100F0D{% else %}#E2E2E2{% endif %};
+               color: {% if cart_count >= 4 %}#FFFFFF{% else %}#100F0D{% endif %};">
+            {{ 'icon-gift.svg' | inline_asset_content }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bc-progress-wrap">
+      {% assign cart_total = cart.total_price %}
+      {% assign progress_percentage = cart_total | times: 100.0 | divided_by: 4500 | at_most: 100 %}
+
+      <div class="bc-progress-text" style="color: {% if cart_total >= 4500 %}#184031{% else %}#100F0D{% endif %};">
+        {% if cart_total >= 4500 %}
+          🎉 Kostenloser Versand aktiviert!
+        {% else %}
+          <strong>{{ 4500 | minus: cart_total | money }}</strong>
+          zu
+          <strong>Kostenloser Versand</strong>!
+        {% endif %}
+      </div>
+      <div class="bc-progress-bar" style="background-color: #E2E2E2; margin-bottom: 0;">
+        <div class="bc-progress-fill" style="width: {{ progress_percentage }}%; background-color: #100F0D;"></div>
+        <div class="bc-checkpoints">
+          <div class="bc-checkpoint {% if cart_total >= 4500 %}is-reached{% endif %}" style="left: 100%; 
+               background-color: {% if cart_total >= 4500 %}#100F0D{% else %}#E2E2E2 {% endif %};
+               color: {% if cart_total >= 4500 %}#FFFFFF{% else %}#100F0D{% endif %};">
+            {{ 'icon-truck.svg' | inline_asset_content }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}

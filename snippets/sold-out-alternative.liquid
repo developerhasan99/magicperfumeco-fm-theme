@@ -1,0 +1,211 @@
+{% comment %}
+  Replaces the ATC area of a fully sold-out product: a "sold out" notice plus an
+  add-to-cart card for the first available product in custom.recommended_alternative.
+
+  Usage: {% render 'sold-out-alternative', product: product %}
+
+  Note: the alternative's button deliberately has no .cta_product_from_submit_btn
+  (floating-atc clicks that) and no .current-price/.compare-price/.variant-button
+  (reactive-atc / quantity-breaker rewrite those globally).
+{% endcomment %}
+{% liquid
+  assign alt = nil
+  for candidate in product.metafields.custom.recommended_alternative.value
+    if candidate.available and candidate.id != product.id
+      assign alt = candidate
+      break
+    endif
+  endfor
+
+  if alt
+    assign alt_variant = alt.selected_or_first_available_variant
+    for v in alt.variants
+      if v.available and v.title contains '50'
+        assign alt_variant = v
+        break
+      endif
+    endfor
+    assign alt_form_id = 'sold-out-alt-form-' | append: section.id
+  endif
+%}
+
+<style>
+  .soa-notice {
+    width: 100%;
+    margin-top: 1.5rem;
+    padding: 1rem;
+    border: 2px dashed #d1d5db;
+    border-radius: 0.75rem;
+    background: #f3f4f6;
+    color: #6b7280;
+    text-align: center;
+    cursor: not-allowed;
+    user-select: none;
+  }
+  .soa-notice__title { margin: 0; font-size: 16px; font-weight: 600; letter-spacing: normal; }
+  .soa-notice__text { margin: 0.25rem 0 0; font-size: 13px; line-height: 1.4; }
+  .soa-card { margin-top: 1rem; border: 1px solid #e5e7eb; border-radius: 0.75rem; background: #fff; overflow: hidden; }
+  .soa-card__head { background: var(--mgx-black); color: #fff; font-size: 13px; font-weight: 700; padding: 0.5rem 0.75rem; }
+  .soa-card__body { padding: 0.75rem; }
+  .soa-link { display: flex; align-items: center; gap: 0.75rem; color: inherit; text-decoration: none; }
+  .soa-link img { width: 80px; height: 80px; object-fit: contain; flex-shrink: 0; }
+  .soa-link h2 { margin: 0; font-size: 16px; font-weight: 600; line-height: 1.25; letter-spacing: normal; }
+  .soa-meta { margin: 0.25rem 0 0; font-size: 12px; color: #6b7280; }
+  .soa-stock { display: flex; align-items: center; gap: 0.375rem; margin: 0.25rem 0 0; font-size: 12px; font-weight: 600; color: #17803d; }
+  .soa-stock::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: #17803d; }
+  .soa-size-label { margin: 1rem 0 0.75rem; font-size: 14px; font-weight: 600; }
+  .soa-sizes { display: flex; gap: 0.75rem; margin-bottom: 0.75rem; }
+  .soa-tile {
+    position: relative;
+    flex: 1;
+    padding: 0.75rem 0.5rem 0.5rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 0.5rem;
+    background: #fff;
+    text-align: center;
+    cursor: pointer;
+  }
+  .soa-tile:has(:checked) { border-color: #000; }
+  .soa-tile:has(:focus-visible) { outline: 2px solid #000; outline-offset: 2px; }
+  .soa-tile__title { display: block; font-size: 14px; font-weight: 600; }
+  .soa-tile__per-ml { display: block; font-size: 11px; color: #6b7280; }
+  .soa-badge {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 1px 8px;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 10px;
+    font-style: italic;
+    white-space: nowrap;
+  }
+  @media (min-width: 750px) {
+    .soa-notice__title { font-size: 19px; }
+  }
+</style>
+
+<div class="soa-notice" aria-disabled="true">
+  <p class="soa-notice__title">{{ 'products.product.sold_out' | t }} – vorübergehend nicht auf Lager</p>
+  <p class="soa-notice__text">
+    {%- if alt -%}
+      Dieser Artikel kann derzeit nicht bestellt werden. Probier unsere Alternative unten aus.
+    {%- else -%}
+      Dieser Artikel kann derzeit nicht bestellt werden.
+    {%- endif -%}
+  </p>
+</div>
+
+{% if alt %}
+  <div class="soa-card">
+    <div class="soa-card__head">✓ Empfohlene Alternative</div>
+    <div class="soa-card__body">
+      <a href="{{ alt.url }}" class="soa-link">
+        {% if alt.featured_image %}
+          <img
+            src="{{ alt.featured_image | image_url: width: 160, height: 160 }}"
+            alt="{{ alt.featured_image.alt | default: alt.title | escape }}"
+            width="80"
+            height="80"
+            loading="lazy">
+        {% endif %}
+        <div>
+          <h2>{{ alt.title }}</h2>
+          {% if alt.metafields.custom.inspiration.value %}
+            <p class="soa-meta">Inspiriert von {{ alt.metafields.custom.inspiration.value.name }}</p>
+          {% endif %}
+          <p class="soa-stock">{{ 'products.product.inventory_in_stock' | t }}</p>
+        </div>
+      </a>
+
+      <product-form class="product-form !m-0" data-section-id="{{ section.id }}">
+        <div class="product-form__error-message-wrapper" role="alert" hidden>
+          <span class="product-form__error-message"></span>
+        </div>
+
+        {%- form 'product', alt, id: alt_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+          {% if alt.variants.size > 1 %}
+            <p class="soa-size-label">Größe auswählen:</p>
+            <div class="soa-sizes" role="radiogroup" aria-label="Größe auswählen">
+              {% for v in alt.variants %}
+                {% unless v.available %}{% continue %}{% endunless %}
+                {% liquid
+                  assign v_ml = 0
+                  if v.title contains '100'
+                    assign v_ml = 100
+                  elsif v.title contains '50'
+                    assign v_ml = 50
+                  elsif v.title contains '30'
+                    assign v_ml = 30
+                  endif
+                %}
+                <label class="soa-tile">
+                  <input
+                    type="radio"
+                    class="visually-hidden"
+                    name="id"
+                    value="{{ v.id }}"
+                    {% if v.id == alt_variant.id %}
+                      checked
+                    {% endif %}>
+                  <span class="soa-tile__title">{{ v.title }}</span>
+                  {% if v_ml > 0 %}
+                    <span class="soa-tile__per-ml">{{ v.price | times: 1.0 | divided_by: v_ml | money }} / ml</span>
+                  {% endif %}
+                  {% if v_ml == 50 %}
+                    <span class="soa-badge" style="background:var(--mgx-amber)">Beliebt</span>
+                  {% elsif v_ml == 100 %}
+                    <span class="soa-badge" style="background:var(--mgx-amber)">Bestseller</span>
+                  {% endif %}
+                </label>
+              {% endfor %}
+            </div>
+          {% else %}
+            <input type="hidden" name="id" value="{{ alt_variant.id }}">
+          {% endif %}
+
+          <button
+            type="submit"
+            name="add"
+            value="1"
+            class="atc-button shimmer-btn flex flex-wrap items-center !mb-0 text-2xl !py-3 !px-2 rounded-lg button mgx-btn-primary transition-colors shadow-xl tracking-normal button--full-width button--primary"
+            aria-label="{{ 'products.product.add_to_cart' | t }}: {{ alt.title | escape }}">
+            <span>{{ 'products.product.add_to_cart' | t }}</span>
+            <div class="ml-2 pl-2 border-0 border-l flex items-center border-solid border-gray-200/20">
+              <div class="inline-block text-lg mgx-price-pill px-3 rounded" role="status">
+                {% for v in alt.variants %}
+                  {% unless v.available %}{% continue %}{% endunless %}
+                  <span
+                    data-price-for="{{ v.id }}"
+                    {% unless v.id == alt_variant.id %}
+                      hidden
+                    {% endunless %}>
+                    {% if v.compare_at_price > v.price %}
+                      <s class="text-white/50 text-base">{{ v.compare_at_price | money }}</s>
+                    {% endif %}
+                    {{ v.price | money }}
+                  </span>
+                {% endfor %}
+              </div>
+            </div>
+            {%- render 'loading-spinner' -%}
+          </button>
+        {%- endform -%}
+      </product-form>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var form = document.getElementById('{{ alt_form_id }}');
+      if (!form) return;
+      form.addEventListener('change', function (e) {
+        if (e.target.name !== 'id') return;
+        form.querySelectorAll('[data-price-for]').forEach(function (el) {
+          el.hidden = el.dataset.priceFor !== e.target.value;
+        });
+      });
+    })();
+  </script>
+{% endif %}

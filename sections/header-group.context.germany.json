@@ -1,0 +1,33 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "context": {
+    "market": "germany"
+  },
+  "parent": "header-group.json",
+  "sections": {
+    "offer_timebar_8kAUGX": {
+      "settings": {
+        "append_text": ""
+      },
+      "blocks": {}
+    },
+    "mgx_search": {
+      "settings": {},
+      "blocks": {
+        "product_5x100": {
+          "settings": {
+            "product": "3-x-50ml-duftgarderobe-44"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,175 @@
+/* MAGYX search triggers (snippets/mgx-search-trigger.liquid) and where the header shows them.
+   Every trigger opens the search overlay (sections/mgx-search.liquid); without JS it is a link to /search.
+   - pill: desktop header from 1200px, between the menu and the cart
+   - icon: header from 990 to 1199px
+   - row:  full-width pill under the logo row on phones/tablets (below 990px), and at the top of the menu drawer
+   Loaded by sections/header.liquid. MAGYX tokens from assets/magyx-brand.css. px only (root font-size is 10px). */
+
+.mgx-st {
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  color: var(--mgx-black);
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mgx-st svg {
+  display: block;
+  flex: 0 0 auto;
+}
+
+/* ---------- icon: the same 44px box as the cart icon ---------- */
+.mgx-st--icon {
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  color: rgb(var(--color-foreground));
+}
+
+.mgx-st__icon {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.15s ease;
+}
+
+.mgx-st--icon:hover .mgx-st__icon {
+  transform: scale(1.07);
+}
+
+/* ---------- pill + row: white, silver hairline, black circle with a white magnifier ---------- */
+.mgx-st--pill,
+.mgx-st--row {
+  gap: 8px;
+  height: 44px;
+  padding: 0 4px 0 16px;
+  border: 1px solid var(--mgx-silver);
+  border-radius: 999px;
+  background: var(--mgx-white);
+  transition: border-color 0.15s ease;
+}
+
+.mgx-st--row {
+  display: flex;
+  width: 100%;
+}
+
+.mgx-st--pill:hover,
+.mgx-st--row:hover {
+  border-color: var(--mgx-graphite);
+}
+
+.mgx-st__label {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--mgx-graphite);
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.2;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.mgx-st__circle {
+  display: flex;
+  flex: 0 0 34px;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--mgx-black);
+  color: var(--mgx-white);
+  transition: background-color 0.15s ease;
+}
+
+.mgx-st__circle svg {
+  width: 16px;
+  height: 16px;
+}
+
+.mgx-st--pill:hover .mgx-st__circle,
+.mgx-st--row:hover .mgx-st__circle {
+  background: var(--mgx-graphite);
+}
+
+/* The desktop pill sizes to its text. Measured on the live header (21.10.2026): from 1200px the header is
+   capped at the 1200px page width and the menu leaves 191px for search + cart; the 13px label (146px) makes a
+   206px pill. The ellipsis only shows for a much longer "Search bar text" or a window just over 1200px with a
+   classic scrollbar. */
+.mgx-st--pill {
+  flex: 0 1 auto;
+  min-width: 0;
+  gap: 6px;
+  padding-left: 14px;
+}
+
+.mgx-st--pill .mgx-st__label {
+  font-size: 13px;
+}
+
+/* ---------- header placement ---------- */
+.header__icons > .mgx-st--pill,
+.header__icons > .mgx-st--icon {
+  display: none;
+}
+
+@media screen and (min-width: 990px) {
+  .header__icons > .mgx-st--icon {
+    display: inline-flex;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .header__icons > .mgx-st--icon {
+    display: none;
+  }
+
+  .header__icons > .mgx-st--pill {
+    display: inline-flex;
+  }
+
+  /* The icons cell fills its grid column and reaches 17px into the 20px gap after the menu, so the pill gets
+     208px and sits 17px after the last menu word. min-width: 0 keeps the menu on one line if space is short. */
+  .header__icons.header__icons--mgx {
+    justify-self: stretch;
+    justify-content: flex-end;
+    align-items: center;
+    min-width: 0;
+    margin-left: -17px;
+  }
+}
+
+/* Logo "top center" layout only (not used today): Dawn puts search on the left there. That trigger shows from
+   990px instead of the icon-row one; below 990px the phone row covers it. */
+@media screen and (max-width: 989px) {
+  .header > .header__search {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .header--top-center .header__icons > .mgx-st {
+    display: none;
+  }
+}
+
+/* Phone/tablet row under the logo row, inside the sticky header (hides and returns with it). No background of
+   its own: the header wrapper paints the header background (colour scheme, gradient included) behind it. */
+.mgx-st-phone {
+  padding: 0 16px 10px;
+}
+
+@media screen and (min-width: 990px) {
+  .mgx-st-phone {
+    display: none;
+  }
+}
+
+/* Row at the top of the menu drawer, its text in line with the menu links. */
+.mgx-st-drawer {
+  padding: 0 16px 14px;
+}

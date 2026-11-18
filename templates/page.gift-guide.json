@@ -1,0 +1,745 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero": {
+      "type": "gg-hero",
+      "settings": {
+        "show_rating": true,
+        "image_desktop": "shopify://shop_images/geschenkguide-hero-desktop.webp",
+        "image_mobile": "shopify://shop_images/geschenkguide-hero-mobile.webp",
+        "button_1_link": "#fuer-sie",
+        "button_2_link": "#selbst-zusammenstellen",
+        "text_color": "light",
+        "height_desktop": 572,
+        "height_mobile": 460,
+        "mobile_focus": "bottom",
+        "eyebrow": "Der Geschenkguide 2026",
+        "rating_text": "[rating]/5 aus über [count] Bewertungen",
+        "heading": "Duftgeschenke, die wirklich getragen werden",
+        "text": "Geschenksets für alle auf deiner Liste, vom sicheren Treffer bis zur Person, die schon alles hat.",
+        "button_1_label": "Geschenksets ansehen",
+        "button_2_label": "Stell dein Set zusammen und spare 40%"
+      }
+    },
+    "trust": {
+      "type": "gg-trust-strip",
+      "settings": {
+        "speed": 40
+      },
+      "blocks": {
+        "t1": {
+          "type": "item",
+          "settings": {
+            "text": "20 % Parfumöl"
+          }
+        },
+        "t2": {
+          "type": "item",
+          "settings": {
+            "text": "Jede Flasche einzeln verpackt, fertig zum Verschenken"
+          }
+        },
+        "t3": {
+          "type": "item",
+          "settings": {
+            "text": "Hält über 12 Stunden"
+          }
+        },
+        "t4": {
+          "type": "item",
+          "settings": {
+            "text": "95 % Duftähnlichkeit"
+          }
+        },
+        "t5": {
+          "type": "item",
+          "settings": {
+            "text": "Öle aus Grasse"
+          }
+        },
+        "t6": {
+          "type": "item",
+          "settings": {
+            "text": "Ohne Phthalate und Parabene"
+          }
+        },
+        "t7": {
+          "type": "item",
+          "settings": {
+            "text": "Vegan und tierversuchsfrei"
+          }
+        }
+      },
+      "block_order": [
+        "t1",
+        "t2",
+        "t3",
+        "t4",
+        "t5",
+        "t6",
+        "t7"
+      ]
+    },
+    "recipients": {
+      "type": "gg-recipients",
+      "settings": {
+        "columns": "4",
+        "heading": "Für wen suchst du?",
+        "sub": "Jedes Set enthält drei 50-ml-Flakons, jeder einzeln verpackt: ein großes Geschenk oder drei kleine.",
+        "budget_label": "Geschenke nach Art"
+      },
+      "blocks": {
+        "r_mama": {
+          "type": "recipient",
+          "settings": {
+            "image": "shopify://shop_images/geschenkguide-fur-mama.webp",
+            "link": "#fuer-sie",
+            "title": "Für Mama",
+            "meta": "Zeitlose Klassiker · Blumig · Warm",
+            "count": "1 Set"
+          }
+        },
+        "r_papa": {
+          "type": "recipient",
+          "settings": {
+            "image": "shopify://shop_images/geschenkguide-fur-papa.webp",
+            "link": "#fuer-ihn",
+            "title": "Für Papa",
+            "meta": "Frisch · Gepflegt · Festlich",
+            "count": "1 Set"
+          }
+        },
+        "r_sister": {
+          "type": "recipient",
+          "settings": {
+            "image": "shopify://shop_images/geschenkguide-fur-schwester.webp",
+            "link": "#fuer-sie",
+            "title": "Für die Schwester",
+            "meta": "Angesagt · Fruchtig · Süß",
+            "count": "1 Set"
+          }
+        },
+        "r_brother": {
+          "type": "recipient",
+          "settings": {
+            "image": "shopify://shop_images/geschenkguide-fur-bruder.webp",
+            "link": "#fuer-ihn",
+            "title": "Für den Bruder",
+            "meta": "Sportlich · Frisch · Würzig",
+            "count": "1 Set"
+          }
+        },
+        "r_girlfriend": {
+          "type": "recipient",
+          "settings": {
+            "image": "shopify://shop_images/geschenkguide-fur-freundin.webp",
+            "link": "#fuer-sie",
+            "title": "Für die Freundin",
+            "meta": "Elegant · Verspielt · Sinnlich",
+            "count": "1 Set"
+          }
+        },
+        "r_boyfriend": {
+          "type": "recipient",
+          "settings": {
+            "image": "shopify://shop_images/geschenkguide-fur-freund.webp",
+            "link": "#fuer-ihn",
+            "title": "Für den Freund",
+            "meta": "Frisch · Sinnlich · Intensiv",
+            "count": "1 Set"
+          }
+        },
+        "r_her": {
+          "type": "recipient",
+          "settings": {
+            "image": "shopify://shop_images/geschenkguide-fur-sie.webp",
+            "link": "#fuer-sie",
+            "title": "Für Sie",
+            "meta": "Duftgarderobe · Bestseller · Blumig",
+            "count": "3 Sets"
+          }
+        },
+        "r_him": {
+          "type": "recipient",
+          "settings": {
+            "image": "shopify://shop_images/geschenkguide-fur-ihn.webp",
+            "link": "#fuer-ihn",
+            "title": "Für Ihn",
+            "meta": "Frisch · Holzig · Intensiv",
+            "count": "3 Sets"
+          }
+        },
+        "r_all": {
+          "type": "recipient",
+          "settings": {
+            "image": "shopify://shop_images/geschenkguide-fur-alle.webp",
+            "link": "#fuer-alle",
+            "title": "Für alle",
+            "meta": "Sichere Treffer für jeden Geschmack",
+            "count": "2 Sets"
+          },
+          "disabled": true
+        },
+        "r_santa": {
+          "type": "recipient",
+          "settings": {
+            "image": "shopify://shop_images/geschenkguide-wichteln.webp",
+            "link": "#wichteln",
+            "title": "Wichteln",
+            "meta": "Eins für sie, eins für ihn, eins für alle",
+            "count": "1 Set"
+          },
+          "disabled": true
+        },
+        "b_sets": {
+          "type": "budget",
+          "settings": {
+            "link": "#fuer-sie",
+            "price": "Geschenksets",
+            "text": "Drei Düfte, fertig zusammengestellt"
+          }
+        },
+        "b_build": {
+          "type": "budget",
+          "settings": {
+            "link": "#selbst-zusammenstellen",
+            "price": "Selbst zusammenstellen",
+            "text": "Du wählst die drei Düfte"
+          }
+        },
+        "b_more": {
+          "type": "budget",
+          "settings": {
+            "link": "#mehr-geschenke",
+            "price": "Mehr Geschenke",
+            "text": "Einzeldüfte und Großpacks"
+          }
+        }
+      },
+      "block_order": [
+        "r_mama",
+        "r_papa",
+        "r_sister",
+        "r_brother",
+        "r_girlfriend",
+        "r_boyfriend",
+        "r_her",
+        "r_him",
+        "r_all",
+        "r_santa",
+        "b_sets",
+        "b_build",
+        "b_more"
+      ]
+    },
+    "for_her": {
+      "type": "gg-gift-sets",
+      "settings": {
+        "anchor": "fuer-sie",
+        "container": "wide",
+        "columns": "3",
+        "carousel": true,
+        "background": "none",
+        "padding_top": 40,
+        "padding_bottom": 72,
+        "show_swap": true,
+        "eyebrow": "Geschenksets",
+        "heading": "Für Sie",
+        "text": "Eine ganze Duftgarderobe, die Düfte, die alle lieben, oder ein Strauß Blumendüfte.",
+        "badge_text": "Sonderangebot",
+        "atc_label": "In den Warenkorb",
+        "soldout_label": "Ausverkauft",
+        "added_label": "Hinzugefügt",
+        "error_label": "Das hat nicht geklappt. Bitte versuch es noch einmal.",
+        "boxed_line": "Jede Flasche einzeln verpackt, fertig zum Verschenken",
+        "contents_heading": "Was drin ist",
+        "inspired_word": "Inspiriert von",
+        "details_label": "Alle Details",
+        "swap_label": "Duft tauschen",
+        "bottle_label": "Flasche"
+      },
+      "blocks": {
+        "her_mama": {
+          "type": "gift_set",
+          "settings": {
+            "product": "fuer-mama-3x-50ml-parfumflakons"
+          }
+        },
+        "her_sister": {
+          "type": "gift_set",
+          "settings": {
+            "product": "fuer-die-schwester-3x-50ml-parfumflakons"
+          }
+        },
+        "her_partner": {
+          "type": "gift_set",
+          "settings": {
+            "product": "fuer-die-freundin-3x-50ml-parfumflakons"
+          }
+        }
+      },
+      "block_order": [
+        "her_mama",
+        "her_sister",
+        "her_partner"
+      ]
+    },
+    "reviews": {
+      "type": "gg-reviews",
+      "settings": {
+        "eyebrow": "Verschenkt und geliebt",
+        "heading": "Das sagen unsere Kunden",
+        "rating_line": "Kundenrezensionen · 4,7 von 5 Sternen"
+      },
+      "blocks": {
+        "q1": {
+          "type": "quote",
+          "settings": {
+            "stars": 5,
+            "title": "„Riecht super frisch und kommt Aventus ziemlich nah.“",
+            "text": "Wusste erst nicht genau, was mich erwartet, aber der Duft hat mich echt positiv überrascht. Hält ordentlich und der Preis ist einfach deutlich besser.",
+            "author": "Michael T.",
+            "source": "Verifizierter Käufer"
+          }
+        },
+        "q2": {
+          "type": "quote",
+          "settings": {
+            "stars": 5,
+            "title": "„Ich hab vorher nie einen Duft-Dupe gefunden, der wirklich authentisch riecht.“",
+            "text": "Das war meine erste Bestellung hier und ich bin echt begeistert. Ich kauf mein Parfüm ab jetzt nirgendwo anders mehr.",
+            "author": "Sebastian Müller",
+            "source": "Verifizierter Käufer"
+          }
+        },
+        "q3": {
+          "type": "quote",
+          "settings": {
+            "stars": 5,
+            "title": "„Die Düfte sind wirklich nah an den Originalen.“",
+            "text": "Alle drei Düfte, die ich bestellt habe, riechen echt richtig gut und halten auch lange.",
+            "author": "Clara P.",
+            "source": "Verifizierter Käufer"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3"
+      ]
+    },
+    "for_him": {
+      "type": "gg-gift-sets",
+      "settings": {
+        "anchor": "fuer-ihn",
+        "container": "wide",
+        "columns": "3",
+        "carousel": true,
+        "background": "none",
+        "padding_top": 72,
+        "padding_bottom": 72,
+        "show_swap": true,
+        "eyebrow": "Geschenksets",
+        "heading": "Für Ihn",
+        "text": "Ein kleiner Anstoß, etwas Neues zu probieren, oder ein sicherer Treffer.",
+        "badge_text": "Sonderangebot",
+        "atc_label": "In den Warenkorb",
+        "soldout_label": "Ausverkauft",
+        "added_label": "Hinzugefügt",
+        "error_label": "Das hat nicht geklappt. Bitte versuch es noch einmal.",
+        "boxed_line": "Jede Flasche einzeln verpackt, fertig zum Verschenken",
+        "contents_heading": "Was drin ist",
+        "inspired_word": "Inspiriert von",
+        "details_label": "Alle Details",
+        "swap_label": "Duft tauschen",
+        "bottle_label": "Flasche"
+      },
+      "blocks": {
+        "him_dad": {
+          "type": "gift_set",
+          "settings": {
+            "product": "fuer-papa-3x-50ml-parfumflakons"
+          }
+        },
+        "him_brother": {
+          "type": "gift_set",
+          "settings": {
+            "product": "fuer-den-bruder-3x-50ml-parfumflakons"
+          }
+        },
+        "him_partner": {
+          "type": "gift_set",
+          "settings": {
+            "product": "fuer-den-freund-3x-50ml-parfumflakons"
+          }
+        },
+        "him_build": {
+          "type": "build_tile",
+          "settings": {
+            "link": "#selbst-zusammenstellen",
+            "eyebrow": "Selbst zusammenstellen",
+            "title": "Du kennst seinen Duft? Wähl drei aus.",
+            "text": "Gleicher Preis, gleiche Verpackung. Du wählst die drei Düfte selbst aus.",
+            "button_label": "Sein Set zusammenstellen"
+          }
+        }
+      },
+      "block_order": [
+        "him_dad",
+        "him_brother",
+        "him_partner",
+        "him_build"
+      ]
+    },
+    "wichteln": {
+      "type": "gg-product-hero",
+      "settings": {
+        "anchor": "wichteln",
+        "background": "green",
+        "product": "er-sie-2x-50ml-parfumflakons",
+        "padding_top": 72,
+        "padding_bottom": 72,
+        "eyebrow": "Ein Set, drei Geschenke",
+        "heading": "Drei Wichtelgeschenke in einem Set.",
+        "text": "<p>Jeder Flakon ist einzeln verpackt. Teil das Set auf: eins für sie, eins für ihn, eins für alle.</p>",
+        "badge_text": "Sonderangebot",
+        "atc_label": "In den Warenkorb",
+        "soldout_label": "Ausverkauft",
+        "added_label": "Hinzugefügt",
+        "error_label": "Das hat nicht geklappt. Bitte versuch es noch einmal.",
+        "boxed_line": "Jede Flasche einzeln verpackt, fertig zum Verschenken",
+        "guarantee_text": "60 Tage Geld-zurück-Garantie",
+        "contents_heading": "Was drin ist",
+        "inspired_word": "Inspiriert von",
+        "bottle_label": "Flasche"
+      },
+      "disabled": true,
+      "blocks": {
+        "l1": {
+          "type": "link",
+          "settings": {
+            "link": "#selbst-zusammenstellen",
+            "lead": "Verschiedene Leute auf deiner Liste?",
+            "label": "Stell dir drei Düfte selbst zusammen"
+          }
+        },
+        "l2": {
+          "type": "link",
+          "settings": {
+            "link": "#mehr-geschenke",
+            "lead": "Für das ganze Büro?",
+            "label": "Großpacks ansehen"
+          }
+        }
+      },
+      "block_order": [
+        "l1",
+        "l2"
+      ]
+    },
+    "for_all": {
+      "type": "gg-gift-sets",
+      "settings": {
+        "anchor": "fuer-alle",
+        "container": "wide",
+        "columns": "3",
+        "background": "none",
+        "padding_top": 72,
+        "padding_bottom": 72,
+        "show_swap": true,
+        "eyebrow": "Geschenksets",
+        "heading": "Für alle",
+        "text": "Sichere Treffer für die Menschen, bei denen Schenken am schwersten ist.",
+        "badge_text": "Sonderangebot",
+        "atc_label": "In den Warenkorb",
+        "soldout_label": "Ausverkauft",
+        "added_label": "Hinzugefügt",
+        "error_label": "Das hat nicht geklappt. Bitte versuch es noch einmal.",
+        "boxed_line": "Jede Flasche einzeln verpackt, fertig zum Verschenken",
+        "contents_heading": "Was drin ist",
+        "inspired_word": "Inspiriert von",
+        "details_label": "Alle Details",
+        "swap_label": "Duft tauschen",
+        "bottle_label": "Flasche"
+      },
+      "disabled": true,
+      "blocks": {
+        "all_1": {
+          "type": "gift_set",
+          "settings": {
+            "product": "nacht-der-leidenschaft-3x-50ml-parfumflakons"
+          }
+        },
+        "all_2": {
+          "type": "gift_set",
+          "settings": {
+            "product": "8x-50ml-parfumflaschen"
+          }
+        },
+        "all_disc": {
+          "type": "discovery",
+          "settings": {
+            "eyebrow": "Unsicher bei ihrem Geschmack?",
+            "title": "Lass sie selbst wählen.",
+            "text": "Mit dem Probierset finden sie ihren Lieblingsduft selbst. Bald erhältlich.",
+            "button_label": "Probierset ansehen"
+          },
+          "disabled": true
+        }
+      },
+      "block_order": [
+        "all_1",
+        "all_2",
+        "all_disc"
+      ]
+    },
+    "builder": {
+      "type": "gg-bundle-builder",
+      "settings": {
+        "anchor": "selbst-zusammenstellen",
+        "bundle_product": "3-x-50ml-duftgarderobe-44",
+        "upgrade_product": "6-x-50ml-duftgarderobe-64",
+        "upgrade_product_2": "9-x-50ml-duftgarderobe-79",
+        "pool_collection": "best-sellers",
+        "pool_limit": 200,
+        "bottle_size": "50ml",
+        "eyebrow": "Selbst zusammenstellen",
+        "heading": "Du weißt, was sie mögen? Wähl drei aus.",
+        "text": "Drei 50-ml-Düfte zum Preis eines Geschenksets, jeder einzeln verpackt. Wähl alle drei selbst aus oder starte mit einem unserer Geschenksets.",
+        "size_label": "[n] Düfte",
+        "sizes_label": "Wie viele Düfte?",
+        "bottle_label": "Flasche",
+        "inspired_word": "Inspiriert von",
+        "presets_label": "Mit einem Geschenkset starten",
+        "presets_note": "Wir füllen dein Set mit den Düften dieses Sets. Tausch jeden davon aus, wie du willst.",
+        "search_placeholder": "Nr., Name oder Note",
+        "gender_label": "Für wen",
+        "gender_all": "Alle",
+        "gender_unisex": "Unisex",
+        "gender_male": "Herren",
+        "gender_female": "Damen",
+        "family_label": "Duftfamilie",
+        "count_label": "[n] Düfte",
+        "sort_label": "Bestseller zuerst",
+        "add_label": "Hinzufügen",
+        "new_badge": "Neu",
+        "best_badge": "Bestseller",
+        "no_results": "Kein Duft gefunden.",
+        "set_title": "Dein Set",
+        "of_label": "[x] von [n]",
+        "choose_more": "Wähle noch [n] Düfte",
+        "choose_one": "Wähle noch 1 Duft",
+        "slot_empty": "Wähle einen Duft",
+        "per_bottle": "[amount] pro Flasche",
+        "was_label": "Statt [amount]",
+        "save_label": "Du sparst [amount]",
+        "cta": "In den Warenkorb · [price]",
+        "error": "Das Set konnte nicht hinzugefügt werden. Bitte versuch es noch einmal.",
+        "fine_print": "Einzeln verpackt, fertig zum Verschenken"
+      },
+      "blocks": {
+        "p_mama": {
+          "type": "preset",
+          "settings": {
+            "product": "fuer-mama-3x-50ml-parfumflakons"
+          }
+        },
+        "p_sister": {
+          "type": "preset",
+          "settings": {
+            "product": "fuer-die-schwester-3x-50ml-parfumflakons"
+          }
+        },
+        "p_girlfriend": {
+          "type": "preset",
+          "settings": {
+            "product": "fuer-die-freundin-3x-50ml-parfumflakons"
+          }
+        },
+        "p_dad": {
+          "type": "preset",
+          "settings": {
+            "product": "fuer-papa-3x-50ml-parfumflakons"
+          }
+        },
+        "p_brother": {
+          "type": "preset",
+          "settings": {
+            "product": "fuer-den-bruder-3x-50ml-parfumflakons"
+          }
+        },
+        "p_boyfriend": {
+          "type": "preset",
+          "settings": {
+            "product": "fuer-den-freund-3x-50ml-parfumflakons"
+          }
+        }
+      },
+      "block_order": [
+        "p_mama",
+        "p_sister",
+        "p_girlfriend",
+        "p_dad",
+        "p_brother",
+        "p_boyfriend"
+      ]
+    },
+    "more_ways": {
+      "type": "gg-more-ways",
+      "settings": {
+        "anchor": "mehr-geschenke",
+        "heading": "Noch mehr Geschenkideen",
+        "sub": "Ein einzelner Duft oder viele Flaschen für viele Menschen."
+      },
+      "blocks": {
+        "m1": {
+          "type": "card",
+          "settings": {
+            "link": "/collections/best-sellers",
+            "eyebrow": "Nur ein Geschenk?",
+            "title": "Ein einzelner Duft",
+            "text": "Du weißt, welcher Duft es sein soll? Wähle einen beliebigen Duft aus unseren Bestsellern.",
+            "button_label": "Bestseller ansehen"
+          }
+        },
+        "m2": {
+          "type": "card",
+          "settings": {
+            "product": "10-x-50ml-parfumflaschen",
+            "eyebrow": "Für viele auf einmal",
+            "title": "10 × 50 ml",
+            "text": "Zehn Flaschen in einer Bestellung. Für Kollegen, die Familie oder alle, die du beschenken willst.",
+            "button_label": "Zum 10er-Pack"
+          }
+        },
+        "m3": {
+          "type": "card",
+          "settings": {
+            "eyebrow": "Zum Ausprobieren",
+            "title": "Probierset",
+            "text": "Mehrere Düfte zum Testen, damit sie ihren Favoriten finden. Bald erhältlich.",
+            "button_label": "Probierset ansehen"
+          },
+          "disabled": true
+        }
+      },
+      "block_order": [
+        "m1",
+        "m2",
+        "m3"
+      ]
+    },
+    "newsletter": {
+      "type": "gg-newsletter",
+      "settings": {
+        "eyebrow": "Noch unentschlossen?",
+        "heading": "Noch nicht bereit? Hol dir die Angebote zuerst.",
+        "text": "Unsere Weihnachtsangebote kommen bald. Trag dich ein und erfahre als Erste oder Erster, wenn sie live sind.",
+        "chips_label": "Du suchst für",
+        "chip_labels": "Sie,Ihn,Beide,Mich",
+        "placeholder": "Deine E-Mail-Adresse",
+        "button_label": "Gib mir Bescheid",
+        "fine_print": "<p>Kein Spam. Abmeldung jederzeit möglich.</p>",
+        "success_text": "Danke, du bist dabei. Wir melden uns, sobald die Angebote live sind."
+      }
+    },
+    "good_to_know": {
+      "type": "gg-good-to-know",
+      "settings": {
+        "heading": "Gut zu wissen vor der Bestellung"
+      },
+      "blocks": {
+        "g1": {
+          "type": "item",
+          "settings": {
+            "title": "Fertig zum Verschenken",
+            "text": "<p>Jede Flasche ist einzeln verpackt. Du musst sie nur noch einpacken.</p>"
+          }
+        },
+        "g2": {
+          "type": "item",
+          "settings": {
+            "title": "Direkt an die beschenkte Person?",
+            "text": "<p>Gib im Checkout einfach ihre Adresse als Lieferadresse an.</p>"
+          }
+        },
+        "g3": {
+          "type": "item",
+          "settings": {
+            "title": "Unsicher, welcher Duft?",
+            "text": "<p>Nimm ein Set mit drei Düften. So findet die beschenkte Person ihren Favoriten selbst.</p>"
+          }
+        },
+        "g4": {
+          "type": "item",
+          "settings": {
+            "title": "Passt nicht?",
+            "text": "<p>60 Tage Geld-zurück-Garantie. Passt der Duft nicht, hast du 60 Tage Zeit für die Rückgabe.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "g1",
+        "g2",
+        "g3",
+        "g4"
+      ]
+    },
+    "closing": {
+      "type": "gg-closing",
+      "settings": {
+        "button_link": "#fuer-sie",
+        "heading": "Geschenke erledigt, mit Zeit zum Durchatmen.",
+        "sub": "Such dir für jede Person auf deiner Liste ein Set aus. Jede Flasche kommt einzeln verpackt.",
+        "button_label": "Geschenksets ansehen",
+        "guarantee": "60 Tage Geld-zurück-Garantie"
+      }
+    },
+    "judgeme_reviews": {
+      "type": "apps",
+      "settings": {
+        "include_margins": true
+      },
+      "blocks": {
+        "judgeme_all_reviews": {
+          "type": "shopify://apps/judge-me-reviews/blocks/all_reviews_page/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "max_width": 1200,
+            "review_source": "all",
+            "show_all_reviews_in_same_tab": true,
+            "show_first": "product",
+            "empty_state": "empty_widget"
+          }
+        }
+      },
+      "block_order": [
+        "judgeme_all_reviews"
+      ]
+    }
+  },
+  "order": [
+    "hero",
+    "trust",
+    "recipients",
+    "for_her",
+    "reviews",
+    "for_him",
+    "wichteln",
+    "for_all",
+    "builder",
+    "more_ways",
+    "newsletter",
+    "good_to_know",
+    "closing",
+    "judgeme_reviews"
+  ]
+}
