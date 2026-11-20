@@ -166,7 +166,7 @@
           "settings": {
             "heading": "Handelt es sich um ein Duftwasser?",
             "icon": "none",
-            "content": "<p>Nein, es ist ein Eau de Parfum mit 20 % Duftöl. Eau de Toilette enthält zum Beispiel zwischen 5 und 15 %.</p>",
+            "content": "<p>Nein, es ist ein Eau de Parfum mit 35 % Duftöl. Eau de Toilette enthält zum Beispiel zwischen 5 und 15 %.</p>",
             "page": ""
           }
         },
@@ -175,7 +175,7 @@
           "settings": {
             "heading": "Wie lange hält das Parfum?",
             "icon": "none",
-            "content": "<p>Das Parfum hält je nach Person und Anwendungsart unterschiedlich lange an. Auf die Haut gesprüht hält es dank unserer Formel und 20 % Parfumölkonzentration 8 bis sogar 12 Stunden und länger. Nach einer längeren Zeitspanne verblasst der Duft.</p>",
+            "content": "<p>Das Parfum hält je nach Person und Anwendungsart unterschiedlich lange an. Auf die Haut gesprüht hält es dank unserer Formel und 35 % Parfumölkonzentration 8 bis sogar 12 Stunden und länger. Nach einer längeren Zeitspanne verblasst der Duft.</p>",
             "page": ""
           }
         },
@@ -193,9 +193,9 @@
           "type": "collapsible_tab",
           "disabled": true,
           "settings": {
-            "heading": "Was bedeutet 20 % Parfum?",
+            "heading": "Was bedeutet 35 % Parfum?",
             "icon": "none",
-            "content": "<p>Es bedeutet, dass der Inhalt des Flakons 20 % Parfumöl enthält. Designerflakons enthalten zwischen 10 und 15 % Parfumöl für Eau de Toilette.</p>",
+            "content": "<p>Es bedeutet, dass der Inhalt des Flakons 35 % Parfumöl enthält. Designerflakons enthalten zwischen 10 und 15 % Parfumöl für Eau de Toilette.</p>",
             "page": ""
           }
         },
