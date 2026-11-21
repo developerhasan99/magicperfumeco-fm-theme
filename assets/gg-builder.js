@@ -398,7 +398,7 @@
       if (it.b) l1.appendChild(el('span', 'gg-bb__tag gg-bb__tag--best', this.t.best || 'Bestseller'));
       if (it.w) l1.appendChild(el('span', 'gg-bb__tag gg-bb__tag--new', this.t.isNew || 'Neu'));
       info.appendChild(l1);
-      var sub = it.i ? (this.t.inspired || 'Inspiriert von') + ' ' + it.i : it.n ? it.t : '';
+      var sub = it.i ? (this.t.inspired || 'Inspiriert von') + ' ' + it.i : it.n ? it.t : (it.s || '');
       if (sub) info.appendChild(el('span', 'gg-bb__insp', sub));
       info.appendChild(el('span', 'gg-bb__price', money(it.p)));
       r.appendChild(info);

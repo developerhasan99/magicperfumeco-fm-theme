@@ -129,21 +129,41 @@
       </script>
       <script type="application/json" data-gg-pool>
         [
+        {%- comment -%}
+          Pool = the main collection (bottle_size, max pool_limit, sorted by best-selling) + the extra collections
+          (pool_extra "handle:size", e.g. black-utique:100ml), appended after it. A product in two collections shows once.
+          Extra collections have no "Nr." in their titles: the card shows the name before " - " and the collection title under it.
+        {%- endcomment -%}
         {%- assign bb_count = 0 -%}
-        {%- paginate bb_coll.products by 250 -%}
-          {%- for p in bb_coll.products -%}
-            {%- if bb_count >= bb_limit -%}{%- break -%}{%- endif -%}
+        {%- assign bb_seen = ',' -%}
+        {%- assign bb_entries = bb_coll.handle | append: ':' | append: bb_size_tok -%}
+        {%- if st.pool_extra != blank -%}{%- assign bb_entries = bb_entries | append: ',' | append: st.pool_extra -%}{%- endif -%}
+        {%- assign bb_entries = bb_entries | split: ',' -%}
+        {%- for bb_e in bb_entries -%}
+          {%- assign bb_ep = bb_e | strip | split: ':' -%}
+          {%- assign bb_h = bb_ep[0] | strip -%}
+          {%- assign bb_pc = collections[bb_h] -%}
+          {%- if bb_h == blank or bb_pc == blank -%}{%- continue -%}{%- endif -%}
+          {%- assign bb_main = forloop.first -%}
+          {%- assign bb_tok = bb_ep[1] | default: bb_size_tok | strip | downcase | remove: ' ' -%}
+        {%- paginate bb_pc.products by 250 -%}
+          {%- for p in bb_pc.products -%}
+            {%- if bb_main and bb_count >= bb_limit -%}{%- break -%}{%- endif -%}
             {%- liquid
               assign skip = false
               if p.available == false or p.tags contains 'bundle' or p.has_only_default_variant
+                assign skip = true
+              endif
+              assign p_key = ',' | append: p.id | append: ','
+              if bb_seen contains p_key
                 assign skip = true
               endif
               assign v = blank
               unless skip
                 for pv in p.variants
                   assign pv_size = pv.title | downcase | remove: ' '
-                  assign pv_head = pv_size | slice: 0, bb_size_tok.size
-                  if pv.available and pv_head == bb_size_tok
+                  assign pv_head = pv_size | slice: 0, bb_tok.size
+                  if pv.available and pv_head == bb_tok
                     assign v = pv
                     break
                   endif
@@ -177,7 +197,7 @@
                 # Bestseller badge = the first 20 scents of the pool (Adrian 11.11: "only top 20"). The pool
                 # collection is sorted by best-selling, so its order is Shopify's sales rank.
                 assign p_best = false
-                if bb_count < 20
+                if bb_main and bb_count < 20
                   assign p_best = true
                 endif
                 assign p_new = false
@@ -200,12 +220,24 @@
               -%}
               {%- capture bb_meta -%}{% render 'gg-scent-meta', product: p, variant: v, inspired_word: bb_word %}{%- endcapture -%}
               {%- assign bb_m = bb_meta | split: '~|~' -%}
+              {%- liquid
+                assign bb_n = bb_m[0] | default: '' | strip
+                assign bb_t = p.title
+                assign bb_s = ''
+                unless bb_main
+                  assign bb_n = ''
+                  assign bb_t = p.title | split: ' - ' | first | strip
+                  assign bb_s = bb_pc.title
+                endunless
+                assign bb_seen = bb_seen | append: p.id | append: ','
+              -%}
               {%- if bb_count > 0 -%},{%- endif -%}
-              {"v":"{{ v.id }}","pid":{{ p.id }},"n":{{ bb_m[0] | default: '' | strip | json }},"t":{{ p.title | json }},"i":{{ bb_m[1] | default: '' | strip | json }},"o":{{ bb_m[2] | default: '' | strip | json }},"f":{{ p_fam | json }},"g":"{{ p_g }}","b":{{ p_best }},"w":{{ p_new }},"p":{{ v.price }},"img":{%- if p.featured_image != blank -%}{{ p.featured_image | image_url: width: 400 | json }}{%- else -%}""{%- endif -%},"c":{{ bb_m[4] | default: p.title | strip | json }}}
+              {"v":"{{ v.id }}","pid":{{ p.id }},"n":{{ bb_n | json }},"t":{{ bb_t | json }},"s":{{ bb_s | json }},"i":{{ bb_m[1] | default: '' | strip | json }},"o":{{ bb_m[2] | default: '' | strip | json }},"f":{{ p_fam | json }},"g":"{{ p_g }}","b":{{ p_best }},"w":{{ p_new }},"p":{{ v.price }},"img":{%- if p.featured_image != blank -%}{{ p.featured_image | image_url: width: 400 | json }}{%- else -%}""{%- endif -%},"c":{{ bb_m[4] | default: p.title | strip | json }}}
               {%- assign bb_count = bb_count | plus: 1 -%}
             {%- endunless -%}
           {%- endfor -%}
         {%- endpaginate -%}
+        {%- endfor -%}
         ]
       </script>
 
@@ -405,6 +437,7 @@
     { "type": "collection", "id": "pool_collection", "label": "Kollektion", "info": "Leer: best-sellers, dann alle Produkte." },
     { "type": "range", "id": "pool_limit", "label": "Max. Düfte", "min": 50, "max": 250, "step": 2, "default": 200 },
     { "type": "text", "id": "bottle_size", "label": "Flaschengröße (Variante)", "default": "50ml" },
+    { "type": "text", "id": "pool_extra", "label": "Weitere Kollektionen (Handle:Größe)", "default": "black-utique:100ml", "info": "Komma-getrennt, z. B. black-utique:100ml,intense:50ml. Kommen nach der Kollektion oben in die Auswahl. Für den Rabatt auch unter Rabatt-Kollektionen eintragen." },
     { "type": "text", "id": "bottle_label", "label": "Wort im Warenkorb (Sets)", "default": "Flasche" },
     { "type": "text", "id": "inspired_word", "label": "Inspiriert-Wort", "default": "Inspiriert von" },
     { "type": "header", "content": "Filter" },

@@ -512,6 +512,7 @@
         "pool_collection": "best-sellers",
         "pool_limit": 200,
         "bottle_size": "50ml",
+        "pool_extra": "black-utique:100ml",
         "eyebrow": "Selbst zusammenstellen",
         "heading": "Stell dein eigenes Set zusammen",
         "text": "Leg so viele 50-ml-Düfte in den Warenkorb, wie du willst. Ab 2 Düften sparst du 25%, ab 4 30%, ab 6 35% und ab 8 40%.",
