@@ -216,6 +216,26 @@
   overflow-wrap: break-word;
 }
 
+/* Narrow cards (phones): two side-by-side columns squeeze long notes into "Inspiriert von".
+   Stack instead: number + occasion on the first line, inspiration, then notes, each full width. */
+.gg-rows__list { container-type: inline-size; }
+
+@container (max-width: 380px) {
+  .gg-rows__row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas: "num label" "insp insp" "notes notes";
+    gap: 2px 12px;
+  }
+
+  .gg-rows__left,
+  .gg-rows__right { display: contents; }
+
+  .gg-rows__num { grid-area: num; }
+  .gg-rows__left .gg-rows__muted { grid-area: insp; }
+  .gg-rows__label { grid-area: label; justify-self: end; }
+  .gg-rows__right .gg-rows__muted { grid-area: notes; text-align: left; }
+}
+
 /* ---------- Discovery tile (grid item, same height as the cards) ---------- */
 .gg-disc {
   display: flex;

@@ -1,14 +1,16 @@
 {%- comment -%}
-  gg-bundle-builder: "Selbst zusammenstellen" set builder of the Gift Guide (pattern: theessencevault.co.uk gift guide,
-  #build-your-own). One card: filters (gift-set chips, search, gender, scent family) | scent list | "Dein Set" summary.
-  Mobile: one column, the summary turns into a sticky bar at the bottom of the section with a slot rail.
-  Data: pool = 50ml variants of the pool collection (same filters as pm-bundle-save), rendered as JSON for
-  assets/gg-builder.js (<gg-builder>). Display data per scent from snippets/gg-scent-meta.liquid.
-  Cart (assets/gg-core.js): ONE line = parent bundle variant (size from the leading number of option1) +
-  "Flasche N" properties + _bundle_items (comma-joined 50ml variant ids), same contract as the store builders.
-  Sizes: up to three parent products (default 3 / 6 / 9 bottles), one button each; the active size sets the
-  slots, the price and the variant that goes into the cart. Only sizes with a product set are shown.
-  Gift cards elsewhere on the page call GG.preset(ids) -> window 'gg:preset' -> this builder loads those scents.
+  gg-bundle-builder: "Selbst zusammenstellen" builder of the Gift Guide. Visual layer only: the discount is the store's
+  own automatic quantity discount (Shopify applies it at cart and checkout), the builder just shows it.
+  Layout: top = product card (image | "Dein Set" box: bottles in cart, discount steps, saving, gift packaging,
+  "Zum Warenkorb", trust row), below = filters (ready-made gift sets, gender, scent family, search) + scent card
+  grid with infinite scroll, plus a sticky bar (count, %, saving, next step) while the builder is on screen.
+  Cart (assets/gg-builder.js): a tap on a scent adds its 50 ml variant to the cart as a normal line, − removes one.
+  Ready-made sets go in as their own line (GG.bundleItem: "Flasche N" + _bundle_items), they never count toward the
+  quantity discount. Gift packaging = its own line, toggled from the box.
+  Discount steps (setting "2:25,4:30,6:35,8:40") must mirror the automatic discounts in Shopify; counted bottles =
+  cart lines of products in the discount collections (setting) or lines Shopify already discounted, minus set lines,
+  free gifts and the packaging. Saving = what Shopify actually took off those lines (cart.js), never estimated.
+  Gift cards elsewhere on the page call GG.preset(ids) -> window 'gg:preset' -> those scents pin to the top of the grid.
 {%- endcomment -%}
 {{ 'gg-base.css' | asset_url | stylesheet_tag }}
 {{ 'gg-builder.css' | asset_url | stylesheet_tag }}
@@ -18,78 +20,28 @@
 {%- liquid
   assign st = section.settings
 
-  comment
-    Size tiers (default 3 / 6 / 9): one parent product each, empty settings are skipped. Size = the product's
-    custom.bundle_size, else 3 / 6 / 9. Variant = the one whose option1 starts with the size ("6 Flaschen"),
-    else the first available. bb_tiers = JSON for gg-builder.js; the parallel lists feed the size buttons.
-    The first tier with a product is the start size.
-  endcomment
-  assign bb_keys = 'bundle_product:3,upgrade_product:6,upgrade_product_2:9' | split: ','
-  assign bb_tiers = ''
-  assign bb_tier_n = 0
-  assign bb_tier_pids = ','
-  assign bb_t_sizes = ''
-  assign bb_t_prices = ''
-  assign bb_t_compares = ''
-  assign bb_t_avail = ''
-  assign bb_base_size = 3
-  assign bb_base_price = 0
-  for tk in bb_keys
-    assign tkp = tk | split: ':'
-    assign tp = st[tkp[0]]
-    if tp == blank
+  # Discount steps "min:percent" pairs, sorted as typed
+  assign bb_steps_json = ''
+  assign bb_steps = st.discount_steps | default: '2:25,4:30,6:35,8:40' | split: ','
+  assign bb_first_min = 0
+  assign bb_first_pct = 0
+  for s in bb_steps
+    assign sp = s | strip | split: ':'
+    assign s_min = sp[0] | plus: 0
+    assign s_pct = sp[1] | plus: 0
+    if s_min < 1 or s_pct < 1
       continue
     endif
-    assign t_size = tkp[1] | plus: 0
-    if tp.metafields.custom.bundle_size != blank
-      assign bb_ms = tp.metafields.custom.bundle_size.value | plus: 0
-      if bb_ms > 1
-        assign t_size = bb_ms
-      endif
-    endif
-    assign t_v = blank
-    for v in tp.variants
-      assign vn = v.option1 | default: '' | split: ' ' | first | plus: 0
-      if vn > 0 and vn == t_size
-        assign t_v = v
-        break
-      endif
-    endfor
-    if t_v == blank
-      assign t_v = tp.selected_or_first_available_variant
-    endif
-    if t_v == blank
-      continue
-    endif
-    assign t_compare = 0
-    if t_v.compare_at_price > t_v.price
-      assign t_compare = t_v.compare_at_price
-    endif
-    if bb_tier_n == 0
-      assign bb_base_size = t_size
-      assign bb_base_price = t_v.price
+    if bb_steps_json != ''
+      assign bb_steps_json = bb_steps_json | append: ','
     else
-      assign bb_tiers = bb_tiers | append: ','
-      assign bb_t_sizes = bb_t_sizes | append: ','
-      assign bb_t_prices = bb_t_prices | append: ','
-      assign bb_t_compares = bb_t_compares | append: ','
-      assign bb_t_avail = bb_t_avail | append: ','
+      assign bb_first_min = s_min
+      assign bb_first_pct = s_pct
     endif
-    assign bb_tiers = bb_tiers | append: '{"size":' | append: t_size | append: ',"variantId":"' | append: t_v.id | append: '","price":' | append: t_v.price | append: ',"compare":' | append: t_compare | append: ',"available":' | append: t_v.available | append: '}'
-    assign bb_t_sizes = bb_t_sizes | append: t_size
-    assign bb_t_prices = bb_t_prices | append: t_v.price
-    assign bb_t_compares = bb_t_compares | append: t_compare
-    assign bb_t_avail = bb_t_avail | append: t_v.available
-    assign bb_tier_pids = bb_tier_pids | append: tp.id | append: ','
-    assign bb_tier_n = bb_tier_n | plus: 1
+    assign bb_steps_json = bb_steps_json | append: '{"min":' | append: s_min | append: ',"pct":' | append: s_pct | append: '}'
   endfor
-  if bb_tier_n == 0
-    assign bb_tiers = '{"size":' | append: bb_base_size | append: ',"variantId":null,"price":0,"compare":0,"available":false}'
-  endif
 
-  comment
-    Pool collection: setting, else best-sellers, else all products
-  endcomment
+  # Pool collection: setting, else best-sellers, else all products
   assign bb_coll = st.pool_collection
   if bb_coll == blank
     assign bb_coll = collections['best-sellers']
@@ -100,12 +52,24 @@
   assign bb_limit = st.pool_limit | default: 200 | plus: 0
   assign bb_size_tok = st.bottle_size | default: '50ml' | strip | downcase | remove: ' '
   assign bb_word = st.inspired_word | default: 'Inspiriert von'
-
-  assign bb_cta_price = bb_base_price | money_without_trailing_zeros
-  assign bb_cta = st.cta | default: 'Set in den Warenkorb · [price]' | replace: '[price]', bb_cta_price
-  assign bb_of = st.of_label | default: '[x] von [n]' | replace: '[x]', '0' | replace: '[n]', bb_base_size
-  assign bb_choose = st.choose_more | default: 'Wähle noch [n] Düfte' | replace: '[n]', bb_base_size
   assign bb_anchor = st.anchor | default: 'selbst-zusammenstellen' | handleize
+  assign bb_img = st.image
+  if bb_img == blank and st.image_product != blank
+    assign bb_img = st.image_product.featured_image
+  endif
+
+  # Gift packaging: first "gift_wrap" block with a product (e.g. the hidden "Geschenkverpackung")
+  assign bb_wrap = blank
+  assign bb_wrap_block = blank
+  for block in section.blocks
+    if block.type == 'gift_wrap' and block.settings.product != blank
+      assign bb_wrap = block.settings.product.selected_or_first_available_variant
+      assign bb_wrap_block = block
+      break
+    endif
+  endfor
+
+  assign bb_status0 = 'Ab [n] Düften sparst du [pct]%' | replace: '[n]', bb_first_min | replace: '[pct]', bb_first_pct
 -%}
 
 <div class="gg gg--surface-2 gg-bb" id="gg-{{ section.id }}">
@@ -117,16 +81,29 @@
       {%- if st.text != blank -%}<p class="gg-sub">{{ st.text | escape }}</p>{%- endif -%}
     </div>
 
-    {%- if bb_tier_n == 0 and request.design_mode -%}
-      <p class="gg-bb__notice">Wähle das Set-Produkt in den Einstellungen</p>
-    {%- endif -%}
-
     <gg-builder class="gg-bb__card" data-section="{{ section.id }}">
       <script type="application/json" data-gg-config>
         {
-          "tiers": [{{ bb_tiers }}],
-          "bottle": {{ st.bottle_size | default: '50ml' | json }},
+          "steps": [{{ bb_steps_json }}],
           "bottleLabel": {{ st.bottle_label | default: 'Flasche' | json }},
+          "pageSize": 12,
+          "cartUrl": {{ routes.cart_url | json }},
+          "wrap": {%- if bb_wrap != blank -%}{"variantId":"{{ bb_wrap.id }}","price":{{ bb_wrap.price }},"available":{{ bb_wrap.available }}}{%- else -%}null{%- endif -%},
+          "qualify": [
+            {%- assign bb_q_n = 0 -%}
+            {%- assign bb_q_handles = st.discount_collections | default: 'best-sellers,fuer-maenner,black-utique' | split: ',' -%}
+            {%- for h in bb_q_handles -%}
+              {%- assign qh = h | strip -%}
+              {%- assign qc = collections[qh] -%}
+              {%- if qc == blank -%}{%- continue -%}{%- endif -%}
+              {%- paginate qc.products by 250 -%}
+                {%- for qp in qc.products -%}
+                  {%- if bb_q_n > 0 -%},{%- endif -%}{{ qp.id }}
+                  {%- assign bb_q_n = bb_q_n | plus: 1 -%}
+                {%- endfor -%}
+              {%- endpaginate -%}
+            {%- endfor -%}
+          ],
           "t": {
             "number": "Nr. [n]",
             "inspired": {{ bb_word | json }},
@@ -134,19 +111,19 @@
             "add": {{ st.add_label | default: 'Hinzufügen' | json }},
             "isNew": {{ st.new_badge | default: 'Neu' | json }},
             "best": {{ st.best_badge | default: 'Bestseller' | json }},
-            "of": {{ st.of_label | default: '[x] von [n]' | json }},
-            "more": {{ st.choose_more | default: 'Wähle noch [n] Düfte' | json }},
-            "one": {{ st.choose_one | default: 'Wähle noch 1 Duft' | json }},
-            "full": "Dein Set ist komplett",
-            "empty": {{ st.slot_empty | default: 'Wähle einen Duft' | json }},
-            "per": {{ st.per_bottle | default: '[amount] pro Flasche' | json }},
-            "was": {{ st.was_label | default: 'Statt [amount]' | json }},
-            "save": {{ st.save_label | default: 'Du sparst [amount]' | json }},
-            "cta": {{ st.cta | default: 'Set in den Warenkorb · [price]' | json }},
-            "loading": "Wird hinzugefügt …",
-            "error": {{ st.error | default: 'Das Set konnte nicht hinzugefügt werden. Bitte versuch es noch einmal.' | json }},
+            "inCart": "[n] Düfte im Warenkorb",
+            "inCartOne": "1 Duft im Warenkorb",
+            "start": "Ab [n] Düften sparst du [pct]%",
+            "toFirst": "Noch [n] Duft bis [pct]% Rabatt",
+            "toFirstMany": "Noch [n] Düfte bis [pct]% Rabatt",
+            "toNext": "Noch [n] Duft bis [pct]%",
+            "toNextMany": "Noch [n] Düfte bis [pct]%",
+            "top": "Höchster Rabatt erreicht",
+            "save": "Du sparst [amount]",
             "remove": "Entfernen",
-            "none": {{ st.no_results | default: 'Kein Duft gefunden.' | json }}
+            "error": {{ st.error | default: 'Das hat nicht geklappt. Bitte versuch es noch einmal.' | json }},
+            "none": {{ st.no_results | default: 'Kein Duft gefunden.' | json }},
+            "showMore": {{ st.show_more | default: '[n] Düfte mehr zeigen' | json }}
           }
         }
       </script>
@@ -158,8 +135,7 @@
             {%- if bb_count >= bb_limit -%}{%- break -%}{%- endif -%}
             {%- liquid
               assign skip = false
-              assign p_tok = ',' | append: p.id | append: ','
-              if p.available == false or bb_tier_pids contains p_tok or p.tags contains 'bundle' or p.has_only_default_variant
+              if p.available == false or p.tags contains 'bundle' or p.has_only_default_variant
                 assign skip = true
               endif
               assign v = blank
@@ -199,8 +175,7 @@
                 endif
 
                 # Bestseller badge = the first 20 scents of the pool (Adrian 11.11: "only top 20"). The pool
-                # collection is sorted by best-selling, so its order is Shopify's sales rank; the "bestseller" tag
-                # sits on 46 products and is not used here. 20 is fixed in code (schema is at 40 settings).
+                # collection is sorted by best-selling, so its order is Shopify's sales rank.
                 assign p_best = false
                 if bb_count < 20
                   assign p_best = true
@@ -226,7 +201,7 @@
               {%- capture bb_meta -%}{% render 'gg-scent-meta', product: p, variant: v, inspired_word: bb_word %}{%- endcapture -%}
               {%- assign bb_m = bb_meta | split: '~|~' -%}
               {%- if bb_count > 0 -%},{%- endif -%}
-              {"v":"{{ v.id }}","n":{{ bb_m[0] | default: '' | strip | json }},"t":{{ p.title | json }},"i":{{ bb_m[1] | default: '' | strip | json }},"o":{{ bb_m[2] | default: '' | strip | json }},"f":{{ p_fam | json }},"g":"{{ p_g }}","b":{{ p_best }},"w":{{ p_new }},"p":{{ v.price }},"img":{%- if p.featured_image != blank -%}{{ p.featured_image | image_url: width: 112 | json }}{%- else -%}""{%- endif -%},"c":{{ bb_m[4] | default: p.title | strip | json }}}
+              {"v":"{{ v.id }}","pid":{{ p.id }},"n":{{ bb_m[0] | default: '' | strip | json }},"t":{{ p.title | json }},"i":{{ bb_m[1] | default: '' | strip | json }},"o":{{ bb_m[2] | default: '' | strip | json }},"f":{{ p_fam | json }},"g":"{{ p_g }}","b":{{ p_best }},"w":{{ p_new }},"p":{{ v.price }},"img":{%- if p.featured_image != blank -%}{{ p.featured_image | image_url: width: 400 | json }}{%- else -%}""{%- endif -%},"c":{{ bb_m[4] | default: p.title | strip | json }}}
               {%- assign bb_count = bb_count | plus: 1 -%}
             {%- endunless -%}
           {%- endfor -%}
@@ -234,141 +209,176 @@
         ]
       </script>
 
-      <div class="gg-bb__filters">
-        {%- capture bb_chips -%}
-          {%- for block in section.blocks -%}
-            {%- liquid
-              assign pp = block.settings.product
-              assign pp_ids = ''
-              if pp != blank
-                for fv in pp.metafields.custom.fixed_bundle_products.value
-                  if fv.id != blank
-                    if pp_ids != ''
-                      assign pp_ids = pp_ids | append: ','
+      <div class="gg-bb__top">
+        <div class="gg-bb__media">
+          {%- if bb_img != blank -%}
+            {{ bb_img | image_url: width: 1400 | image_tag: widths: '400, 600, 800, 1000, 1200, 1400', sizes: '(min-width: 990px) 45vw, 100vw', loading: 'lazy', class: 'gg-bb__img', alt: bb_img.alt }}
+          {%- elsif request.design_mode -%}
+            <span class="gg-bb__img gg-bb__img--empty"></span>
+          {%- endif -%}
+        </div>
+
+        <div class="gg-bb__sum" data-sum>
+          <div class="gg-bb__sum-line">
+            <span class="gg-bb__sum-title">{{ st.set_title | default: 'Dein Set' | escape }}</span>
+            <span class="gg-bb__of" data-of>0 Düfte im Warenkorb</span>
+          </div>
+
+          {%- comment -%} Discount steps: one marker per step, the bar fills up to the bottles in the cart. Same markup again in the sticky bar. {%- endcomment -%}
+          {%- capture bb_steps_html -%}
+          <div class="gg-bb__steps" data-steps>
+            <div class="gg-bb__steps-bar"><span class="gg-bb__steps-fill" data-steps-fill></span></div>
+            <ol class="gg-bb__steps-list">
+              {%- for s in bb_steps -%}
+                {%- assign sp = s | strip | split: ':' -%}
+                {%- assign s_min = sp[0] | plus: 0 -%}
+                {%- assign s_pct = sp[1] | plus: 0 -%}
+                {%- if s_min < 1 or s_pct < 1 -%}{%- continue -%}{%- endif -%}
+                <li class="gg-bb__step-mark" data-step-min="{{ s_min }}">
+                  <strong>-{{ s_pct }}%</strong>
+                  <span>{{ s_min }} Düfte</span>
+                </li>
+              {%- endfor -%}
+            </ol>
+          </div>
+          {%- endcapture -%}
+          {{ bb_steps_html }}
+
+          <p class="gg-bb__status" data-status aria-live="polite">{{ bb_status0 | escape }}</p>
+          <p class="gg-bb__saving" data-saving hidden></p>
+
+          <div class="gg-bb__picked" role="list" data-picked hidden></div>
+          <div class="gg-bb__addons" role="list" data-addons hidden></div>
+
+          {%- if bb_wrap != blank and bb_wrap.available -%}
+            <label class="gg-bb__wrap" {{ bb_wrap_block.shopify_attributes }}>
+              <input class="gg-bb__wrap-input" type="checkbox" data-wrap>
+              <span class="gg-bb__wrap-switch" aria-hidden="true"></span>
+              <span class="gg-bb__wrap-txt">
+                <a class="gg-bb__wrap-title" href="{{ bb_wrap_block.settings.product.url }}" target="_blank" rel="noopener">{{ bb_wrap_block.settings.label | default: 'Als Geschenk verpacken' | escape }}</a>
+                {%- if bb_wrap_block.settings.text != blank -%}
+                  <span class="gg-bb__wrap-sub">{{ bb_wrap_block.settings.text | escape }}</span>
+                {%- endif -%}
+              </span>
+              <span class="gg-bb__wrap-price">+{{ bb_wrap.price | money_without_trailing_zeros }}</span>
+            </label>
+          {%- endif -%}
+
+          <button type="button" class="gg-btn gg-btn--primary gg-btn--block gg-bb__cta" data-cta disabled>{{ st.cta | default: 'Zum Warenkorb' | escape }}</button>
+          <p class="gg-bb__err" role="alert" data-err hidden></p>
+          {%- if st.fine_print != blank -%}<p class="gg-bb__fine">{{ st.fine_print | escape }}</p>{%- endif -%}
+          {%- comment -%} Same trust pair as the store's other buy boxes (pm-bundle-save, quantity-breaker) {%- endcomment -%}
+          <div class="gg-bb__trust">
+            {% render 'mgx-payment-icons' %}
+            {% render 'shipping-badges' %}
+          </div>
+        </div>
+      </div>
+
+      <div class="gg-bb__pick">
+        <div class="gg-bb__filters">
+          {%- capture bb_chips -%}
+            {%- for block in section.blocks -%}
+              {%- if block.type != 'preset' -%}{%- continue -%}{%- endif -%}
+              {%- liquid
+                assign pp = block.settings.product
+                assign pp_ids = ''
+                if pp != blank
+                  for fv in pp.metafields.custom.fixed_bundle_products.value
+                    if fv.id != blank
+                      if pp_ids != ''
+                        assign pp_ids = pp_ids | append: ','
+                      endif
+                      assign pp_ids = pp_ids | append: '"' | append: fv.id | append: '"'
                     endif
-                    assign pp_ids = pp_ids | append: '"' | append: fv.id | append: '"'
-                  endif
-                endfor
-              endif
-              assign pp_label = block.settings.label
-              if pp_label == blank and pp != blank
-                assign pp_label = pp.metafields.custom.gift_title.value | default: pp.title
-              endif
-            -%}
-            {%- if pp_ids != '' -%}
-              <button type="button" class="gg-bb__chip" data-preset="[{{ pp_ids | escape }}]" {{ block.shopify_attributes }}>{{ pp_label | escape }}</button>
-            {%- elsif request.design_mode -%}
-              <button type="button" class="gg-bb__chip" disabled {{ block.shopify_attributes }}>{{ pp_label | default: 'Geschenkset wählen' | escape }}</button>
-            {%- endif -%}
-          {%- endfor -%}
-        {%- endcapture -%}
-        {%- if bb_chips != blank -%}
-          <div class="gg-bb__group gg-bb__group--presets">
-            <p class="gg-bb__label" id="ggbb-pre-{{ section.id }}">{{ st.presets_label | escape }}</p>
-            <div class="gg-bb__scroller gg-bb__chips" role="group" aria-labelledby="ggbb-pre-{{ section.id }}">
-              {{- bb_chips -}}
+                  endfor
+                endif
+                assign pp_label = block.settings.label
+                if pp_label == blank and pp != blank
+                  assign pp_label = pp.metafields.custom.gift_title.value | default: pp.title
+                endif
+                assign pp_v = blank
+                if pp != blank
+                  assign pp_v = pp.selected_or_first_available_variant
+                endif
+              -%}
+              {%- if pp_ids != '' and pp_v != blank and pp_v.available -%}
+                {%- comment -%} Fair value = the set's 50 ml bottles at their single prices (bought separately) {%- endcomment -%}
+                {%- assign pp_fair = 0 -%}
+                {%- for fv in pp.metafields.custom.fixed_bundle_products.value -%}
+                  {%- assign pp_fair = pp_fair | plus: fv.price -%}
+                {%- endfor -%}
+                {%- if pp_fair <= pp_v.price -%}{%- assign pp_fair = 0 -%}{%- endif -%}
+                {%- capture pp_names -%}
+                  [
+                  {%- for fv in pp.metafields.custom.fixed_bundle_products.value -%}
+                    {%- capture pp_meta -%}{% render 'gg-scent-meta', product: fv.product, variant: fv, inspired_word: bb_word %}{%- endcapture -%}
+                    {%- assign pp_m = pp_meta | split: '~|~' -%}
+                    {"id":{{ fv.id | json }},"name":{{ pp_m[4] | default: fv.product.title | strip | json }}}{%- unless forloop.last -%},{%- endunless -%}
+                  {%- endfor -%}
+                  ]
+                {%- endcapture -%}
+                <button type="button" class="gg-bb__chip" data-set-variant="{{ pp_v.id }}" data-set-price="{{ pp_v.price }}" data-set-compare="{{ pp_fair }}" data-set-title="{{ pp_label | escape }}" data-set-scents="{{ pp_names | strip | escape }}" aria-pressed="false" {{ block.shopify_attributes }}><span class="gg-bb__chip-ok" aria-hidden="true">✓</span><span>{{ pp_label | escape }}</span><span class="gg-bb__chip-price">+{{ pp_v.price | money_without_trailing_zeros }}{%- if pp_fair > 0 -%}{{ ' ' }}<s>{{ pp_fair | money_without_trailing_zeros }}</s>{%- endif -%}</span></button>
+              {%- elsif request.design_mode -%}
+                <button type="button" class="gg-bb__chip" disabled {{ block.shopify_attributes }}>{{ pp_label | default: 'Geschenkset wählen' | escape }}</button>
+              {%- endif -%}
+            {%- endfor -%}
+          {%- endcapture -%}
+          {%- if bb_chips != blank -%}
+            <div class="gg-bb__group gg-bb__group--presets">
+              <p class="gg-bb__label" id="ggbb-pre-{{ section.id }}">{{ st.presets_label | escape }}</p>
+              <div class="gg-bb__scroller gg-bb__chips" role="group" aria-labelledby="ggbb-pre-{{ section.id }}">
+                {{- bb_chips -}}
+              </div>
+              {%- if st.presets_note != blank -%}<p class="gg-bb__note">{{ st.presets_note | escape }}</p>{%- endif -%}
             </div>
-            {%- if st.presets_note != blank -%}<p class="gg-bb__note">{{ st.presets_note | escape }}</p>{%- endif -%}
-          </div>
-        {%- endif -%}
+          {%- endif -%}
 
-        <div class="gg-bb__group gg-bb__group--search">
-          <label class="gg-vh" for="ggbb-q-{{ section.id }}">{{ st.search_placeholder | escape }}</label>
-          <div class="gg-bb__search">
-            <svg class="gg-bb__search-ico" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="m20 20-4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-            <input class="gg-bb__input" type="search" id="ggbb-q-{{ section.id }}" placeholder="{{ st.search_placeholder | escape }}" autocomplete="off" data-q>
+          <div class="gg-bb__group" data-g-group>
+            <p class="gg-bb__label" id="ggbb-g-{{ section.id }}">{{ st.gender_label | escape }}</p>
+            <div class="gg-bb__scroller gg-bb__opts" role="group" aria-labelledby="ggbb-g-{{ section.id }}">
+              <button type="button" class="gg-bb__opt is-active" data-g="all" aria-pressed="true"><span>{{ st.gender_all | escape }}</span> <span class="gg-bb__cnt" data-cnt="all"></span></button>
+              <button type="button" class="gg-bb__opt" data-g="unisex" aria-pressed="false"><span>{{ st.gender_unisex | escape }}</span> <span class="gg-bb__cnt" data-cnt="unisex"></span></button>
+              <button type="button" class="gg-bb__opt" data-g="male" aria-pressed="false"><span>{{ st.gender_male | escape }}</span> <span class="gg-bb__cnt" data-cnt="male"></span></button>
+              <button type="button" class="gg-bb__opt" data-g="female" aria-pressed="false"><span>{{ st.gender_female | escape }}</span> <span class="gg-bb__cnt" data-cnt="female"></span></button>
+            </div>
+          </div>
+
+          <div class="gg-bb__group" data-f-group>
+            <p class="gg-bb__label" id="ggbb-f-{{ section.id }}">{{ st.family_label | escape }}</p>
+            <div class="gg-bb__scroller gg-bb__pills" role="group" aria-labelledby="ggbb-f-{{ section.id }}" data-f-list>
+              <button type="button" class="gg-bb__pill is-active" data-f="" aria-pressed="true">{{ st.gender_all | escape }}</button>
+            </div>
+          </div>
+
+          <div class="gg-bb__group gg-bb__group--search">
+            <label class="gg-vh" for="ggbb-q-{{ section.id }}">{{ st.search_placeholder | escape }}</label>
+            <div class="gg-bb__search">
+              <svg class="gg-bb__search-ico" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="m20 20-4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <input class="gg-bb__input" type="search" id="ggbb-q-{{ section.id }}" placeholder="{{ st.search_placeholder | escape }}" autocomplete="off" data-q>
+            </div>
           </div>
         </div>
 
-        <div class="gg-bb__group" data-g-group>
-          <p class="gg-bb__label" id="ggbb-g-{{ section.id }}">{{ st.gender_label | escape }}</p>
-          <div class="gg-bb__scroller gg-bb__opts" role="group" aria-labelledby="ggbb-g-{{ section.id }}">
-            <button type="button" class="gg-bb__opt is-active" data-g="all" aria-pressed="true"><span>{{ st.gender_all | escape }}</span> <span class="gg-bb__cnt" data-cnt="all"></span></button>
-            <button type="button" class="gg-bb__opt" data-g="unisex" aria-pressed="false"><span>{{ st.gender_unisex | escape }}</span> <span class="gg-bb__cnt" data-cnt="unisex"></span></button>
-            <button type="button" class="gg-bb__opt" data-g="male" aria-pressed="false"><span>{{ st.gender_male | escape }}</span> <span class="gg-bb__cnt" data-cnt="male"></span></button>
-            <button type="button" class="gg-bb__opt" data-g="female" aria-pressed="false"><span>{{ st.gender_female | escape }}</span> <span class="gg-bb__cnt" data-cnt="female"></span></button>
+        <div class="gg-bb__main">
+          <div class="gg-bb__listhead">
+            <p class="gg-bb__count" data-count aria-live="polite"></p>
+            <p class="gg-bb__sort">{{ st.sort_label | escape }}</p>
           </div>
-        </div>
-
-        <div class="gg-bb__group" data-f-group>
-          <p class="gg-bb__label" id="ggbb-f-{{ section.id }}">{{ st.family_label | escape }}</p>
-          <div class="gg-bb__scroller gg-bb__pills" role="group" aria-labelledby="ggbb-f-{{ section.id }}" data-f-list>
-            <button type="button" class="gg-bb__pill is-active" data-f="" aria-pressed="true">{{ st.gender_all | escape }}</button>
-          </div>
+          <div class="gg-bb__list" role="list" data-list tabindex="-1"></div>
+          <button type="button" class="gg-btn gg-bb__more" data-more hidden></button>
         </div>
       </div>
 
-      <div class="gg-bb__main">
-        <div class="gg-bb__listhead">
-          <p class="gg-bb__count" data-count aria-live="polite"></p>
-          <p class="gg-bb__sort">{{ st.sort_label | escape }}</p>
-        </div>
-        <div class="gg-bb__list" role="list" data-list tabindex="-1"></div>
-      </div>
-
-      <div class="gg-bb__sum" data-sum>
-        <div class="gg-bb__sum-head" data-head>
-          <div class="gg-bb__sum-titles">
-            <p class="gg-bb__sum-line">
-              <span class="gg-bb__sum-title">{{ st.set_title | escape }}</span>
-              <span class="gg-bb__of" data-of>{{ bb_of | escape }}</span>
-            </p>
-            <p class="gg-bb__status" data-status aria-live="polite">{{ bb_choose | escape }}</p>
-          </div>
-          <button type="button" class="gg-bb__chev" data-toggle aria-expanded="false" aria-controls="ggbb-rail-{{ section.id }}">
-            <span class="gg-vh">{{ st.set_title | escape }}</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m6 15 6-6 6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      {%- comment -%} Sticky bar: shown while the builder is on screen and the box is not {%- endcomment -%}
+      <div class="gg-bb__bar" data-bar hidden>
+        <div class="gg-bb__bar-in">
+          <div class="gg-bb__bar-steps">{{ bb_steps_html }}</div>
+          <button type="button" class="gg-bb__bar-cart" data-bar-cta aria-label="{{ st.cta | default: 'Zum Warenkorb' | escape }}" disabled>
+            {%- render 'icon-cart' -%}
+            <span class="gg-bb__bar-badge" data-bar-badge hidden>0</span>
           </button>
         </div>
-        {%- if bb_tier_n > 1 -%}
-          {%- assign tz = bb_t_sizes | split: ',' -%}
-          {%- assign tpz = bb_t_prices | split: ',' -%}
-          {%- assign tcz = bb_t_compares | split: ',' -%}
-          {%- assign taz = bb_t_avail | split: ',' -%}
-          {%- comment -%} Each size shows its set price, the struck compare-at and the saving in % (pill on the top
-            edge), so the offer reads before anything is picked. No compare-at on a size = price only. {%- endcomment -%}
-          <div class="gg-bb__sizes" role="group" aria-label="{{ st.sizes_label | default: 'Wie viele Düfte?' | escape }}">
-            {%- for s in tz -%}
-              {%- liquid
-                assign i = forloop.index0
-                assign s_pr = tpz[i] | plus: 0
-                assign s_cmp = tcz[i] | plus: 0
-                assign s_pct = 0
-                if s_cmp > s_pr and s_pr > 0
-                  assign s_pct = s_cmp | minus: s_pr | times: 100.0 | divided_by: s_cmp | round
-                endif
-                assign s_label = st.size_label | default: '[n] Düfte' | replace: '[n]', s
-              -%}
-              <button type="button" class="gg-bb__size{% if i == 0 %} is-active{% endif %}{% if s_pct > 0 %} has-save{% endif %}" data-tier="{{ i }}" aria-pressed="{% if i == 0 %}true{% else %}false{% endif %}"{% if taz[i] != 'true' %} disabled{% endif %}>
-                {%- if s_pct > 0 -%}
-                  <span class="gg-bb__size-pct">-{{ s_pct }}%</span>
-                {%- endif -%}
-                <span class="gg-bb__size-n">{{ s_label | escape }}</span>
-                <span class="gg-bb__size-pr">
-                  <span class="gg-bb__size-p">{{ s_pr | money_without_trailing_zeros }}</span>
-                  {%- if s_pct > 0 -%}
-                    {{ ' ' }}<s class="gg-bb__size-was">{{ s_cmp | money_without_trailing_zeros }}</s>
-                  {%- endif -%}
-                </span>
-              </button>
-            {%- endfor -%}
-          </div>
-        {%- endif -%}
-        <div class="gg-bb__rail" id="ggbb-rail-{{ section.id }}">
-          <ol class="gg-bb__slots" data-slots>
-            {%- for i in (1..bb_base_size) -%}
-              <li class="gg-bb__slot"><span class="gg-bb__slot-idx">{% if i < 10 %}0{% endif %}{{ i }}</span><span class="gg-bb__slot-txt">{{ st.slot_empty | escape }}</span></li>
-            {%- endfor -%}
-          </ol>
-        </div>
-        <div class="gg-bb__totals" data-totals>
-          <p class="gg-bb__trow"><span data-tl-size></span><strong data-tl-price>{{ bb_cta_price }}</strong></p>
-          <p class="gg-bb__trow gg-bb__trow--small"><span data-tl-per></span><s data-tl-was></s></p>
-          <p class="gg-bb__save" data-tl-save></p>
-        </div>
-        <button type="button" class="gg-btn gg-btn--primary gg-btn--block gg-bb__cta" data-cta disabled>{{ bb_cta | escape }}</button>
-        <p class="gg-bb__err" role="alert" data-err hidden></p>
-        {%- if st.fine_print != blank -%}<p class="gg-bb__fine">{{ st.fine_print | escape }}</p>{%- endif -%}
       </div>
     </gg-builder>
   </div>
@@ -383,24 +393,24 @@
   "settings": [
     { "type": "text", "id": "anchor", "label": "Anker (ohne #)", "default": "selbst-zusammenstellen" },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Selbst zusammenstellen" },
-    { "type": "text", "id": "heading", "label": "Überschrift", "default": "Du weißt, was sie mögen? Wähl drei aus." },
-    { "type": "textarea", "id": "text", "label": "Text", "default": "Drei 50-ml-Düfte zum Preis eines Geschenksets, jeder einzeln verpackt. Wähl alle drei selbst aus oder starte mit einem unserer Geschenksets." },
-    { "type": "header", "content": "Set-Produkte" },
-    { "type": "product", "id": "bundle_product", "label": "Set-Produkt 1 (Start)", "info": "Wird in den Warenkorb gelegt. Flaschenzahl aus custom.bundle_size des Produkts (sonst 3 / 6 / 9)." },
-    { "type": "product", "id": "upgrade_product", "label": "Set-Produkt 2", "info": "Optional, z. B. das 6er-Set. Flaschenzahl aus custom.bundle_size des Produkts." },
-    { "type": "product", "id": "upgrade_product_2", "label": "Set-Produkt 3", "info": "Optional, z. B. das 9er-Set. Flaschenzahl aus custom.bundle_size des Produkts." },
-    { "type": "text", "id": "size_label", "label": "Größen-Button", "default": "[n] Düfte" },
-    { "type": "text", "id": "sizes_label", "label": "Größen-Auswahl (Screenreader)", "default": "Wie viele Düfte?" },
+    { "type": "text", "id": "heading", "label": "Überschrift", "default": "Stell dein eigenes Set zusammen" },
+    { "type": "textarea", "id": "text", "label": "Text" },
+    { "type": "image_picker", "id": "image", "label": "Bild links" },
+    { "type": "product", "id": "image_product", "label": "Bild von Produkt", "info": "Wird genutzt, wenn kein Bild gewählt ist." },
+    { "type": "header", "content": "Mengenrabatt" },
+    { "type": "paragraph", "content": "Der Rabatt kommt aus den automatischen Rabatten in Shopify. Hier nur die Anzeige: Stufen und Kollektionen müssen zu den Rabatten passen." },
+    { "type": "text", "id": "discount_steps", "label": "Stufen (Anzahl:Prozent)", "default": "2:25,4:30,6:35,8:40" },
+    { "type": "text", "id": "discount_collections", "label": "Rabatt-Kollektionen (Handles)", "default": "best-sellers,fuer-maenner,black-utique" },
     { "type": "header", "content": "Duftauswahl" },
     { "type": "collection", "id": "pool_collection", "label": "Kollektion", "info": "Leer: best-sellers, dann alle Produkte." },
     { "type": "range", "id": "pool_limit", "label": "Max. Düfte", "min": 50, "max": 250, "step": 2, "default": 200 },
     { "type": "text", "id": "bottle_size", "label": "Flaschengröße (Variante)", "default": "50ml" },
-    { "type": "text", "id": "bottle_label", "label": "Wort im Warenkorb", "default": "Flasche" },
+    { "type": "text", "id": "bottle_label", "label": "Wort im Warenkorb (Sets)", "default": "Flasche" },
     { "type": "text", "id": "inspired_word", "label": "Inspiriert-Wort", "default": "Inspiriert von" },
     { "type": "header", "content": "Filter" },
-    { "type": "text", "id": "presets_label", "label": "Geschenksets Titel", "default": "Mit einem Geschenkset starten" },
-    { "type": "textarea", "id": "presets_note", "label": "Geschenksets Hinweis", "default": "Wir füllen dein Set mit den drei Düften dieses Sets. Tausch jeden davon aus, wie du willst." },
-    { "type": "text", "id": "search_placeholder", "label": "Suche", "default": "Nummer, Name oder Note suchen" },
+    { "type": "text", "id": "presets_label", "label": "Geschenksets Titel", "default": "Fertige Geschenksets dazulegen" },
+    { "type": "textarea", "id": "presets_note", "label": "Geschenksets Hinweis", "default": "Schon reduziert, kommen als eigenes Set in den Warenkorb." },
+    { "type": "text", "id": "search_placeholder", "label": "Suche", "default": "Marke, Duft oder Nr. suchen" },
     { "type": "text", "id": "gender_label", "label": "Für wen", "default": "Für wen" },
     { "type": "text", "id": "gender_all", "label": "Alle (Für wen, Duftfamilie)", "default": "Alle" },
     { "type": "text", "id": "gender_unisex", "label": "Unisex", "default": "Unisex" },
@@ -414,18 +424,12 @@
     { "type": "text", "id": "new_badge", "label": "Badge neu", "default": "Neu" },
     { "type": "text", "id": "best_badge", "label": "Badge Bestseller", "default": "Bestseller" },
     { "type": "text", "id": "no_results", "label": "Keine Treffer", "default": "Kein Duft gefunden." },
+    { "type": "text", "id": "show_more", "label": "Mehr zeigen", "default": "[n] Düfte mehr zeigen" },
     { "type": "header", "content": "Dein Set" },
     { "type": "text", "id": "set_title", "label": "Titel", "default": "Dein Set" },
-    { "type": "text", "id": "of_label", "label": "Zähler", "default": "[x] von [n]" },
-    { "type": "text", "id": "choose_more", "label": "Noch mehrere", "default": "Wähle noch [n] Düfte" },
-    { "type": "text", "id": "choose_one", "label": "Noch einer", "default": "Wähle noch 1 Duft" },
-    { "type": "text", "id": "slot_empty", "label": "Leerer Platz", "default": "Wähle einen Duft" },
-    { "type": "text", "id": "per_bottle", "label": "Pro Flasche", "default": "[amount] pro Flasche" },
-    { "type": "text", "id": "was_label", "label": "Statt", "default": "Statt [amount]" },
-    { "type": "text", "id": "save_label", "label": "Ersparnis", "default": "Du sparst [amount]" },
-    { "type": "text", "id": "cta", "label": "Button", "default": "Set in den Warenkorb · [price]" },
-    { "type": "text", "id": "error", "label": "Fehler", "default": "Das Set konnte nicht hinzugefügt werden. Bitte versuch es noch einmal." },
-    { "type": "text", "id": "fine_print", "label": "Kleingedrucktes", "default": "Einzeln verpackt, fertig zum Verschenken" }
+    { "type": "text", "id": "cta", "label": "Button", "default": "Zum Warenkorb" },
+    { "type": "text", "id": "error", "label": "Fehler", "default": "Das hat nicht geklappt. Bitte versuch es noch einmal." },
+    { "type": "text", "id": "fine_print", "label": "Kleingedrucktes" }
   ],
   "blocks": [
     {
@@ -434,6 +438,16 @@
       "settings": [
         { "type": "product", "id": "product", "label": "Geschenkset", "info": "Fixes Set: die Düfte kommen aus custom.fixed_bundle_products." },
         { "type": "text", "id": "label", "label": "Name", "info": "Leer: custom.gift_title, dann Produkttitel." }
+      ]
+    },
+    {
+      "type": "gift_wrap",
+      "name": "Geschenkverpackung",
+      "limit": 1,
+      "settings": [
+        { "type": "product", "id": "product", "label": "Produkt", "info": "Eigene Zeile im Warenkorb, wenn der Schalter an ist." },
+        { "type": "text", "id": "label", "label": "Titel", "default": "Als Geschenk verpacken" },
+        { "type": "text", "id": "text", "label": "Hinweis" }
       ]
     }
   ],

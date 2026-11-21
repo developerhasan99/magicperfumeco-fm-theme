@@ -22,8 +22,8 @@
   --gg-radius-pill: 999px;
   --gg-gutter: 16px;
   --gg-gap: 12px;
-  --gg-pad-top: 48px;
-  --gg-pad-bottom: 48px;
+  --gg-pad-top: 24px;
+  --gg-pad-bottom: 24px;
   --gg-wide: 1300px;
   --gg-narrow: 840px;
   --gg-font-heading: var(--font-heading-family, inherit);
@@ -54,8 +54,8 @@
 
 @media (min-width: 990px) {
   .gg {
-    --gg-pad-top: 80px;
-    --gg-pad-bottom: 80px;
+    --gg-pad-top: 40px;
+    --gg-pad-bottom: 40px;
   }
 }
 

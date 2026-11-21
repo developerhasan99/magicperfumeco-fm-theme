@@ -3,9 +3,14 @@
    px only, mobile-first (375 base, 750 / 990 / 1200), no importance overrides. */
 
 /* ---------- Hero ---------- */
-.gg-hero {
+/* .gg.gg-hero (not .gg-hero): every section re-links gg-base.css, so a later copy of the base .gg padding would
+   win over a single-class rule here, depending on which sections come after */
+.gg.gg-hero {
   --gg-pad-top: 0;
   --gg-pad-bottom: 0;
+}
+
+.gg-hero {
   display: flex;
   flex-direction: column;
   background: var(--gg-surface);
@@ -162,7 +167,7 @@
 }
 
 /* ---------- Trust strip ---------- */
-.gg-trust {
+.gg.gg-trust {
   --gg-pad-top: 0;
   --gg-pad-bottom: 0;
   overflow: hidden;
