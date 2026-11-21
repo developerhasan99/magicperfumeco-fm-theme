@@ -142,16 +142,25 @@
     "home_tabs_fcxFYG": {
       "type": "home-tabs",
       "blocks": {
+        "collection_7ikAAh": {
+          "type": "collection",
+          "settings": {
+            "tab_title": "Utique Kollektion",
+            "collection": "black-utique",
+            "button_text": "Alle anzeigen"
+          }
+        },
         "collection_gRbYPe": {
           "type": "collection",
           "settings": {
-            "tab_title": "🔥 BESTSELLER",
+            "tab_title": "Bestsellers",
             "collection": "best-sellers",
             "button_text": "Alle anzeigen"
           }
         },
         "collection_Jyzpyq": {
           "type": "collection",
+          "disabled": true,
           "settings": {
             "tab_title": "Neue Düfte",
             "collection": "neue-dufte",
@@ -176,6 +185,7 @@
         }
       },
       "block_order": [
+        "collection_7ikAAh",
         "collection_gRbYPe",
         "collection_Jyzpyq",
         "collection_xgUpzQ",
