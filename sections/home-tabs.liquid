@@ -17,7 +17,13 @@
   style="background-color: {{ section.settings.background_color }}">
   <div class="page-width">
     <h2 class="text-center text-2xl md:text-4xl font-semibold mb-6 mt-0">{{ section.settings.heading }}</h2>
-    <p class="text-center text-sm md:text-base text-gray-600 mb-8">{{ section.settings.subheading }}</p>
+    {%- comment -%} One line per tab: the tab's own description, or the section subheading when it is empty; the tab script shows the open tab's line {%- endcomment -%}
+    {%- for block in section.blocks -%}
+      {%- assign tab_desc = block.settings.description | strip | default: section.settings.subheading -%}
+      <p class="text-center text-sm md:text-base text-gray-600 mb-8 tab-desc"{% unless forloop.first %} style="display: none"{% endunless %}>
+        {{- tab_desc | newline_to_br -}}
+      </p>
+    {%- endfor -%}
     <div class="flex flex-wrap gap-2 justify-center [&>.active]:[border:2px_solid_#000000]">
       {% for block in section.blocks %}
         <button class="bg-white text-black border-2 border-gray-200 rounded-lg border-solid font-semibold text-sm md:text-lg px-4 py-2 cursor-pointer products-tab-btn">
@@ -42,7 +48,8 @@
           <div class="grid grid-cols-2 gap-3 md:gap-8 md:grid-cols-4">
             {%- for product in collection.products limit: 4 -%}
               {% render 'product-card'
-                , product: product %}
+                , product: product
+                , oil_badge: true %}
             {%- endfor -%}
           </div>
         {% else %}
@@ -62,6 +69,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         const buttons = document.querySelectorAll('#{{ section.id }} .products-tab-btn');
         const tabContents = document.querySelectorAll('#{{ section.id }} .tab-content');
+        const tabDescs = document.querySelectorAll('#{{ section.id }} .tab-desc');
 
         buttons.forEach((button, index) => {
             // Add click event listener to each button
@@ -73,6 +81,7 @@
                 // Show the clicked tab's content
                 button.classList.add('active');
                 tabContents[index].style.display = 'block';
+                tabDescs.forEach((desc, j) => { desc.style.display = j === index ? '' : 'none'; });
             });
         });
     
@@ -146,6 +155,11 @@
             "type": "collection",
             "id": "collection",
             "label": "Collection"
+          }, {
+            "type": "textarea",
+            "id": "description",
+            "label": "Description under heading",
+            "info": "Shown under the section heading while this tab is open. Empty = the section subheading."
           }, {
             "type": "text",
             "id": "button_text",

@@ -8,11 +8,27 @@
       width="{{ product.images.first.width }}"
       loading="lazy"
     >
+    {%- liquid
+      assign mgx_oil = blank
+      if oil_badge
+        assign mgx_oil = product.metafields.custom.oil_concentration.value
+      endif
+    -%}
+    {%- comment -%} oil_badge (homepage tabs): badge + oil % share one top row (.mgx-card__top) so they never overlap {%- endcomment -%}
+    {%- if mgx_oil != blank -%}<div class="mgx-card__top">{%- endif -%}
     {% if product.tags contains 'bestseller' %}
       <span class="mgx-card__badge">Bestseller</span>
     {% elsif product.tags contains 'onsale' %}
       <span class="mgx-card__badge mgx-card__badge--sale">Angebot</span>
     {% endif %}
+    {%- if mgx_oil != blank -%}
+      {%- comment -%} Separate block elements: Weglot glues sibling inline spans into one sentence {%- endcomment -%}
+      <div class="mgx-card__oil">
+        <div class="mgx-card__oil-num">{{ mgx_oil }}%</div>
+        <div class="mgx-card__oil-label">Parfümöl</div>
+      </div>
+      </div>
+    {%- endif -%}
     {% unless product.tags contains 'Bundle_Price_Show' %}
       <div class="card__promo-marquee" aria-label="Black Friday: 40 % Rabatt + 2 Flakons gratis dazu!">
         <div class="card__promo-marquee-rail">
