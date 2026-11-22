@@ -98,16 +98,18 @@
 
 .gg-bb__saving[hidden] { display: none; }
 
-/* Discount steps: equal segments, the marker under the right end of each segment */
+/* Discount steps + Kite goals, the cart drawer bar look: thin line, round markers centred in equal columns,
+   label under each marker */
 .gg-bb__steps {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+  position: relative;
 }
 
 .gg-bb__steps-bar {
-  position: relative;
-  height: 8px;
+  position: absolute;
+  top: 8px;
+  left: 0;
+  right: 0;
+  height: 4px;
   border-radius: var(--gg-radius-pill);
   background: var(--gg-line);
   overflow: hidden;
@@ -118,11 +120,12 @@
   inset: 0 auto 0 0;
   width: 0;
   border-radius: inherit;
-  background: var(--gg-good);
+  background: var(--gg-ink);
   transition: width 0.35s ease;
 }
 
 .gg-bb__steps-list {
+  position: relative;
   display: grid;
   grid-auto-flow: column;
   grid-auto-columns: minmax(0, 1fr);
@@ -134,10 +137,29 @@
 .gg-bb__step-mark {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: center;
+  gap: 1px;
   margin: 0;
-  text-align: right;
+  padding: 0 2px;
+  text-align: center;
   color: var(--gg-muted);
+}
+
+.gg-bb__step-mark::before {
+  content: "";
+  box-sizing: border-box;
+  width: 20px;
+  height: 20px;
+  margin-bottom: 6px;
+  border: 2px solid var(--gg-line);
+  border-radius: 50%;
+  background: var(--gg-white);
+  transition: background-color 0.25s ease, border-color 0.25s ease;
+}
+
+.gg-bb__step-mark.is-reached::before {
+  border-color: var(--gg-ink);
+  background: var(--gg-white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8.5l3 3 6-7' fill='none' stroke='%23111' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 12px no-repeat;
 }
 
 .gg-bb__step-mark strong {
@@ -153,6 +175,11 @@
 
 .gg-bb__step-mark.is-reached { color: var(--gg-ink); }
 .gg-bb__step-mark.is-current strong { color: var(--gg-good); }
+
+.gg-bb__goals[hidden],
+.gg-bb__goal-status[hidden] { display: none; }
+
+.gg-bb__goals { margin-top: 4px; }
 
 /* Bottles in the cart: small tiles, × takes one out */
 .gg-bb__picked {
@@ -257,8 +284,6 @@
   max-width: 640px;
 }
 
-.gg-bb__bar-steps .gg-bb__steps { gap: 6px; }
-.gg-bb__bar-steps .gg-bb__steps-bar { height: 8px; }
 .gg-bb__bar-steps .gg-bb__step-mark strong { font-size: 14px; line-height: 18px; }
 .gg-bb__bar-steps .gg-bb__step-mark span { font-size: 11px; line-height: 14px; }
 

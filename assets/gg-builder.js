@@ -33,6 +33,23 @@
     return String(out).replace(/ /g, ' ');
   }
 
+  /* Kite-style track: markers centred in equal columns; the fill runs from 0 to the first marker, then marker to
+     marker, and to the end once the last one is reached */
+  function trackPos(stops, v) {
+    var n = stops.length;
+    if (!n || v <= 0) return 0;
+    var seg = 100 / n;
+    var prevAt = 0;
+    var prevV = 0;
+    for (var i = 0; i < n; i++) {
+      var at = seg * (i + 0.5);
+      if (v < stops[i]) return prevAt + (at - prevAt) * (v - prevV) / Math.max(1, stops[i] - prevV);
+      prevAt = at;
+      prevV = stops[i];
+    }
+    return 100;
+  }
+
   function el(tag, cls, text) {
     var n = document.createElement(tag);
     if (cls) n.className = cls;
@@ -133,8 +150,13 @@
         cta: this.querySelector('[data-cta]'),
         err: this.querySelector('[data-err]'),
         bar: this.querySelector('[data-bar]'),
-        barCta: this.querySelector('[data-bar-cta]')
+        barCta: this.querySelector('[data-bar-cta]'),
+        goals: this.querySelector('[data-goals]'),
+        goalsFill: this.querySelector('[data-goals-fill]'),
+        goalsList: this.querySelector('[data-goals-list]'),
+        goalStatus: this.querySelector('[data-goal-status]')
       };
+      this.goals = [];
 
       this.buildFamilies();
       this.initGenders();
@@ -143,6 +165,80 @@
       this.renderSummary();
       this.classList.add('is-ready');
       this.loadCart();
+      this.startGoals(0);
+    }
+
+    /* ---------- Kite cart goals (gifts + free shipping), the same goals as the cart drawer bar ---------- */
+    /* Kite loads after this element: its config lands in window.gfg.settings once its script ran. Retry ~10 s, then no goal row. */
+    startGoals(tries) {
+      var self = this;
+      if (!this.$.goals) return;
+      var goals = this.readGoals();
+      if (!goals.length) {
+        if (tries < 20) setTimeout(function () { self.startGoals(tries + 1); }, 500);
+        return;
+      }
+      this.goals = goals;
+      var t = this.t;
+      var frag = document.createDocumentFragment();
+      goals.forEach(function (g) {
+        var li = el('li', 'gg-bb__step-mark');
+        li.appendChild(el('strong', '', money(g.amount)));
+        li.appendChild(el('span', '', g.ship ? (t.goalShip || 'Gratis Versand') : (t.goalGift || 'Mystery-Duft')));
+        frag.appendChild(li);
+      });
+      this.$.goalsList.textContent = '';
+      this.$.goalsList.appendChild(frag);
+      this.$.goals.hidden = false;
+      this.renderSummary();
+    }
+
+    /* Kite progress bar goals (cart subtotal thresholds), this market's value, sorted by amount (same as pm-bundle-save) */
+    readGoals() {
+      var data = window.gfg && window.gfg.settings && window.gfg.settings.consolidatedCombinedDiscount ? window.gfg.settings : null;
+      if (!data) {
+        var tag = document.getElementById('kite-app-data');
+        try { data = tag && tag.textContent ? JSON.parse(tag.textContent) : null; } catch (e) { data = null; }
+      }
+      if (!data) return [];
+      var market = this.cfg.market || '';
+      var rate = parseFloat(window.Shopify && window.Shopify.currency && window.Shopify.currency.rate) || 1;
+      var out = [];
+      (data.consolidatedCombinedDiscount || []).forEach(function (c) {
+        if (!c || c.isEnabled === false || c.discountFunctionType !== 'CONSOLIDATED_PROGRESS_BAR') return;
+        ((c.segmentsData && c.segmentsData.segmentsList) || []).forEach(function (s) {
+          var r = ((s.buyXRulesData && s.buyXRulesData.rulesList) || [])[0];
+          if (!r || !/subtotal/i.test(r.ruleType || '')) return;
+          var rv = r.ruleValue || {};
+          var amount = parseFloat(rv.qualifierValue) * rate;
+          (rv.marketValues || []).forEach(function (m) {
+            if (m && m.handle === market && parseFloat(m.value) > 0) amount = parseFloat(m.value);
+          });
+          if (!(amount > 0)) return;
+          out.push({ amount: Math.round(amount * 100), ship: s.goalType !== 'FREE_GIFT' });
+        });
+      });
+      return out.sort(function (a, b) { return a.amount - b.amount; });
+    }
+
+    renderGoals() {
+      if (!this.goals.length || !this.$.goals) return;
+      var t = this.t;
+      var c = this.cart || {};
+      var v = typeof c.items_subtotal_price === 'number' ? c.items_subtotal_price : (c.total_price || 0);
+      this.$.goalsFill.style.width = trackPos(this.goals.map(function (g) { return g.amount; }), v) + '%';
+      var marks = this.$.goalsList.children;
+      var next = null;
+      this.goals.forEach(function (g, i) {
+        var hit = v >= g.amount;
+        if (marks[i]) marks[i].classList.toggle('is-reached', hit);
+        if (!hit && !next) next = g;
+      });
+      var txt = next
+        ? fill(next.ship ? (t.toShip || 'Noch [amount] bis zum Gratis-Versand') : (t.toGift || 'Noch [amount] bis zum Mystery-Duft'), { amount: money(next.amount - v) })
+        : (t.goalsDone || 'Alle Geschenke freigeschaltet');
+      this.$.goalStatus.textContent = txt;
+      this.$.goalStatus.hidden = false;
     }
 
     disconnectedCallback() {
@@ -225,9 +321,10 @@
       return hit;
     }
 
-    /* One cart write at a time; each re-reads the cart and refreshes the header bubble. open: an addition, which opens the drawer */
+    /* One cart write at a time; each re-reads the cart and refreshes the header bubble. Builder additions never open the drawer (cart icon / CTA do) */
     run(job, open) {
       var self = this;
+      this.muteDrawer(8000);
       this.pending++;
       this.hideError();
       this.renderSummary();
@@ -244,6 +341,7 @@
         .then(function () {
           self.pending--;
           self.render();
+          self.muteDrawer(6000);
         });
       return this.queue;
     }
@@ -251,7 +349,7 @@
     addVariant(v, qty, props) {
       var item = { id: Number(v), quantity: qty || 1 };
       if (props) item.properties = props;
-      return this.run(function () { return postJSON('cart/add.js', { items: [item] }); }, true);
+      return this.run(function () { return postJSON('cart/add.js', { items: [item] }); });
     }
 
     changeLine(key, quantity) {
@@ -305,7 +403,26 @@
         return;
       }
       /* Contents are fresh from the last write; refresh once more in case the cart changed elsewhere */
-      return this.refreshBubble().then(function () { drawer.open(); });
+      return this.refreshBubble().then(function () {
+        drawer._ggMuteUntil = 0;
+        drawer.open();
+      });
+    }
+
+    /* Kite opens the drawer when it adds a free gift after a builder addition: drawer.open() is ignored for ms
+       after a builder write (the cart icon / CTA clear it first) */
+    muteDrawer(ms) {
+      var drawer = document.querySelector('cart-drawer');
+      if (!drawer || typeof drawer.open !== 'function') return;
+      if (!drawer._ggMuted) {
+        var orig = drawer.open;
+        drawer.open = function () {
+          if (Date.now() < (drawer._ggMuteUntil || 0)) return;
+          return orig.apply(drawer, arguments);
+        };
+        drawer._ggMuted = true;
+      }
+      drawer._ggMuteUntil = Math.max(drawer._ggMuteUntil || 0, Date.now() + ms);
     }
 
     showError() {
@@ -503,20 +620,10 @@
       this.$.of.textContent = s.n === 1 ? t.inCartOne : fill(t.inCart, { n: s.n });
       this.$.status.textContent = this.nextText(s);
 
-      /* Bar: the markers sit at equal distances, the fill runs between the step a count has passed and the next */
-      var marks = this.steps;
-      var pos = 0;
-      if (marks.length) {
-        var seg = 100 / marks.length;
-        for (var i = 0; i < marks.length; i++) {
-          var lo = i === 0 ? 0 : marks[i - 1].min;
-          var hi = marks[i].min;
-          if (s.n >= hi) { pos = seg * (i + 1); continue; }
-          pos = seg * i + seg * Math.max(0, s.n - lo) / Math.max(1, hi - lo);
-          break;
-        }
-      }
+      /* Bar: markers centred in equal columns (Kite cart bar look) */
+      var pos = trackPos(this.steps.map(function (m) { return m.min; }), s.n);
       this.$.fills.forEach(function (f) { f.style.width = Math.min(100, pos) + '%'; });
+      this.renderGoals();
       this.$.marks.forEach(function (m) {
         var min = Number(m.getAttribute('data-step-min'));
         m.classList.toggle('is-reached', s.n >= min);
@@ -647,7 +754,7 @@
       var item = window.GG && window.GG.bundleItem
         ? window.GG.bundleItem(v, scents, this.cfg.bottleLabel || 'Flasche')
         : { id: Number(v), quantity: 1 };
-      this.run(function () { return postJSON('cart/add.js', { items: [item] }); }, true);
+      this.run(function () { return postJSON('cart/add.js', { items: [item] }); });
     }
 
     toggleWrap(on) {

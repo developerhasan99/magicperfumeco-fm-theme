@@ -88,6 +88,7 @@
           "bottleLabel": {{ st.bottle_label | default: 'Flasche' | json }},
           "pageSize": 12,
           "cartUrl": {{ routes.cart_url | json }},
+          "market": {{ localization.market.handle | json }},
           "wrap": {%- if bb_wrap != blank -%}{"variantId":"{{ bb_wrap.id }}","price":{{ bb_wrap.price }},"available":{{ bb_wrap.available }}}{%- else -%}null{%- endif -%},
           "qualify": [
             {%- assign bb_q_n = 0 -%}
@@ -120,6 +121,11 @@
             "toNextMany": "Noch [n] Düfte bis [pct]%",
             "top": "Höchster Rabatt erreicht",
             "save": "Du sparst [amount]",
+            "goalGift": {{ st.goal_gift_label | default: 'Mystery-Duft' | json }},
+            "goalShip": {{ st.goal_ship_label | default: 'Gratis Versand' | json }},
+            "toGift": "Noch [amount] bis zum Mystery-Duft",
+            "toShip": "Noch [amount] bis zum Gratis-Versand",
+            "goalsDone": "Alle Geschenke freigeschaltet",
             "remove": "Entfernen",
             "error": {{ st.error | default: 'Das hat nicht geklappt. Bitte versuch es noch einmal.' | json }},
             "none": {{ st.no_results | default: 'Kein Duft gefunden.' | json }},
@@ -276,7 +282,14 @@
           {%- endcapture -%}
           {{ bb_steps_html }}
 
+          {%- comment -%} Kite goals (gifts + free shipping, cart total), same look; filled by JS from Kite's settings, hidden without Kite {%- endcomment -%}
+          <div class="gg-bb__steps gg-bb__goals" data-goals hidden>
+            <div class="gg-bb__steps-bar"><span class="gg-bb__steps-fill" data-goals-fill></span></div>
+            <ol class="gg-bb__steps-list" data-goals-list></ol>
+          </div>
+
           <p class="gg-bb__status" data-status aria-live="polite">{{ bb_status0 | escape }}</p>
+          <p class="gg-bb__status gg-bb__goal-status" data-goal-status aria-live="polite" hidden></p>
           <p class="gg-bb__saving" data-saving hidden></p>
 
           <div class="gg-bb__picked" role="list" data-picked hidden></div>
@@ -432,6 +445,8 @@
     { "type": "header", "content": "Mengenrabatt" },
     { "type": "paragraph", "content": "Der Rabatt kommt aus den automatischen Rabatten in Shopify. Hier nur die Anzeige: Stufen und Kollektionen müssen zu den Rabatten passen." },
     { "type": "text", "id": "discount_steps", "label": "Stufen (Anzahl:Prozent)", "default": "2:25,4:30,6:35,8:40" },
+    { "type": "text", "id": "goal_gift_label", "label": "Kite: Name Geschenk", "default": "Mystery-Duft" },
+    { "type": "text", "id": "goal_ship_label", "label": "Kite: Name Versand", "default": "Gratis Versand" },
     { "type": "text", "id": "discount_collections", "label": "Rabatt-Kollektionen (Handles)", "default": "best-sellers,fuer-maenner,black-utique" },
     { "type": "header", "content": "Duftauswahl" },
     { "type": "collection", "id": "pool_collection", "label": "Kollektion", "info": "Leer: best-sellers, dann alle Produkte." },
