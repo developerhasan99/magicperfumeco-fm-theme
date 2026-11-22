@@ -310,7 +310,36 @@
             </label>
           {%- endif -%}
 
+          {%- comment -%} Versandschutz: the Insureful switch of the cart drawer, mirrored. Insureful stores the choice and adds its
+             product at checkout; the checkout button below does the same. Hidden until the app is on the page. {%- endcomment -%}
+          <label class="gg-bb__wrap gg-bb__ins" data-ins-row hidden>
+            <input class="gg-bb__wrap-input" type="checkbox" data-ins>
+            <span class="gg-bb__wrap-switch" aria-hidden="true"></span>
+            <span class="gg-bb__wrap-txt">
+              <span class="gg-bb__wrap-title gg-bb__ins-title" data-ins-title>Versandschutz</span>
+              <span class="gg-bb__wrap-sub" data-ins-sub>Schützt die Bestellung vor Verlust und Beschädigung.</span>
+            </span>
+            <span class="gg-bb__wrap-price" data-ins-price></span>
+          </label>
+
+          {%- comment -%} Totals as the cart drawer shows them: Zwischensumme / Rabatt / Gesamt {%- endcomment -%}
+          <div class="gg-bb__totals" data-totals hidden>
+            <div class="gg-bb__tot" data-tot-sub-row>
+              <span>Zwischensumme:</span>
+              <span data-tot-sub></span>
+            </div>
+            <div class="gg-bb__tot" data-tot-off-row>
+              <span>Rabatt:</span>
+              <span class="mgx-text-accent" data-tot-off></span>
+            </div>
+            <div class="gg-bb__tot gg-bb__tot--total">
+              <span>Gesamt:</span>
+              <span data-tot-total></span>
+            </div>
+          </div>
+
           <p class="gg-bb__added" role="status" aria-live="polite" data-bb-added hidden></p>
+          <button type="button" class="gg-btn gg-btn--primary gg-btn--block gg-bb__cta" data-cta disabled>{{ st.checkout_label | default: 'Zur Kasse' | escape }}</button>
           <p class="gg-bb__err" role="alert" data-err hidden></p>
           {%- if st.fine_print != blank -%}<p class="gg-bb__fine">{{ st.fine_print | escape }}</p>{%- endif -%}
           {%- comment -%} Same trust pair as the store's other buy boxes (pm-bundle-save, quantity-breaker) {%- endcomment -%}
@@ -447,6 +476,7 @@
     { "type": "header", "content": "Mengenrabatt" },
     { "type": "paragraph", "content": "Der Rabatt kommt aus den automatischen Rabatten in Shopify. Hier nur die Anzeige: Stufen und Kollektionen müssen zu den Rabatten passen." },
     { "type": "text", "id": "discount_steps", "label": "Stufen (Anzahl:Prozent)", "default": "2:25,4:30,6:35,8:40" },
+    { "type": "text", "id": "checkout_label", "label": "Button zur Kasse", "default": "Zur Kasse" },
     { "type": "text", "id": "added_label", "label": "Hinweis nach dem Hinzufügen", "default": "Zum Warenkorb hinzugefügt" },
     { "type": "text", "id": "goal_gift_label", "label": "Kite: Name Geschenk", "default": "Mystery-Duft" },
     { "type": "text", "id": "goal_ship_label", "label": "Kite: Name Versand", "default": "Gratis Versand" },

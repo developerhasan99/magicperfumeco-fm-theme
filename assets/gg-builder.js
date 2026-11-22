@@ -155,7 +155,15 @@
         goalsFill: this.querySelector('[data-goals-fill]'),
         goalsList: this.querySelector('[data-goals-list]'),
         goalStatus: this.querySelector('[data-goal-status]'),
-        added: Array.prototype.slice.call(this.querySelectorAll('[data-bb-added]'))
+        added: Array.prototype.slice.call(this.querySelectorAll('[data-bb-added]')),
+        insRow: this.querySelector('[data-ins-row]'),
+        ins: this.querySelector('[data-ins]'),
+        totals: this.querySelector('[data-totals]'),
+        totSubRow: this.querySelector('[data-tot-sub-row]'),
+        totOffRow: this.querySelector('[data-tot-off-row]'),
+        totSub: this.querySelector('[data-tot-sub]'),
+        totOff: this.querySelector('[data-tot-off]'),
+        totTotal: this.querySelector('[data-tot-total]')
       };
       this.goals = [];
 
@@ -167,6 +175,72 @@
       this.classList.add('is-ready');
       this.loadCart();
       this.startGoals(0);
+      this.startIns(0);
+    }
+
+    /* ---------- Versandschutz (Insureful app) ---------- */
+    /* The drawer's own Insureful switch is the source of truth: flipping ours clicks it, so the app keeps one choice.
+       Insureful loads after this element: retry ~10 s, then the row stays hidden. */
+    insInput() {
+      return document.querySelector('cart-drawer .pti-insurence-needed') || document.querySelector('.pti-insurence-needed');
+    }
+
+    startIns(tries) {
+      var self = this;
+      if (!this.$.insRow) return;
+      var src = this.insInput();
+      if (!src || typeof window.ptiSettings === 'undefined') {
+        if (tries < 20) setTimeout(function () { self.startIns(tries + 1); }, 500);
+        return;
+      }
+      var wrap = src.closest('.insureful-widget') || document;
+      var title = wrap.querySelector('.pti-title');
+      var desc = wrap.querySelector('.pti-desc');
+      var price = wrap.querySelector('.pti-price');
+      if (title && title.textContent.trim()) this.querySelector('[data-ins-title]').textContent = title.textContent.trim();
+      if (desc && desc.textContent.trim()) this.querySelector('[data-ins-sub]').textContent = desc.textContent.trim();
+      var p = price ? price.textContent.replace(/[()]/g, '').replace(/\s*[A-Z]{3}\s*$/, '').trim() : '';
+      if (!p && window.ptiSettings.fixed_plan_price) p = money(Math.round(parseFloat(window.ptiSettings.fixed_plan_price) * 100));
+      this.querySelector('[data-ins-price]').textContent = p ? '+' + p : '';
+      this.$.insRow.hidden = false;
+      this.$.ins.checked = !!src.checked;
+      this.$.ins.addEventListener('change', function () {
+        var s = self.insInput();
+        if (s && s.checked !== self.$.ins.checked) s.click();
+      });
+      /* The drawer re-renders after cart changes: keep ours in step with whatever the app shows */
+      document.addEventListener('change', function (e) {
+        if (e.target && e.target.classList && e.target.classList.contains('pti-insurence-needed')) self.$.ins.checked = !!e.target.checked;
+      });
+    }
+
+    insLine() {
+      var vendor = /^pt-insur/i;
+      var hit = null;
+      (this.cart.items || []).forEach(function (it) { if (!hit && vendor.test(it.vendor || '')) hit = it; });
+      return hit;
+    }
+
+    /* Checkout: what the drawer's checkout does with Insureful (add its product when chosen, drop it when not), then go */
+    checkout() {
+      var self = this;
+      var go = function () { window.location.href = root + 'checkout'; };
+      this.$.cta.disabled = true;
+      this.$.cta.setAttribute('aria-busy', 'true');
+      this.queue = this.queue.then(function () {
+        var want = !!(self.$.ins && self.$.insRow && !self.$.insRow.hidden && self.$.ins.checked);
+        var line = self.insLine();
+        if (want && !line) {
+          var ready = typeof window.ptiChooseInsurance === 'function' ? Promise.resolve(window.ptiChooseInsurance()).catch(function () {}) : Promise.resolve();
+          return ready.then(function () {
+            var v = (window.insuranceVariant && window.insuranceVariant.id) || (window.ptiSettings && window.ptiSettings.variant_id);
+            if (!v) return null;
+            return postJSON('cart/add.js', { items: [{ id: Number(v), quantity: 1 }] });
+          });
+        }
+        if (!want && line) return postJSON('cart/change.js', { id: line.key, quantity: 0 });
+        return null;
+      }).then(go, go);
     }
 
     /* ---------- Kite cart goals (gifts + free shipping), the same goals as the cart drawer bar ---------- */
@@ -649,9 +723,28 @@
         m.classList.toggle('is-current', !!(s.cur && s.cur.min === min));
       });
 
-      var saveText = s.saved > 0 ? fill(t.save || 'Du sparst [amount]', { amount: money(s.saved) }) : '';
-      this.$.saving.textContent = saveText;
-      this.$.saving.hidden = !saveText;
+      /* Savings as the cart drawer shows them (whole cart): Zwischensumme / Rabatt / Gesamt */
+      if (this.$.saving) this.$.saving.hidden = true;
+      if (this.$.totals) {
+        var c = this.cart || {};
+        var orig = c.original_total_price || 0;
+        var tot = c.total_price || 0;
+        var cur = (window.Shopify && window.Shopify.currency && window.Shopify.currency.active) || '';
+        /* money_with_currency, as in the drawer: "48,00 € EUR" */
+        var withCur = function (v) {
+          var txt;
+          try { txt = new Intl.NumberFormat('de-DE', { style: 'currency', currency: cur || 'EUR' }).format(v / 100); }
+          catch (e) { txt = money(v); }
+          return cur && txt.indexOf(cur) === -1 ? txt + ' ' + cur : txt;
+        };
+        this.$.totals.hidden = !(c.items && c.items.length);
+        var off = orig > tot;
+        this.$.totSubRow.hidden = !off;
+        this.$.totOffRow.hidden = !off;
+        this.$.totSub.textContent = withCur(orig);
+        this.$.totOff.textContent = '-' + withCur(orig - tot);
+        this.$.totTotal.textContent = withCur(tot);
+      }
 
       this.renderPicked();
       this.renderSets();
@@ -817,7 +910,7 @@
         this.$.wrap.addEventListener('change', function () { self.toggleWrap(self.$.wrap.checked); });
       }
 
-      if (this.$.cta) this.$.cta.addEventListener('click', function () { self.queue.then(function () { self.openCart(); }); });
+      if (this.$.cta) this.$.cta.addEventListener('click', function () { self.checkout(); });
       if (this.$.barCta) this.$.barCta.addEventListener('click', function () { self.queue.then(function () { self.openCart(); }); });
 
       if (this.$.q) {

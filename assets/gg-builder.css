@@ -361,6 +361,36 @@
 
 .gg-bb__added[hidden] { display: none; }
 
+/* Totals, cart drawer style */
+.gg-bb__totals {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 4px;
+}
+
+.gg-bb__totals[hidden],
+.gg-bb__tot[hidden],
+.gg-bb__ins[hidden] { display: none; }
+
+.gg-bb__tot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 4px 16px;
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: 700;
+}
+
+.gg-bb__tot--total {
+  font-size: 17px;
+  line-height: 24px;
+  font-weight: 800;
+}
+
+.gg-bb__ins .gg-bb__ins-title { text-decoration: none; }
+
 /* Same note above the sticky bar, for adds made far below the box */
 .gg-bb__bar-added {
   position: absolute;
