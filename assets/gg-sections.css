@@ -46,9 +46,11 @@
   object-position: right var(--gg-hero-pos-m, center);
 }
 
+/* Stacked (below 1200): copy first, so headline and buttons are above the fold; the image follows */
 .gg-hero__inner {
+  order: -1;
   padding-top: 24px;
-  padding-bottom: 32px;
+  padding-bottom: 24px;
 }
 
 .gg-hero__copy {
