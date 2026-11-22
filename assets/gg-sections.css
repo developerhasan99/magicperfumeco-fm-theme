@@ -46,11 +46,9 @@
   object-position: right var(--gg-hero-pos-m, center);
 }
 
-/* Stacked (below 1200): copy first, so headline and buttons are above the fold; the image follows */
 .gg-hero__inner {
-  order: -1;
   padding-top: 24px;
-  padding-bottom: 24px;
+  padding-bottom: 32px;
 }
 
 .gg-hero__copy {
@@ -100,6 +98,102 @@
   .gg-hero__actions {
     flex-direction: row;
     flex-wrap: wrap;
+  }
+}
+
+/* Phones (homepage hero look): eyebrow, rating and headline sit centred in white on the empty dark top of the mobile
+   image (375x660, bottles in the lower half); text and buttons follow on the same dark green under the image.
+   One grid: the image spans rows 1-4, the copy items sit in rows 1-3, text and buttons in rows 5-6. */
+@media (max-width: 989px) {
+  .gg-hero {
+    --gg-hero-dark: #0b1e18;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto auto 1fr auto auto;
+    background: var(--gg-hero-dark);
+    color: var(--gg-white);
+  }
+
+  .gg-hero__media {
+    grid-column: 1;
+    grid-row: 1 / 5;
+    height: auto;
+    aspect-ratio: 375 / 660;
+    background: var(--gg-hero-dark);
+  }
+
+  .gg-hero__media::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 22%;
+    background: linear-gradient(to bottom, rgba(11, 30, 24, 0), var(--gg-hero-dark));
+    pointer-events: none;
+  }
+
+  .gg-hero .gg-hero__pic { object-position: center bottom; }
+
+  .gg-hero__inner,
+  .gg-hero__copy { display: contents; }
+
+  .gg-hero__eyebrow,
+  .gg-hero__rating,
+  .gg-hero__heading,
+  .gg-hero__text,
+  .gg-hero__actions {
+    position: relative;
+    grid-column: 1;
+    padding-inline: var(--gg-gutter);
+    text-align: center;
+  }
+
+  .gg-hero .gg-hero__eyebrow {
+    grid-row: 1;
+    padding-top: 28px;
+    margin: 0 0 10px;
+    color: var(--gg-white);
+    opacity: 0.85;
+  }
+
+  .gg-hero .gg-hero__rating {
+    grid-row: 2;
+    justify-content: center;
+    color: var(--gg-white);
+  }
+
+  .gg-hero .gg-hero__heading {
+    grid-row: 3;
+    max-width: 22ch;
+    margin-inline: auto;
+    font-size: clamp(30px, 8.6vw, 44px);
+    line-height: 1.1;
+    color: var(--gg-white);
+  }
+
+  .gg-hero .gg-hero__text {
+    grid-row: 5;
+    margin: -8px auto 0;
+    max-width: 34ch;
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .gg-hero__actions {
+    grid-row: 6;
+    padding-bottom: 32px;
+  }
+
+  .gg-hero .gg-hero__actions .gg-btn--primary {
+    background: var(--gg-white);
+    border-color: var(--gg-white);
+    color: var(--gg-ink);
+  }
+
+  .gg-hero .gg-hero__actions .gg-btn--secondary {
+    background: transparent;
+    border-color: var(--gg-white);
+    color: var(--gg-white);
   }
 }
 
