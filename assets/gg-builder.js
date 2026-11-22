@@ -154,7 +154,8 @@
         goals: this.querySelector('[data-goals]'),
         goalsFill: this.querySelector('[data-goals-fill]'),
         goalsList: this.querySelector('[data-goals-list]'),
-        goalStatus: this.querySelector('[data-goal-status]')
+        goalStatus: this.querySelector('[data-goal-status]'),
+        added: Array.prototype.slice.call(this.querySelectorAll('[data-bb-added]'))
       };
       this.goals = [];
 
@@ -322,7 +323,7 @@
     }
 
     /* One cart write at a time; each re-reads the cart and refreshes the header bubble. Builder additions never open the drawer (cart icon / CTA do) */
-    run(job, open) {
+    run(job, open, note) {
       var self = this;
       this.muteDrawer(8000);
       this.pending++;
@@ -332,7 +333,8 @@
         .then(job)
         .then(function (c) {
           if (c && c.items) self.cart = c;
-          return self.loadCart().then(function () { return open ? self.openCart() : self.refreshBubble(); });
+          if (note) self.showAdded();
+          return self.loadCart().then(function () { return open === true ? self.openCart() : self.refreshBubble(); });
         })
         .catch(function () {
           self.showError();
@@ -346,10 +348,10 @@
       return this.queue;
     }
 
-    addVariant(v, qty, props) {
+    addVariant(v, qty, props, note) {
       var item = { id: Number(v), quantity: qty || 1 };
       if (props) item.properties = props;
-      return this.run(function () { return postJSON('cart/add.js', { items: [item] }); });
+      return this.run(function () { return postJSON('cart/add.js', { items: [item] }); }, false, note);
     }
 
     changeLine(key, quantity) {
@@ -423,6 +425,23 @@
         drawer._ggMuted = true;
       }
       drawer._ggMuteUntil = Math.max(drawer._ggMuteUntil || 0, Date.now() + ms);
+    }
+
+    /* Short green "added" note in the box, replaces the old cart button (the add itself is the action) */
+    showAdded() {
+      var notes = this.$.added;
+      var txt = this.t.added || 'Zum Warenkorb hinzugefügt';
+      notes.forEach(function (n) {
+        n.textContent = txt;
+        n.hidden = false;
+        n.classList.remove('is-on');
+        void n.offsetWidth;
+        n.classList.add('is-on');
+      });
+      clearTimeout(this._addedT);
+      this._addedT = setTimeout(function () {
+        notes.forEach(function (n) { n.hidden = true; n.classList.remove('is-on'); });
+      }, 2500);
     }
 
     showError() {
@@ -641,8 +660,10 @@
       if (this.$.wrap) this.$.wrap.checked = !!wrapLine;
 
       var hasItems = (this.cart.items || []).length > 0;
-      this.$.cta.disabled = !hasItems;
-      this.$.cta.setAttribute('aria-busy', this.pending ? 'true' : 'false');
+      if (this.$.cta) {
+        this.$.cta.disabled = !hasItems;
+        this.$.cta.setAttribute('aria-busy', this.pending ? 'true' : 'false');
+      }
 
       /* Sticky bar */
       if (this.$.bar) {
@@ -754,7 +775,7 @@
       var item = window.GG && window.GG.bundleItem
         ? window.GG.bundleItem(v, scents, this.cfg.bottleLabel || 'Flasche')
         : { id: Number(v), quantity: 1 };
-      this.run(function () { return postJSON('cart/add.js', { items: [item] }); });
+      this.run(function () { return postJSON('cart/add.js', { items: [item] }); }, false, true);
     }
 
     toggleWrap(on) {
@@ -775,7 +796,7 @@
         var id = r.getAttribute('data-v');
         /* A tap anywhere on the card (or + / Hinzufügen) puts one bottle in the cart, − takes one out */
         if (b && b.getAttribute('data-act') === 'dec') self.removeOne(id);
-        else self.addVariant(id, 1);
+        else self.addVariant(id, 1, null, true);
       });
 
       /* × on a bottle tile or a set line in the box: one less of that line */
@@ -796,7 +817,7 @@
         this.$.wrap.addEventListener('change', function () { self.toggleWrap(self.$.wrap.checked); });
       }
 
-      this.$.cta.addEventListener('click', function () { self.queue.then(function () { self.openCart(); }); });
+      if (this.$.cta) this.$.cta.addEventListener('click', function () { self.queue.then(function () { self.openCart(); }); });
       if (this.$.barCta) this.$.barCta.addEventListener('click', function () { self.queue.then(function () { self.openCart(); }); });
 
       if (this.$.q) {
