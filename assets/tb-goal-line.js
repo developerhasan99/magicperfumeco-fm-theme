@@ -240,7 +240,7 @@
     var nextMarkerSet = false;
 
    marks.forEach(function (m) {
-   var on = !m.step || bottles >= m.step.n;
+   var on = bottles >= m.at;
 
    m.goals.forEach(function (g) {
     if (total < g.amount) on = false;
