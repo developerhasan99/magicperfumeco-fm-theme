@@ -235,21 +235,37 @@
       var msg = message();
       root.classList.toggle('is-done', msg.done);
 
-      // Markers: reached (red, check), the next discount step's marker pulses, a marker reached by this cart
-      // update pops with a ring burst.
-      marks.forEach(function (m) {
-        var on = !m.step || bottles >= m.step.n;
-        m.goals.forEach(function (g) { if (total < g.amount) on = false; });
-        var was = m.el.classList.contains('is-reached');
-        m.el.classList.toggle('is-reached', on);
-        m.el.classList.toggle('is-next', !!(msg.next && m.step === msg.next));
-        if (animate && on && !was && !reduceMotion) {
-          m.el.classList.remove('is-pop');
-          void m.el.offsetWidth;
-          m.el.classList.add('is-pop');
-          setTimeout(function () { m.el.classList.remove('is-pop'); }, 800);
-        }
-      });
+      
+    // Markers: reached (red, check), the first unreached visual marker glows.
+    var nextMarkerSet = false;
+
+   marks.forEach(function (m) {
+   var on = !m.step || bottles >= m.step.n;
+
+   m.goals.forEach(function (g) {
+    if (total < g.amount) on = false;
+    });
+
+   var was = m.el.classList.contains('is-reached');
+
+   m.el.classList.toggle('is-reached', on);
+
+   // Glow the next visual checkpoint, including Kite milestones.
+   var isNext = !on && !nextMarkerSet;
+   m.el.classList.toggle('is-next', isNext);
+
+   if (isNext) nextMarkerSet = true;
+ 
+   if (animate && on && !was && !reduceMotion) {
+     m.el.classList.remove('is-pop');
+     void m.el.offsetWidth;
+     m.el.classList.add('is-pop');
+     setTimeout(function () {
+      m.el.classList.remove('is-pop');
+    }, 800);
+   }
+   });
+
 
       // Discount steps reached now; a step newly crossed by this cart update is announced first.
       var now = steps.filter(function (s) { return bottles >= s.n; });
