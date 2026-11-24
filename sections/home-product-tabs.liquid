@@ -218,6 +218,22 @@
       padding-bottom: {{ section.settings.padding_bottom | times: 0.5 | round: 0 }}px;
     }
 
+    /* Round white arrows as on tryscent.co (its pm-base.css has this rule; this store's copy does not). */
+    .premium .pm-ptabs .swiper-button-prev,
+    .premium .pm-ptabs .swiper-button-next {
+      --swiper-navigation-size: 14px;
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      border: 0;
+      -webkit-appearance: none;
+      appearance: none;
+      border-radius: var(--pm-radius-pill);
+      background: var(--pm-white);
+      color: var(--pm-ink);
+      box-shadow: var(--pm-shadow-float);
+    }
+
     @media screen and (min-width: 750px) {
       .section-{{ section.id }}-padding {
         padding-top: {{ section.settings.padding_top }}px;
