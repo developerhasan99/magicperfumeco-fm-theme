@@ -1101,6 +1101,106 @@
       "settings": {
         "include_margins": true
       }
+    },
+    "tabs_family": {
+      "type": "home-product-tabs",
+      "blocks": {
+        "tab_1": {
+          "type": "tab",
+          "settings": {
+            "title": "Blumig",
+            "collection": "all",
+            "filter": "family:floral"
+          }
+        },
+        "tab_2": {
+          "type": "tab",
+          "settings": {
+            "title": "Orientalisch",
+            "collection": "all",
+            "filter": "family:amber"
+          }
+        },
+        "tab_3": {
+          "type": "tab",
+          "settings": {
+            "title": "Holzig",
+            "collection": "all",
+            "filter": "family:woody"
+          }
+        },
+        "tab_4": {
+          "type": "tab",
+          "settings": {
+            "title": "Gourmand",
+            "collection": "all",
+            "filter": "family:gourmand"
+          }
+        },
+        "tab_5": {
+          "type": "tab",
+          "settings": {
+            "title": "Würzig",
+            "collection": "all",
+            "filter": "duft:wuerzig"
+          }
+        },
+        "tab_6": {
+          "type": "tab",
+          "settings": {
+            "title": "Frisch",
+            "collection": "all",
+            "filter": "family:fresh"
+          }
+        },
+        "tab_7": {
+          "type": "tab",
+          "settings": {
+            "title": "Fruchtig",
+            "collection": "all",
+            "filter": "family:fruity"
+          }
+        },
+        "tab_8": {
+          "type": "tab",
+          "settings": {
+            "title": "Süß",
+            "collection": "all",
+            "filter": "charakter:suess"
+          }
+        },
+        "tab_9": {
+          "type": "tab",
+          "settings": {
+            "title": "Vanille",
+            "collection": "all",
+            "filter": "note:vanille"
+          }
+        }
+      },
+      "block_order": [
+        "tab_1",
+        "tab_2",
+        "tab_3",
+        "tab_4",
+        "tab_5",
+        "tab_6",
+        "tab_7",
+        "tab_8",
+        "tab_9"
+      ],
+      "settings": {
+        "color_scheme": "scheme-1",
+        "heading": "Wähle deine Duftfamilie",
+        "subheading": "Wähle eine Duftfamilie und entdecke die Düfte, die zu dir passen.",
+        "products_per_tab": 12,
+        "cards_desktop": "5",
+        "cards_mobile": "2.2",
+        "button_text": "Alle ansehen",
+        "button_link": "",
+        "padding_top": 28,
+        "padding_bottom": 28
+      }
     }
   },
   "order": [
@@ -1112,6 +1212,7 @@
     "fuel06_finder",
     "home_tabs_fcxFYG",
     "custom_liquid_rMkdET",
+    "tabs_family",
     "tryscent_hero_A8wiWK",
     "image_and_text_nj4mfM",
     "feature_heighlights_EpJcyT",
