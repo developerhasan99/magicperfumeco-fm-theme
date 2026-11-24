@@ -205,6 +205,11 @@
   }
 </style>
 {{ 'pm-base.css' | asset_url | stylesheet_tag }}
+{%- comment -%} layout/theme.liquid loads Swiper on product pages only; the homepage needs it for the carousel. {%- endcomment -%}
+{%- unless template.name == 'product' -%}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+{%- endunless -%}
   {{ 'pm-s-home-product-tabs.css' | asset_url | stylesheet_tag }}
   <script src="{{ 'pm-product-tabs.js' | asset_url }}" defer="defer"></script>
   {%- style -%}
