@@ -174,21 +174,14 @@ cart-drawer {
   width: 100%;
 }
 
+/* The whole drawer scrolls (items, gift wrap card, totals, checkout); the footer is not pinned */
 cart-drawer-items {
-  overflow: auto;
-  flex: 1;
+  flex: 1 0 auto;
   padding: 0 24px;
 }
 
-/* Short or portrait screens: the whole drawer scrolls (items, gift wrap card, totals, checkout) instead of pinning the footer */
-@media screen and (max-height: 650px), screen and (orientation: portrait) {
-  cart-drawer-items {
-    overflow: visible;
-  }
-
-  .drawer__inner {
-    overflow: scroll;
-  }
+.drawer__inner {
+  overflow-y: auto;
 }
 
 .cart-drawer .cart-item {
