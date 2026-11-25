@@ -290,6 +290,15 @@
         delete nodes[key];
       });
 
+      // More than 4 rewards: labels alternate between two rows by position, so neighbours never touch.
+      var byX = track.markers.slice().sort(function (a, b) { return a.x - b.x; });
+      var stagger = byX.length > 4;
+      labelsEl.classList.toggle('is-staggered', stagger);
+      byX.forEach(function (m, i) {
+        var n = nodes[m.kind + ':' + (m.kind === 'pct' ? m.n : m.amount)];
+        if (n) n.label.classList.toggle('is-low', stagger && i % 2 === 1);
+      });
+
       var f = track.fill;
       fillEl.style.width = f >= 1 ? '100%' : f <= 0 ? '0px' : 'calc(' + f + ' * (100% - var(--gc-mark)) + var(--gc-mark) / 2)';
       root.classList.toggle('is-done', track.done);

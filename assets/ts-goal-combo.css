@@ -152,6 +152,15 @@
   transition: left 500ms ease;
 }
 
+/* More than 4 rewards (JS adds .is-staggered): every second label by position drops to a second row */
+.ts-gc__labels.is-staggered {
+  height: 92px;
+}
+
+.ts-gc__label.is-low {
+  top: 46px;
+}
+
 /* Phones: rail ~307px at 375 and markers 24% apart (~74px), so labels narrow to 60px to never touch. */
 @media screen and (max-width: 749px) {
   .ts-gc__label {
