@@ -154,7 +154,7 @@
 
 /* Phones: one compact row. Each % marker carries its own value (25%), gift and shipping keep their icon,
    and the label under a marker is just the threshold (2 Fl. / 50 €), so 7 rewards fit without a second row.
-   Markers sit at least 1/7 of the rail apart (~45px at 375), the labels are 42px wide. */
+   Markers sit at least 1/7 of the rail apart (~45px at 375), the labels are 38px wide. */
 .ts-gc__short,
 .ts-gc__pct-val {
   display: none;
@@ -171,8 +171,8 @@
   }
 
   .ts-gc__label {
-    left: clamp(0px, calc(var(--x, 1) * (100% - var(--gc-mark)) + var(--gc-mark) / 2 - 21px), calc(100% - 42px));
-    width: 42px;
+    left: clamp(0px, calc(var(--x, 1) * (100% - var(--gc-mark)) + var(--gc-mark) / 2 - 19px), calc(100% - 38px));
+    width: 38px;
   }
 
   .ts-gc__reward,
@@ -245,7 +245,7 @@
 
   /* More than 4 rewards (JS adds .is-staggered): every second label by position drops to a second row */
   .ts-gc__labels.is-staggered {
-    height: 74px;
+    height: 90px;
   }
 
   .ts-gc__label.is-low {
