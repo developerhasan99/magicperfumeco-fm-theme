@@ -154,11 +154,12 @@
 
 /* More than 4 rewards (JS adds .is-staggered): every second label by position drops to a second row */
 .ts-gc__labels.is-staggered {
-  height: 92px;
+  height: 116px;
 }
 
+/* 58px: a label wraps to 3 lines (54px) on phones, so the lower row starts below the tallest upper label */
 .ts-gc__label.is-low {
-  top: 46px;
+  top: 58px;
 }
 
 /* Phones: rail ~307px at 375 and markers 24% apart (~74px), so labels narrow to 60px to never touch. */
