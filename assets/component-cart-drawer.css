@@ -180,7 +180,8 @@ cart-drawer-items {
   padding: 0 24px;
 }
 
-@media screen and (max-height: 650px) {
+/* Short or portrait screens: the whole drawer scrolls (items, gift wrap card, totals, checkout) instead of pinning the footer */
+@media screen and (max-height: 650px), screen and (orientation: portrait) {
   cart-drawer-items {
     overflow: visible;
   }
