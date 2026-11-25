@@ -106,21 +106,6 @@
     },
     "product-grid": {
       "type": "main-collection-product-grid",
-      "blocks": {
-        "fuel05_ugc_video_BbgRbj": {
-          "type": "fuel05_ugc_video",
-          "settings": {
-            "position": 4,
-            "device": "mobile",
-            "video": "shopify://files/videos/magic_perfume_Anna_SophiaZ_DuftWieLIBR_64e5df0c.mov",
-            "video_url": "",
-            "product": "intensive-abende-3x-50ml-parfumflakons"
-          }
-        }
-      },
-      "block_order": [
-        "fuel05_ugc_video_BbgRbj"
-      ],
       "settings": {
         "products_per_page": 24,
         "columns_desktop": 4,
@@ -135,11 +120,11 @@
         "filter_type": "horizontal",
         "enable_sorting": true,
         "enable_search": true,
+        "show_oil_badge": true,
+        "combo_goals": true,
         "columns_mobile": "2",
         "padding_top": 0,
-        "padding_bottom": 60,
-        "show_oil_badge": true,
-        "combo_goals": true
+        "padding_bottom": 60
       }
     }
   },
