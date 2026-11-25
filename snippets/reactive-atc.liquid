@@ -178,6 +178,7 @@
     </button>
   {%- endform -%}
 </product-form>
+{% render 'gift-wrap', pdp: true %}
 {% endunless %}
 
 {%- comment -%} FUEL_06 product page entry for product.expressive-notes, see snippets/fuel06-pdp-link.liquid. This snippet is shared with the bundle templates; the link's own gate keeps it off those. {%- endcomment -%}

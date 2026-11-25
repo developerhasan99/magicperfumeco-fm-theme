@@ -278,6 +278,10 @@
       "subtext": "404"
     }
   },
+  "gift_wrap": {
+    "add_for": "Hinzufügen für +{{ price }}",
+    "add_label": "{{ title }} hinzufügen"
+  },
   "sections": {
     "header": {
       "announcement": "Ankündigung",

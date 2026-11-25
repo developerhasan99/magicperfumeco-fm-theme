@@ -190,6 +190,8 @@
      role="alert" aria-live="assertive" class="!mt-2 !mb-0 text-sm text-center text-red-600"></p>
 </div>
 
+{% render 'gift-wrap', pdp: true %}
+
 {%- comment -%} Under the buy button, the same trio as the scent PDPs (snippets/reactive-atc.liquid): FUEL_06 finder link, payment icons, badge row. The finder link shows only on templates listed in the fuel06_pdp_templates theme setting (custom-bundle added 10.11.2026). {%- endcomment -%}
 {%- render 'fuel06-pdp-link' -%}
 
@@ -380,13 +382,15 @@
           {%- unless product.tags contains 'fixed_bundle' %}
           this.selectedProducts = [];
           {%- endunless %}
+          // This add publishes no cart event, so add a ticked gift wrap here (snippets/gift-wrap.liquid); leave only once it is in.
+          const wrap = Promise.resolve(document.querySelector('gift-wrap-pdp')?.afterAdd());
           {%- if block.settings.open_checkout %}
-          window.location.href = '/checkout';
+          wrap.finally(() => { window.location.href = '/checkout'; });
           {%- else %}
           if (cart) {
             cart.renderContents(data);
           } else {
-            window.location.href = '/cart';
+            wrap.finally(() => { window.location.href = '/cart'; });
           }
           {%- endif %}
         })

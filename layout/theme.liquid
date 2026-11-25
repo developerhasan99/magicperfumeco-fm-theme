@@ -395,6 +395,13 @@ body {
         predictive_search_url: '{{ routes.predictive_search_url }}',
       };
 
+      // The gift wrap line's price (snippets/gift-wrap.liquid) in cents; goal and progress bars subtract it, it counts toward no offer.
+      window.giftWrapCents = function (c) {
+        return ((c && c.items) || []).reduce(function (s, i) {
+          return s + (i.handle === 'geschenkverpackung' ? Number(i.final_line_price) || 0 : 0);
+        }, 0);
+      };
+
       window.cartStrings = {
         error: `{{ 'sections.cart.cart_error' | t }}`,
         quantityError: `{{ 'sections.cart.cart_quantity_error_html' | t: quantity: '[quantity]' }}`,

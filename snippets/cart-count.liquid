@@ -1,0 +1,10 @@
+{%- comment -%} Cart item count without the gift wrap (snippets/gift-wrap.liquid). Echoes a number; for `t: count:` capture it and `| plus: 0` first. {%- endcomment -%}
+{%- liquid
+  assign count = cart.item_count
+  for item in cart.items
+    if item.product.handle == 'geschenkverpackung'
+      assign count = count | minus: item.quantity
+    endif
+  endfor
+  echo count
+-%}

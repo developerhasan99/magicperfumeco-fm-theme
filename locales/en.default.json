@@ -279,6 +279,10 @@
       }
     }
   },
+  "gift_wrap": {
+    "add_for": "Add for +{{ price }}",
+    "add_label": "Add {{ title }}"
+  },
   "sections": {
     "announcements": {
       "previous_announcement": "Previous announcement",

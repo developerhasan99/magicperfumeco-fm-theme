@@ -74,6 +74,7 @@
     var count = 0;
     (items || []).forEach(function (it) {
       var p = it.properties || {};
+      if (it.handle === 'geschenkverpackung') return; // gift wrap (snippets/gift-wrap.liquid) is no bottle
       var gift = p._free_product;
       if (gift !== undefined && gift !== null && gift !== '' && String(gift) !== 'false') return;
       var q = Number(it.quantity) || 0;
@@ -108,6 +109,7 @@
     var items = [];
     try { items = JSON.parse(root.querySelector('[data-tg-items]').textContent); } catch (e) { items = []; }
     var bottles = bottlesIn(items);
+    total -= window.giftWrapCents({ items: items }); // the gift wrap counts toward no goal
     var goals = null;
     var marks = [];
     var reachedSteps = null;
@@ -293,7 +295,7 @@
 
     function applyCart(cart, animate) {
       if (!cart || typeof cart.total_price !== 'number' || !cart.items) return;
-      total = cart.total_price;
+      total = cart.total_price - window.giftWrapCents(cart);
       bottles = bottlesIn(cart.items);
       render(animate);
     }

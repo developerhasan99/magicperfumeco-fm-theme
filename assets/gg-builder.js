@@ -300,7 +300,7 @@
       if (!this.goals.length || !this.$.goals) return;
       var t = this.t;
       var c = this.cart || {};
-      var v = typeof c.items_subtotal_price === 'number' ? c.items_subtotal_price : (c.total_price || 0);
+      var v = (typeof c.items_subtotal_price === 'number' ? c.items_subtotal_price : (c.total_price || 0)) - window.giftWrapCents(c); // the gift wrap counts toward no goal
       this.$.goalsFill.style.width = trackPos(this.goals.map(function (g) { return g.amount; }), v) + '%';
       var marks = this.$.goalsList.children;
       var next = null;
@@ -762,7 +762,9 @@
       if (this.$.bar) {
         this.$.barCta.disabled = !hasItems;
         var badge = this.$.barCta.querySelector('[data-bar-badge]');
-        var count = this.cart.item_count || 0;
+        var count = (this.cart.item_count || 0) - (this.cart.items || []).reduce(function (s, i) {
+          return s + (i.handle === 'geschenkverpackung' ? i.quantity : 0); // the gift wrap is no item in the count
+        }, 0);
         if (badge) {
           badge.textContent = count > 99 ? '99+' : String(count);
           badge.hidden = !count;

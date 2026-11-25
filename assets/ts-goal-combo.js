@@ -33,6 +33,7 @@
     var count = 0;
     (items || []).forEach(function (it) {
       var p = it.properties || {};
+      if (it.handle === 'geschenkverpackung') return; // gift wrap (snippets/gift-wrap.liquid) is no bottle
       var gift = p._free_product;
       if (gift !== undefined && gift !== null && gift !== '' && String(gift) !== 'false') return;
       var q = Number(it.quantity) || 0;
@@ -196,7 +197,7 @@
     try {
       var initial = JSON.parse(root.querySelector('[data-gc-cart]').textContent);
       bottles = bottlesIn(initial.items);
-      cents = Number(initial.total_price) || 0;
+      cents = (Number(initial.total_price) || 0) - window.giftWrapCents(initial); // the gift wrap counts toward no goal
     } catch (e) { /* first /cart.js fills it */ }
 
     function money(c) {
@@ -334,7 +335,7 @@
     function applyCart(c) {
       if (!c || typeof c.total_price !== 'number' || !c.items) return;
       bottles = bottlesIn(c.items);
-      cents = c.total_price;
+      cents = c.total_price - window.giftWrapCents(c);
       if (root.isConnected) update();
     }
 

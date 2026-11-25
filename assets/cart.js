@@ -104,7 +104,8 @@ class CartItems extends HTMLElement {
 
   onCartUpdate() {
     if (this.tagName === "CART-DRAWER-ITEMS") {
-      fetch(`${routes.cart_url}?section_id=cart-drawer`)
+      // Kept on window so assets/gift-wrap.js can paint after it (this GET may carry a cart from before the wrap update).
+      window.cartDrawerRefresh = fetch(`${routes.cart_url}?section_id=cart-drawer`)
         .then((response) => response.text())
         .then((responseText) => {
           const html = new DOMParser().parseFromString(
