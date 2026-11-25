@@ -235,7 +235,14 @@
       var span = document.createElement('span');
       span.className = 'ts-gc__icon';
       if (kind === 'pct') {
-        span.textContent = '%';
+        // '%' on wide screens; phones show the step's own value (25%) in the marker instead of a label line
+        var sign = document.createElement('span');
+        sign.className = 'ts-gc__pct-sign';
+        sign.textContent = '%';
+        var val = document.createElement('span');
+        val.className = 'ts-gc__pct-val';
+        span.appendChild(sign);
+        span.appendChild(val);
         span.classList.add('ts-gc__icon--pct');
         return span;
       }
@@ -263,14 +270,20 @@
           node.reward.className = 'ts-gc__reward';
           node.at = document.createElement('span');
           node.at.className = 'ts-gc__at';
+          node.short = document.createElement('span');
+          node.short.className = 'ts-gc__short';
           node.label.appendChild(node.reward);
           node.label.appendChild(node.at);
+          node.label.appendChild(node.short);
           marksEl.appendChild(node.mark);
           labelsEl.appendChild(node.label);
           nodes[key] = node;
         }
         node.reward.textContent = rewardLabel(m);
         node.at.textContent = m.kind === 'pct' ? bottleWord(m.n) : money(m.amount);
+        node.short.textContent = m.kind === 'pct' ? m.n + ' Fl.' : money(m.amount);
+        var val = node.mark.querySelector('.ts-gc__pct-val');
+        if (val) val.textContent = Math.round(m.pct) + '%';
         node.mark.style.setProperty('--x', String(m.x));
         node.label.style.setProperty('--x', String(m.x));
         var was = node.mark.classList.contains('is-reached');

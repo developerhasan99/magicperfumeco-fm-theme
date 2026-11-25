@@ -107,16 +107,6 @@
     "product-grid": {
       "type": "main-collection-product-grid",
       "blocks": {
-        "fuel05_ugc_video_RT6PEm": {
-          "type": "fuel05_ugc_video",
-          "settings": {
-            "position": 8,
-            "device": "mobile",
-            "video": "shopify://files/videos/magic_perfume_FinnjaV_DuftWieVery_5b40c218.mov",
-            "video_url": "",
-            "product": "8x-50ml-parfumflaschen"
-          }
-        },
         "fuel05_ugc_video_BbgRbj": {
           "type": "fuel05_ugc_video",
           "settings": {
@@ -126,22 +116,10 @@
             "video_url": "",
             "product": "intensive-abende-3x-50ml-parfumflakons"
           }
-        },
-        "fuel05_ugc_video_WqEhYg": {
-          "type": "fuel05_ugc_video",
-          "settings": {
-            "position": 2,
-            "device": "mobile",
-            "video": "shopify://files/videos/05_ROAS1.59_11.08_Arbitrage_HighOilConcentration_V2_9x16.mp4",
-            "video_url": "",
-            "product": "5x-100ml-parfumflaschen"
-          }
         }
       },
       "block_order": [
-        "fuel05_ugc_video_RT6PEm",
-        "fuel05_ugc_video_BbgRbj",
-        "fuel05_ugc_video_WqEhYg"
+        "fuel05_ugc_video_BbgRbj"
       ],
       "settings": {
         "products_per_page": 24,
