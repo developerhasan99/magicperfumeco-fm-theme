@@ -40,6 +40,21 @@
 
 <div class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}">
   {%- paginate collection.products by section.settings.products_per_page -%}
+    {%- comment -%} Setting "Show combined goals bar": top bar bottle steps + Kite goals on one track (snippets/ts-goal-combo.liquid, port of tryscent.co); unit_price = cheapest product on this page, places Kite markers while the cart is empty {%- endcomment -%}
+    {%- if section.settings.combo_goals -%}
+      {%- liquid
+        assign gc_unit = 0
+        for gc_p in collection.products
+          if gc_p.price > 0
+            if gc_unit == 0 or gc_p.price < gc_unit
+              assign gc_unit = gc_p.price
+            endif
+          endif
+        endfor
+      -%}
+      <div class="page-width">{% render 'ts-goal-combo', st: section.settings, unit_price: gc_unit %}</div>
+    {%- endif -%}
+
     {% comment %} Sort is the first tabbable element when filter type is vertical {% endcomment %}
     {%- if section.settings.enable_sorting and section.settings.filter_type == 'vertical' -%}
       <facet-filters-form class="facets facets-vertical-sort page-width small-hide">
@@ -253,7 +268,8 @@
                   style="--animation-order: {{ forloop.index }};"
                   {% endif %}>
                   {% render 'product-card'
-                    , product: product %}
+                    , product: product
+                    , oil_badge: section.settings.show_oil_badge %}
                 </li>
                 {%- assign skip_card_product_styles = true -%}
               {%- endfor -%}
@@ -496,7 +512,23 @@
         "id": "search_clear_label",
         "default": "Suche löschen",
         "label": "Clear button label"
-      }, {
+      },
+      { "type": "header", "content": "Oil badge" },
+      { "type": "checkbox", "id": "show_oil_badge", "default": false, "label": "Show % EDP badge on cards", "info": "Shows \"<n>% EDP\" top right on each card, from the product metafield custom.oil_concentration. Products without the value show no badge." },
+      { "type": "header", "content": "Combined goals bar" },
+      { "type": "checkbox", "id": "combo_goals", "default": false, "label": "Show combined goals bar", "info": "Display only, above the products. One track with the top bar's bottle discount steps (top bar > Goal line > Discount steps) and the Kite gift / free shipping goals. Hidden when neither exists for the market." },
+      { "type": "text", "id": "combo_msg_bottles", "default": "Füge noch [count] hinzu und erhalte [reward]", "label": "Message before a discount step", "info": "[count] = bottles left, [reward] = discount label, [pct] = percent only." },
+      { "type": "text", "id": "combo_msg_gift", "default": "Noch [amount] bis zu deinem Gratis-Geschenk", "label": "Message before a gift goal", "info": "[amount] = amount left, [reward] = gift label." },
+      { "type": "text", "id": "combo_msg_ship", "default": "Noch [amount] bis zum kostenlosen Versand", "label": "Message before the shipping goal", "info": "[amount] = amount left, [reward] = shipping label." },
+      { "type": "text", "id": "combo_msg_done", "default": "Glückwunsch! Du hast alle Vorteile freigeschaltet", "label": "Message when every reward is reached" },
+      { "type": "text", "id": "combo_label_pct", "default": "[pct] RABATT", "label": "Label of a discount step", "info": "[pct] = the step's percent from the top bar." },
+      { "type": "text", "id": "combo_label_gift", "default": "Gratis-Geschenk", "label": "Label of a gift goal" },
+      { "type": "text", "id": "combo_label_ship", "default": "Gratis Versand", "label": "Label of the shipping goal" },
+      { "type": "text", "id": "combo_word_one", "default": "Flasche", "label": "Word for 1 bottle" },
+      { "type": "text", "id": "combo_word_many", "default": "Flaschen", "label": "Word for several bottles" },
+      { "type": "textarea", "id": "combo_texts_da", "label": "Combined goals bar, Danish", "info": "Only for pages Weglot translates to Danish (not used on this store). 9 lines in the order of the fields above." },
+      { "type": "textarea", "id": "combo_texts_fi", "label": "Combined goals bar, Finnish", "info": "Only for pages Weglot translates to Finnish (not used on this store). 9 lines in the order of the fields above." },
+      {
         "type": "header",
         "content": "t:sections.main-collection-product-grid.settings.header_mobile.content"
       }, {

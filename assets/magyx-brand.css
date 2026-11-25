@@ -398,6 +398,25 @@
   font-weight: 500;
   line-height: 1.1;
 }
+/* Collection grid (setting show_oil_badge): same size and type as .mgx-card__badge, one line "24% EDP";
+   white with a hairline frame so it reads apart from the dark badge. Homepage tabs keep the stacked version above. */
+#product-grid .mgx-card__oil {
+  flex-direction: row;
+  gap: 4px;
+  padding: 4px 7px; /* badge padding minus the 1px frame, so both are the same height */
+  font-size: 11px;
+  line-height: 1.2;
+  letter-spacing: 0.125em;
+  text-transform: uppercase;
+}
+#product-grid .mgx-card__oil-num,
+#product-grid .mgx-card__oil-label {
+  font-size: inherit;
+  line-height: inherit;
+}
+#product-grid .mgx-card__oil-label {
+  font-weight: 500;
+}
 /* one line from 990: between 750 and 989 the grid is already 4-up and the line would run past the image */
 @media screen and (min-width: 990px) {
   .mgx-card__oil {
