@@ -67,7 +67,7 @@
         "subtitle": "Je mehr du kaufst, desto mehr sparst du.",
         "note": "<p>Leg 2 Parfums in den Warenkorb und erhalte <strong>25 % Rabatt</strong>, bis zu <strong>40 %</strong>, wenn du 8 oder mehr kaufst. Der Rabatt wird automatisch an der Kasse abgezogen.</p>",
         "button_text": "Black Friday shoppen",
-        "button_link": "shopify://collections/bestseller-singles",
+        "button_link": "shopify://collections/all",
         "shipping_text": "Kostenloser Versand ab 60 €"
       }
     },
