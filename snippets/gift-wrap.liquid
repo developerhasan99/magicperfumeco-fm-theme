@@ -1,7 +1,7 @@
 {%- comment -%}
   Gift wrap add-on (product "geschenkverpackung"), one per order: quantity is only ever 0 or 1 (cart/update.js).
-  Drawer footer: {% render 'gift-wrap' %}. Under a product page buy button: {% render 'gift-wrap', pdp: true %}.
-  data-fix (drawer only): 0 = the wrap is alone in the cart, remove it; 1 = quantity above 1, set it back to 1.
+  Cart drawer footer only: {% render 'gift-wrap' %}.
+  data-fix: 0 = the wrap is alone in the cart, remove it; 1 = quantity above 1, set it back to 1.
   Logic in assets/gift-wrap.js, look in assets/gift-wrap.css (both loaded once from snippets/cart-drawer.liquid).
 {%- endcomment -%}
 {%- liquid
@@ -37,11 +37,7 @@
     </label>
   {%- endcapture -%}
 
-  {%- if pdp -%}
-    {%- if gw_variant.available -%}
-      <gift-wrap-pdp class="gift-wrap gift-wrap--pdp" data-variant="{{ gw_variant.id }}">{{ gw_row }}</gift-wrap-pdp>
-    {%- endif -%}
-  {%- elsif gw_variant.available or gw_qty > 0 -%}
+  {%- if gw_variant.available or gw_qty > 0 -%}
     <gift-wrap class="gift-wrap" data-variant="{{ gw_variant.id }}"{% if gw_fix != '' %} data-fix="{{ gw_fix }}"{% endif %}>{{ gw_row }}</gift-wrap>
   {%- endif -%}
 {%- endif -%}

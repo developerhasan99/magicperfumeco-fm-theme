@@ -913,8 +913,6 @@
         (snippets/mgx-payment-icons: PayPal, Klarna, SEPA, eps, Apple Pay, Google Pay, Visa, Mastercard;
         snippets/shipping-badges: delivery time per country, DPD & DHL, 60 Tage Geld-zurück-Garantie).
       {%- endcomment -%}
-      {% render 'gift-wrap', pdp: true %}
-
       {%- if st.show_payment_icons -%}
         <div class="pm-bs-trust">
           {% render 'mgx-payment-icons' %}

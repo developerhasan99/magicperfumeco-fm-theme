@@ -1,5 +1,5 @@
 /* Gift wrap add-on (snippets/gift-wrap.liquid): one per order, quantity 0 or 1 via cart/update.js.
-   <gift-wrap> sits in the drawer footer, <gift-wrap-pdp> under the product page buy buttons.
+   <gift-wrap> sits in the drawer footer.
    After an update only the drawer's inner element and the bubble are repainted (the drawer is not opened), then the
    cart is published as source 'cart-items', which the drawer's own listener ignores. */
 (() => {
@@ -8,7 +8,7 @@
   let busy = false;
   const setBusy = (on) => {
     busy = on;
-    all('gift-wrap, gift-wrap-pdp').forEach((el) => el.toggleAttribute('aria-busy', on));
+    all('gift-wrap').forEach((el) => el.toggleAttribute('aria-busy', on));
   };
 
   const setWrap = (id, qty) => {
@@ -29,11 +29,9 @@
         if (inner && newInner) inner.innerHTML = newInner.innerHTML;
         if (bubble && newBubble) bubble.innerHTML = newBubble.innerHTML;
         document.querySelector('cart-drawer')?.classList.toggle('is-empty', state.item_count === 0);
-        const inCart = state.items.some((i) => String(i.variant_id) === String(id));
-        all('gift-wrap-pdp input').forEach((el) => { el.checked = inCart; });
         publish(PUB_SUB_EVENTS.cartUpdate, { source: 'cart-items', cartData: state });
       })
-      .catch(() => all('gift-wrap input, gift-wrap-pdp input').forEach((el) => { el.checked = !qty; }))
+      .catch(() => all('gift-wrap input').forEach((el) => { el.checked = !qty; }))
       .finally(() => setBusy(false));
   };
 
@@ -52,22 +50,4 @@
     }
   });
 
-  customElements.get('gift-wrap-pdp') || customElements.define('gift-wrap-pdp', class extends HTMLElement {
-    connectedCallback() {
-      const box = this.querySelector('input');
-      guard(box);
-      // Empty cart: only remember the tick; afterAdd() adds the wrap once the product is in (else it would be alone).
-      box.addEventListener('change', () => {
-        if (!document.querySelector('cart-drawer.is-empty')) setWrap(this.dataset.variant, box.checked ? 1 : 0);
-      });
-      // Product forms and the bundle-save section publish their adds; the bundle builder calls afterAdd() itself.
-      this.unsubscribe = subscribe(PUB_SUB_EVENTS.cartUpdate, (e) => {
-        if (e.source === 'product-form' || e.source === 'pm-bundle-save') this.afterAdd();
-      });
-    }
-    disconnectedCallback() { this.unsubscribe?.(); }
-    afterAdd() {
-      return this.querySelector('input').checked ? setWrap(this.dataset.variant, 1) : Promise.resolve();
-    }
-  });
 })();
