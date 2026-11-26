@@ -1122,3 +1122,202 @@
   .gg-bb__wrap-txt { grid-area: txt; }
   .gg-bb__wrap-price { grid-area: price; }
 }
+
+/* ---------- Christmas look (discount steps, Kite goals, gift wrap) ----------
+   Compact bars: 14px markers on an 6px candy-cane track, labels on two short lines. Reached markers turn red with a
+   white tick and pop once, the next one pulses gold, Kite goals carry a gift / truck icon. Same rules hit the sticky
+   bar, which reuses the step markup. */
+.gg-bb__sum { gap: 10px; }
+
+.gg-bb__steps-bar {
+  top: 4px;
+  height: 6px;
+  background: #f3e4e4;
+}
+
+.gg-bb__steps-fill {
+  background-color: #c8102e;
+  background-image:
+    repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.45) 0 5px, rgba(255, 255, 255, 0) 5px 10px),
+    linear-gradient(90deg, #a50d26 0%, #e3263f 100%);
+  background-size: 14px 14px, 100% 100%;
+  box-shadow: 0 0 8px rgba(227, 38, 63, 0.45);
+  animation: gg-xmas-stripes 900ms linear infinite;
+  transition: width 0.6s cubic-bezier(0.22, 1.2, 0.36, 1);
+}
+
+.gg-bb__step-mark { gap: 0; }
+
+.gg-bb__step-mark::before {
+  width: 14px;
+  height: 14px;
+  margin-bottom: 4px;
+  border-width: 2px;
+  border-color: #e6cfcf;
+}
+
+.gg-bb__step-mark strong {
+  font-size: 13px;
+  line-height: 16px;
+}
+
+.gg-bb__step-mark span {
+  font-size: 10px;
+  line-height: 13px;
+}
+
+.gg-bb__step-mark.is-reached { color: #c8102e; }
+.gg-bb__step-mark.is-current strong { color: #c8102e; }
+
+.gg-bb__step-mark.is-reached::before {
+  border-color: #c8102e;
+  background: #c8102e url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8.5l3 3 6-7' fill='none' stroke='%23fff' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 9px no-repeat;
+  box-shadow: 0 0 0 3px rgba(200, 16, 46, 0.15), 0 0 10px rgba(227, 38, 63, 0.55);
+  animation: gg-xmas-pop 600ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.gg-bb__step-mark.is-next::before {
+  border-color: #d4a017;
+  animation: gg-xmas-pulse 1600ms ease-out infinite;
+}
+
+.gg-bb__step-mark.is-next strong { color: #b8860b; }
+
+/* Kite goals: icon in the marker, a bit bigger than the plain steps */
+.gg-bb__goals .gg-bb__steps-bar { top: 7px; }
+
+.gg-bb__step-mark.is-gift::before,
+.gg-bb__step-mark.is-ship::before {
+  width: 20px;
+  height: 20px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 12px;
+}
+
+.gg-bb__step-mark.is-gift::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a08a8a' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='8' width='18' height='4' rx='1'/%3E%3Cpath d='M12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7M7.5 8a2.5 2.5 0 0 1 0-5C10 3 12 8 12 8s2-5 4.5-5a2.5 2.5 0 0 1 0 5'/%3E%3C/svg%3E");
+}
+
+.gg-bb__step-mark.is-ship::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a08a8a' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 4h14v12H1zM15 9h4l4 4v3h-8z'/%3E%3Ccircle cx='5.5' cy='18.5' r='2.5'/%3E%3Ccircle cx='18.5' cy='18.5' r='2.5'/%3E%3C/svg%3E");
+}
+
+.gg-bb__step-mark.is-gift.is-reached::before {
+  background-color: #c8102e;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='8' width='18' height='4' rx='1'/%3E%3Cpath d='M12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7M7.5 8a2.5 2.5 0 0 1 0-5C10 3 12 8 12 8s2-5 4.5-5a2.5 2.5 0 0 1 0 5'/%3E%3C/svg%3E");
+  background-size: 12px;
+}
+
+.gg-bb__step-mark.is-ship.is-reached::before {
+  background-color: #c8102e;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 4h14v12H1zM15 9h4l4 4v3h-8z'/%3E%3Ccircle cx='5.5' cy='18.5' r='2.5'/%3E%3Ccircle cx='18.5' cy='18.5' r='2.5'/%3E%3C/svg%3E");
+  background-size: 12px;
+}
+
+.gg-bb__goals { margin-top: 2px; }
+
+/* Status lines: the next reward in festive red, the Kite line a touch smaller */
+.gg-bb__status {
+  font-size: 13px;
+  line-height: 18px;
+  color: #c8102e;
+}
+
+.gg-bb__goal-status {
+  margin-top: -6px;
+  color: var(--gg-ink);
+  font-weight: 600;
+}
+
+/* Gift wrap upsell: ribbon-red dashed card until switched on */
+.gg-bb__wrap:not(.gg-bb__ins) {
+  border: 1.5px dashed #c8102e;
+  background: #fff6f6;
+}
+
+.gg-bb__wrap:not(.gg-bb__ins):has(.gg-bb__wrap-input:checked) {
+  border-style: solid;
+  background: #fdeaea;
+  box-shadow: 0 0 0 3px rgba(200, 16, 46, 0.1);
+}
+
+.gg-bb__wrap:not(.gg-bb__ins) .gg-bb__wrap-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #a50d26;
+}
+
+.gg-bb__wrap:not(.gg-bb__ins) .gg-bb__wrap-title::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23c8102e' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='8' width='18' height='4' rx='1'/%3E%3Cpath d='M12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7M7.5 8a2.5 2.5 0 0 1 0-5C10 3 12 8 12 8s2-5 4.5-5a2.5 2.5 0 0 1 0 5'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.gg-bb__wrap:not(.gg-bb__ins) .gg-bb__wrap-price { color: #a50d26; }
+
+.gg-bb__wrap:not(.gg-bb__ins) .gg-bb__wrap-input:checked + .gg-bb__wrap-switch { background: #c8102e; }
+
+@keyframes gg-xmas-stripes {
+  from { background-position: 0 0, 0 0; }
+  to { background-position: 14px 0, 0 0; }
+}
+
+@keyframes gg-xmas-pop {
+  0% { transform: scale(1); }
+  45% { transform: scale(1.45); }
+  100% { transform: scale(1); }
+}
+
+@keyframes gg-xmas-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(212, 160, 23, 0.6); }
+  70% { box-shadow: 0 0 0 6px rgba(212, 160, 23, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(212, 160, 23, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gg-bb__steps-fill,
+  .gg-bb__step-mark.is-reached::before,
+  .gg-bb__step-mark.is-next::before {
+    animation: none;
+  }
+}
+
+/* One merged track (discount steps + Kite goals, assets/gg-builder.js renderMerged): every marker 20px so the
+   discount ticks and the gift / truck icons sit on one line, the track through their centres */
+.gg-bb__steps .gg-bb__steps-bar { top: 7px; }
+
+.gg-bb__steps .gg-bb__step-mark::before {
+  width: 20px;
+  height: 20px;
+}
+
+.gg-bb__steps .gg-bb__step-mark.is-reached:not(.is-gift):not(.is-ship)::before { background-size: 11px; }
+
+/* Gift wrap upsell: product picture between the switch and the title (no link, the whole row toggles) */
+.gg-bb__wrap:has(.gg-bb__wrap-img) { grid-template-columns: auto auto minmax(0, 1fr) auto; }
+
+.gg-bb__wrap-img {
+  display: block;
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  object-fit: cover;
+  background: var(--gg-white);
+}
+
+.gg-bb__wrap:not(.gg-bb__ins) .gg-bb__wrap-title { text-decoration: none; }
+
+.gg-bb__wrap:not(.gg-bb__ins) .gg-bb__wrap-title::before { content: none; }
+
+@media (max-width: 339px) {
+  .gg-bb__wrap:has(.gg-bb__wrap-img) {
+    grid-template-columns: auto auto minmax(0, 1fr);
+    grid-template-areas: "sw img txt" "sw img price";
+  }
+
+  .gg-bb__wrap-img { grid-area: img; }
+}

@@ -101,6 +101,8 @@
       (this.cfg.qualify || []).forEach(function (id) { self.qualify[String(id)] = true; });
 
       var pool = readJSON(this, 'script[data-gg-pool]', []) || [];
+      var prices = pool.map(function (it) { return Number(it && it.p) || 0; }).filter(Boolean).sort(function (a, b) { return a - b; });
+      this.poolUnit = prices.length ? prices[Math.floor(prices.length / 2)] : 0;
       this.byId = {};
       var best = [];
       var rest = [];
@@ -255,16 +257,16 @@
       }
       this.goals = goals;
       var t = this.t;
-      var frag = document.createDocumentFragment();
-      goals.forEach(function (g) {
-        var li = el('li', 'gg-bb__step-mark');
-        li.appendChild(el('strong', '', money(g.amount)));
-        li.appendChild(el('span', '', g.ship ? (t.goalShip || 'Gratis Versand') : (t.goalGift || 'Mystery-Duft')));
-        frag.appendChild(li);
+      this.querySelectorAll('[data-steps] .gg-bb__steps-list').forEach(function (list) {
+        goals.forEach(function (g, i) {
+          var li = el('li', 'gg-bb__step-mark ' + (g.ship ? 'is-ship' : 'is-gift'));
+          li.setAttribute('data-goal-i', String(i));
+          li.appendChild(el('strong', '', money(g.amount)));
+          li.appendChild(el('span', '', g.ship ? (t.goalShip || 'Gratis Versand') : (t.goalGift || 'Mystery-Duft')));
+          list.appendChild(li);
+        });
       });
-      this.$.goalsList.textContent = '';
-      this.$.goalsList.appendChild(frag);
-      this.$.goals.hidden = false;
+      this._mergeKey = '';
       this.renderSummary();
     }
 
@@ -296,12 +298,61 @@
       return out.sort(function (a, b) { return a.amount - b.amount; });
     }
 
+    /* One track for discount steps (bottles) and Kite goals (cart value): goals sit where they unlock, converted to
+       bottles at the cart's own value per counted bottle (empty cart: median pool price after the first step).
+       Fill = up to the last reward reached in a row, then part of the way to the next by that reward's own measure. */
+    renderMerged(s) {
+      if (!this.goals.length) return;
+      var c = this.cart || {};
+      var v = (typeof c.items_subtotal_price === 'number' ? c.items_subtotal_price : (c.total_price || 0)) -
+        (typeof window.giftWrapCents === 'function' ? window.giftWrapCents(c) : 0);
+      var first = this.steps[0];
+      var unit = s.n > 0 && v > 0 ? v / s.n : this.poolUnit * (1 - (first ? first.pct : 0) / 100);
+      if (!(unit > 0)) unit = 1;
+      var ms = this.steps.map(function (st) {
+        return { sel: '[data-step-min="' + st.min + '"]', pos: st.min, hit: s.n >= st.min, at: s.n, target: st.min, bottles: true };
+      });
+      this.goals.forEach(function (g, i) {
+        ms.push({ sel: '[data-goal-i="' + i + '"]', pos: g.amount / unit, hit: v >= g.amount, at: v, target: g.amount, bottles: false });
+      });
+      ms.sort(function (a, b) { return a.pos - b.pos || (a.bottles ? -1 : 1); });
+
+      var N = ms.length;
+      var k = 0;
+      while (k < N && ms[k].hit) k++;
+      var fill = 100;
+      if (k < N) {
+        var seg = 100 / N;
+        var at = seg * (k + 0.5);
+        var prevAt = k ? seg * (k - 0.5) : 0;
+        var m = ms[k];
+        var prev = k ? (m.bottles ? ms[k - 1].pos : ms[k - 1].pos * unit) : 0;
+        var r = (m.at - prev) / Math.max(1e-9, m.target - prev);
+        fill = prevAt + (at - prevAt) * Math.max(0, Math.min(1, r));
+      }
+      this.$.fills.forEach(function (f) { f.style.width = fill + '%'; });
+
+      /* Order changes only when a goal crosses a step; moving nodes restarts their animations, so only then */
+      var key = ms.map(function (x) { return x.sel; }).join();
+      var reorder = key !== this._mergeKey;
+      this._mergeKey = key;
+      this.querySelectorAll('[data-steps] .gg-bb__steps-list').forEach(function (list) {
+        ms.forEach(function (x, i) {
+          var li = list.querySelector(x.sel);
+          if (!li) return;
+          if (reorder) list.appendChild(li);
+          li.classList.toggle('is-reached', x.hit);
+          li.classList.toggle('is-next', i === k);
+        });
+      });
+    }
+
     renderGoals() {
       if (!this.goals.length || !this.$.goals) return;
       var t = this.t;
       var c = this.cart || {};
       var v = (typeof c.items_subtotal_price === 'number' ? c.items_subtotal_price : (c.total_price || 0)) - window.giftWrapCents(c); // the gift wrap counts toward no goal
-      this.$.goalsFill.style.width = trackPos(this.goals.map(function (g) { return g.amount; }), v) + '%';
+      this.$.goals.hidden = true;
       var marks = this.$.goalsList.children;
       var next = null;
       this.goals.forEach(function (g, i) {
@@ -721,7 +772,9 @@
         var min = Number(m.getAttribute('data-step-min'));
         m.classList.toggle('is-reached', s.n >= min);
         m.classList.toggle('is-current', !!(s.cur && s.cur.min === min));
+        m.classList.toggle('is-next', !!(s.next && s.next.min === min));
       });
+      this.renderMerged(s);
 
       /* Savings as the cart drawer shows them (whole cart): Zwischensumme / Rabatt / Gesamt */
       if (this.$.saving) this.$.saving.hidden = true;

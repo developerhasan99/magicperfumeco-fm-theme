@@ -300,8 +300,12 @@
             <label class="gg-bb__wrap" {{ bb_wrap_block.shopify_attributes }}>
               <input class="gg-bb__wrap-input" type="checkbox" data-wrap>
               <span class="gg-bb__wrap-switch" aria-hidden="true"></span>
+              {%- assign bb_wrap_img = bb_wrap_block.settings.product.featured_image -%}
+              {%- if bb_wrap_img != blank -%}
+                {{ bb_wrap_img | image_url: width: 160 | image_tag: class: 'gg-bb__wrap-img', width: 48, height: 48, loading: 'lazy', alt: '' }}
+              {%- endif -%}
               <span class="gg-bb__wrap-txt">
-                <a class="gg-bb__wrap-title" href="{{ bb_wrap_block.settings.product.url }}" target="_blank" rel="noopener">{{ bb_wrap_block.settings.label | default: 'Als Geschenk verpacken' | escape }}</a>
+                <span class="gg-bb__wrap-title">{{ bb_wrap_block.settings.label | default: 'Als Geschenk verpacken' | escape }}</span>
                 {%- if bb_wrap_block.settings.text != blank -%}
                   <span class="gg-bb__wrap-sub">{{ bb_wrap_block.settings.text | escape }}</span>
                 {%- endif -%}

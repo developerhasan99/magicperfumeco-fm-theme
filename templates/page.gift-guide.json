@@ -508,6 +508,7 @@
         "anchor": "selbst-zusammenstellen",
         "discount_steps": "2:25,4:30,6:35,8:40",
         "discount_collections": "best-sellers,fuer-maenner,black-utique",
+        "image": "shopify://shop_images/gg-weihnachtsset-3x50ml.jpg",
         "image_product": "3-x-50ml-duftgarderobe-44",
         "pool_collection": "best-sellers",
         "pool_limit": 200,
@@ -579,7 +580,8 @@
           "type": "gift_wrap",
           "settings": {
             "product": "geschenkverpackung",
-            "label": "Als Geschenk verpacken"
+            "label": "Als Geschenk verpacken",
+            "text": "Fertig für unter den Baum"
           }
         }
       },
