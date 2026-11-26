@@ -135,6 +135,12 @@
 
   .gg-hero .gg-hero__pic { object-position: center top; }
 
+  /* German headline + intro run a line longer than the Swedish: photo starts 56px lower so the text stays above the
+     caps; the photo's top is the same dark green as the hero, so no seam */
+  .gg-hero__media { aspect-ratio: 375 / 666; }
+
+  .gg-hero__img { top: 56px; }
+
   .gg-hero__inner,
   .gg-hero__copy { display: contents; }
 
